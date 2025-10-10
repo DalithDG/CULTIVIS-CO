@@ -14,6 +14,12 @@ public class RoutesController {
     public String Index() {
         return "index";
     }
+    
+    @GetMapping("/login")
+    public String login() {
+        return "login";
+    }
+
 
 
     

@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cultivus Co</title>
-  <link rel="stylesheet" href="css.css">
+  <link rel="stylesheet" th:href="@{/css.css}">
 </head>
 
 <body>
   <header class="header">
     <div class="logo">
-      <img src="/src/main/resources/image/LOGO.png" alt="Cultivus Co">
+      <img th:src="@{/LOGO.png}" alt="Cultivus Co">
       <span>Cultivus Co</span>
     </div>
 
@@ -23,26 +23,26 @@
 
       <ul class="nav-links">
         <li>
-          <a href="#">
-            <img src="/src/main/resources/image/shopping-bag.svg" alt="Productos">
+          <a th:href="@{/product}">
+            <img th:src="@{/shopping-bag.svg}" alt="Productos">
             <span>Productos</span>
           </a>
         </li>
         <li>
-          <a href="/src/main/resources/templates/product.html">
-            <img src="/src/main/resources/image/salad.svg" alt="Productores">
+          <a th:href="@{/productores}">
+            <img th:src="@{/salad.svg}" alt="Productores">
             <span>Productores</span>
           </a>
         </li>
         <li>
-          <a href="#">
-            <img src="/src/main/resources/image/shopping-cart.svg" alt="Carrito">
+          <a th:href="@{/carrito}">
+            <img th:src="@{/shopping-cart.svg}" alt="Carrito">
             <span>Carrito</span>
           </a>
         </li>
         <li>
-          <a href="#">
-            <img src="/src/main/resources/image/user.svg" alt="Usuario">
+          <a th:href="@{/login}">
+            <img th:src="@{/user.svg}" alt="Usuario">
             <span>Mi Cuenta</span>
           </a>
         </li>
@@ -53,7 +53,7 @@
   <!-- CONTENEDOR DEL PRODUCTO -->
   <div class="producto-container">
     <div class="producto-imagen">
-      <img src="/src/main/resources/image/Frutas.jpg" alt="Mandarina Importada">
+      <img th:src="@{/Frutas.jpg}" alt="Mandarina Importada">
     </div>
 
     <div class="producto-info">

@@ -5,13 +5,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Cultivus Co</title>
-  <link rel="stylesheet" href="css.css">
+  <link rel="stylesheet" th:href="@{/css.css}">
 </head>
 
 <body>
   <header class="header">
     <div class="logo">
-      <img src="/src/main/resources/image/LOGO.png" alt="Cultivus Co">
+      <img th:src="@{/LOGO.png}" alt="Cultivus Co">
       <span>Cultivus Co</span>
     </div>
 
@@ -23,27 +23,26 @@
 
       <ul class="nav-links">
         <li>
-          <a href="#">
-            <img src="/src/main/resources/image/shopping-bag.svg" alt="Productos">
+          <a th:href="@{/product}">
+            <img th:src="@{/shopping-bag.svg}" alt="Productos">
             <span>Productos</span>
           </a>
         </li>
         <li>
-          <a href="/src/main/resources/templates/product.html">
-            <img src="/src/main/resources/image/salad.svg" alt="Productores">
+          <a th:href="@{/}">
+            <img th:src="@{/salad.svg}" alt="Productores">
             <span>Productores</span>
-
           </a>
         </li>
         <li>
-          <a href="#">
-            <img src="/src/main/resources/image/shopping-cart.svg" alt="Carrito">
+          <a th:href="@{/}">
+            <img th:src="@{/shopping-cart.svg}" alt="Carrito">
             <span>Carrito</span>
           </a>
         </li>
         <li>
-          <a href="#">
-            <img src="/src/main/resources/image/user.svg" alt="Usuario">
+          <a th:href="@{/login}">
+            <img th:src="@{/user.svg}" alt="Usuario">
             <span>Mi Cuenta</span>
           </a>
         </li>
@@ -55,63 +54,63 @@
   <h2 class="Titulo">Categorías de Productos Campesinos</h2>
   <div class="carrusel">
 
-    <a href="productos.html?categoria=frutas" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Frutas">
+    <a th:href="@{/product?categoria=frutas}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Frutas">
       <h3>Frutas</h3>
     </a>
 
-    <a href="productos.html?categoria=verduras" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Verduras">
+    <a th:href="@{/product?categoria=verduras}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Verduras">
       <h3>Verduras</h3>
     </a>
 
-    <a href="productos.html?categoria=lacteos" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Lácteos">
+    <a th:href="@{/product?categoria=lacteos}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Lácteos">
       <h3>Lácteos</h3>
     </a>
 
-    <a href="productos.html?categoria=cafe-cacao" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Café y Cacao">
+    <a th:href="@{/product?categoria=cafe-cacao}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Café y Cacao">
       <h3>Café y Cacao</h3>
     </a>
 
-    <a href="productos.html?categoria=artesanias" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Artesanías">
+    <a th:href="@{/product?categoria=artesanias}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Artesanías">
       <h3>Artesanías</h3>
     </a>
 
-    <a href="productos.html?categoria=nuevos" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Nuevos">
+    <a th:href="@{/product?categoria=nuevos}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Nuevos">
       <h3>Nuevos</h3>
     </a>
 
-    <a href="productos.html?categoria=frutas" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Frutas">
+    <a th:href="@{/product?categoria=frutas}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Frutas">
       <h3>Frutas</h3>
     </a>
 
-    <a href="productos.html?categoria=verduras" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Verduras">
+    <a th:href="@{/product?categoria=verduras}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Verduras">
       <h3>Verduras</h3>
     </a>
 
-    <a href="productos.html?categoria=lacteos" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Lácteos">
+    <a th:href="@{/product?categoria=lacteos}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Lácteos">
       <h3>Lácteos</h3>
     </a>
 
-    <a href="productos.html?categoria=cafe-cacao" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Café y Cacao">
+    <a th:href="@{/product?categoria=cafe-cacao}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Café y Cacao">
       <h3>Café y Cacao</h3>
     </a>
 
-    <a href="productos.html?categoria=artesanias" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Artesanías">
+    <a th:href="@{/product?categoria=artesanias}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Artesanías">
       <h3>Artesanías</h3>
     </a>
 
-    <a href="productos.html?categoria=nuevos" class="card">
-      <img src="/src/main/resources/image/Verduras.jpg" alt="Nuevos">
+    <a th:href="@{/product?categoria=nuevos}" class="card">
+      <img th:src="@{/Verduras.jpg}" alt="Nuevos">
       <h3>Nuevos</h3>
     </a>
 
@@ -125,10 +124,12 @@
 
       <div class="categoria">
         <h4>Categoría</h4>
-        <label><input type="checkbox"> Alimentación para bebés</label>
-        <label><input type="checkbox"> Aseo del hogar</label>
-        <label><input type="checkbox"> Bebidas</label>
-        <label><input type="checkbox"> Charcutería y delicatessen</label>
+        <label><input type="checkbox"> Verduras</label>
+        <label><input type="checkbox"> Frutas</label>
+        <label><input type="checkbox"> Lácteos</label>
+        <label><input type="checkbox"> Café y Cacao</label>
+        <label><input type="checkbox"> Artesanías</label>
+        <label><input type="checkbox"> Nuevos</label>
       </div>
 
       <button class="aplicar">Aplicar filtros</button>
@@ -149,29 +150,29 @@
 
       <div class="grid">
         <div class="producto">
-          <img src="/src/main/resources/image/Verduras.jpg" alt="Mandarina">
-          <h4>Mandarina Importada Malla 1000 gr</h4>
+          <img th:src="@{/Verduras.jpg}" alt="Mandarina">
+          <a th:href="@{/product-detall}"><h4>Mandarina Importada Malla 1000 gr</h4></a>
           <p class="peso">(Gr a $ 13)</p>
           <p class="precio">$ 13.940</p>
         </div>
 
         <div class="producto">
-          <img src="/src/main/resources/image/Verduras.jpg" alt="Albahaca">
-          <h4>ALBAHACA FRESCA BOLSA 50 gr</h4>
+          <img th:src="@{/Verduras.jpg}" alt="Albahaca">
+          <a th:href="@{/product-detall}"><h4>ALBAHACA FRESCA BOLSA 50 gr</h4></a>
           <p class="peso">(Gr a $ 106)</p>
           <p class="precio">$ 5.340</p>
         </div>
 
         <div class="producto">
-          <img src="/src/main/resources/image/Verduras.jpg" alt="Rábano rojo">
-          <h4>RABANO ROJO 250 gr</h4>
+          <img th:src="@{/Verduras.jpg}" alt="Rábano rojo">
+          <a th:href="@{/product-detall}"><h4>RABANO ROJO 250 gr</h4></a>
           <p class="peso">(Gr a $ 26)</p>
           <p class="precio">$ 6.600</p>
         </div>
 
         <div class="producto">
-          <img src="/src/main/resources/image/Verduras.jpg" alt="Tomate Chonto">
-          <h4>Tomate Chonto Insuperable FRESCAMPO 1000 gr</h4>
+          <img th:src="@{/Verduras.jpg}" alt="Tomate Chonto">
+          <a th:href="@{/product-detall}"><h4>Tomate Chonto Insuperable FRESCAMPO 1000 gr</h4></a>
           <p class="peso">(Gr a $ 5)</p>
           <p class="precio">$ 5.400</p>
         </div>

@@ -1,35 +1,101 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cultivus Co</title>
-    <link rel="stylesheet" href="/src/main/resources/static/style.css">
+    <title>Cultivus Co</title>  
+    <link rel="stylesheet" th:href="@{/style.css}">
+    
 </head>
 
 <body>
-    <div class="header">
-        <header>
+    <header class="header">
+        <div class="logo">
+            <a href="/"><img th:src="@{/LOGO.png}" alt="Cultivus Co"></a>
+            <span>Cultivus Co</span>
+        </div>
 
-            <div class="logo"><img src="/src/main/resources/image/Ico.png" alt="Cultivus Co">
-            <span>Cultivus Co</span></div>
+        <nav class="nav">
+            <ul class="nav-links">
+                <li>
+                    <a href="product.html">
+                        <img th:src="@{/image/shopping-bag.svg}" alt="Productos">
+                        <span>Productos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img th:src="@{/image/salad.svg}" alt="Productores">
+                        <span>Productores</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img th:src="@{/image/shopping-cart.svg}" alt="Carrito">
+                        <span>Carrito</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img th:src="@{/image/user.svg}" alt="Usuario">
+                        <span>Mi Cuenta</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </header>
 
+    <section id="hero">
+        <div class="slider-container">
+            <div class="carousel">
 
-            <div class="nav">
-                <nav>
-                    <div class="search">
-                        <input type="search" id="search" placeholder="Buscar productos..." />
-                        <button>Buscar</button>
+                <div class="slide">
+                    <img th:src="@{/image/Imagen 1.jpg}" alt="Imagen 1">
+                    <div class="overlay"></div>
+                    <div class="text-content">
+                        <h1 class="animated-text">Cultivus Co</h1>
+                        <p class="animated-subtext">Conectamos el campo con tu mesa 🌾</p>
                     </div>
-                    <li><a href="#">Inicio</a></li>
-                    <li><a href="#">Producto</a></li>
-                    <li><a href="#">Productores</a></li>
-                    <li><a href="#">Ingresar / Registrarse.</a></li>
-                </nav>
+                </div>
+
+                <div class="slide">
+                    <img th:src="@{/image/Imagen 2.jpg}" alt="Imagen 2">
+                    <div class="overlay"></div>
+                    <div class="text-content">
+                        <h1 class="animated-text">Productos Frescos</h1>
+                        <p class="animated-subtext">Del productor directamente a tu hogar 🍅</p>
+                    </div>
+                </div>
+
+                <div class="slide">
+                    <img th:src="@{/image/Imagen 3.jpg}" alt="Imagen 3">
+                    <div class="overlay"></div>
+                    <div class="text-content">
+                        <h1 class="animated-text">Agricultura Sostenible</h1>
+                        <p class="animated-subtext">Cuidando la tierra, cuidamos el futuro 🌱</p>
+                    </div>
+                </div>
+
+                <div class="slide">
+                    <img th:src="@{/image/Imagen 4.jpg}" alt="Imagen 4">
+                    <div class="overlay"></div>
+                    <div class="text-content">
+                        <h1 class="animated-text">Nuestras Raíces</h1>
+                        <p class="animated-subtext">Impulsa el trabajo campesino 💚</p>
+                    </div>
+                </div>
+
             </div>
-        </header>
-    </div>
+
+            <div class="buscardor">
+                <form>
+                    <input type="search" placeholder="¿Qué buscas?...">
+                    <button type="submit" class="buscardor-boton">Buscar</button>
+                </form>
+            </div>
+        </div>
+    </section>
 </body>
 
 </html>

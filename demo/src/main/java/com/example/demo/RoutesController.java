@@ -20,6 +20,11 @@ public class RoutesController {
         return "login";
     }
 
+    @GetMapping ("/product")
+    public String Producto(){
+        return "product";
+    }
+
 
 
     

@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cultivus Co</title>
+  <link rel="stylesheet" href="css.css">
+</head>
+
+<body>
+  <header class="header">
+    <div class="logo">
+      <img src="/src/main/resources/image/LOGO.png" alt="Cultivus Co">
+      <span>Cultivus Co</span>
+    </div>
+
+    <nav class="nav">
+      <div class="search">
+        <input type="search" id="search" placeholder="¿Que buscas?....">
+        <button>Buscar</button>
+      </div>
+
+      <ul class="nav-links">
+        <li>
+          <a href="#">
+            <img src="/src/main/resources/image/shopping-bag.svg" alt="Productos">
+            <span>Productos</span>
+          </a>
+        </li>
+        <li>
+          <a href="/src/main/resources/templates/product.html">
+            <img src="/src/main/resources/image/salad.svg" alt="Productores">
+            <span>Productores</span>
+
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <img src="/src/main/resources/image/shopping-cart.svg" alt="Carrito">
+            <span>Carrito</span>
+          </a>
+        </li>
+        <li>
+          <a href="#">
+            <img src="/src/main/resources/image/user.svg" alt="Usuario">
+            <span>Mi Cuenta</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="carousel-catalogo">
+  <h2 class="Titulo">Categorías de Productos Campesinos</h2>
+  <div class="carrusel">
+
+    <a href="productos.html?categoria=frutas" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Frutas">
+      <h3>Frutas</h3>
+    </a>
+
+    <a href="productos.html?categoria=verduras" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Verduras">
+      <h3>Verduras</h3>
+    </a>
+
+    <a href="productos.html?categoria=lacteos" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Lácteos">
+      <h3>Lácteos</h3>
+    </a>
+
+    <a href="productos.html?categoria=cafe-cacao" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Café y Cacao">
+      <h3>Café y Cacao</h3>
+    </a>
+
+    <a href="productos.html?categoria=artesanias" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Artesanías">
+      <h3>Artesanías</h3>
+    </a>
+
+    <a href="productos.html?categoria=nuevos" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Nuevos">
+      <h3>Nuevos</h3>
+    </a>
+
+    <a href="productos.html?categoria=frutas" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Frutas">
+      <h3>Frutas</h3>
+    </a>
+
+    <a href="productos.html?categoria=verduras" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Verduras">
+      <h3>Verduras</h3>
+    </a>
+
+    <a href="productos.html?categoria=lacteos" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Lácteos">
+      <h3>Lácteos</h3>
+    </a>
+
+    <a href="productos.html?categoria=cafe-cacao" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Café y Cacao">
+      <h3>Café y Cacao</h3>
+    </a>
+
+    <a href="productos.html?categoria=artesanias" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Artesanías">
+      <h3>Artesanías</h3>
+    </a>
+
+    <a href="productos.html?categoria=nuevos" class="card">
+      <img src="/src/main/resources/image/Verduras.jpg" alt="Nuevos">
+      <h3>Nuevos</h3>
+    </a>
+
+  </div>
+</section>
+
+  <div class="contenedor">
+    <aside class="filtros">
+      <h3>Filtrado por</h3>
+      <button class="limpiar">🗑️ Limpiar filtros</button>
+
+      <div class="categoria">
+        <h4>Categoría</h4>
+        <label><input type="checkbox"> Alimentación para bebés</label>
+        <label><input type="checkbox"> Aseo del hogar</label>
+        <label><input type="checkbox"> Bebidas</label>
+        <label><input type="checkbox"> Charcutería y delicatessen</label>
+      </div>
+
+      <button class="aplicar">Aplicar filtros</button>
+    </aside>
+
+    <main class="productos">
+      <div class="encabezado">
+        <p>501 resultados</p>
+        <div class="orden">
+          <label for="ordenar">Ordenar por:</label>
+          <select id="ordenar">
+            <option>Relevancia</option>
+            <option>Menor precio</option>
+            <option>Mayor precio</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="producto">
+          <img src="/src/main/resources/image/Verduras.jpg" alt="Mandarina">
+          <h4>Mandarina Importada Malla 1000 gr</h4>
+          <p class="peso">(Gr a $ 13)</p>
+          <p class="precio">$ 13.940</p>
+        </div>
+
+        <div class="producto">
+          <img src="/src/main/resources/image/Verduras.jpg" alt="Albahaca">
+          <h4>ALBAHACA FRESCA BOLSA 50 gr</h4>
+          <p class="peso">(Gr a $ 106)</p>
+          <p class="precio">$ 5.340</p>
+        </div>
+
+        <div class="producto">
+          <img src="/src/main/resources/image/Verduras.jpg" alt="Rábano rojo">
+          <h4>RABANO ROJO 250 gr</h4>
+          <p class="peso">(Gr a $ 26)</p>
+          <p class="precio">$ 6.600</p>
+        </div>
+
+        <div class="producto">
+          <img src="/src/main/resources/image/Verduras.jpg" alt="Tomate Chonto">
+          <h4>Tomate Chonto Insuperable FRESCAMPO 1000 gr</h4>
+          <p class="peso">(Gr a $ 5)</p>
+          <p class="precio">$ 5.400</p>
+        </div>
+      </div>
+    </main>
+  </div>
+
+
+
+</body>
+
+</html>

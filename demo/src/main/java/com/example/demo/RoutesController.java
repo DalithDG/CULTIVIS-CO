@@ -14,11 +14,6 @@ public class RoutesController {
         return "index";
     }
     
-    @GetMapping("/login")
-    public String login() {
-        return "login";
-    }
-
     @GetMapping ("/product")
     public String Producto(){
         return "product";

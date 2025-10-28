@@ -125,11 +125,16 @@ body {
 }
 
 
-.carrusel {
+.carousel-catalogo {
+  overflow: hidden;
+  position: relative;
+}
+
+.carousel-catalogo .carrusel {
   display: flex;
   gap: 20px;
   width: max-content;
-  animation: scrollInfinite 35s linear infinite;
+  animation: scrollInfinite 20s linear infinite;
 }
 
 
@@ -174,15 +179,8 @@ body {
   0% {
     transform: translateX(0);
   }
-
-  30% {
-    transform: translateX(30);
-  }
-  50%{
-    transform: translateX(25);
-  }
   100% {
-    transform: translateX(-50%);
+    transform: translateX(-33.33%);
   }
 }
 

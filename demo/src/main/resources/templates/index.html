@@ -4,104 +4,260 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cultivus Co</title>
+    <title>Cultivus</title>
+
+    <!-- CSS principal -->
     <link rel="stylesheet" th:href="@{/style.css}">
 
+    <!-- Íconos Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-RXf+QSDCUQs6Q0p2U2uD2OeR5xw8n5T6vCJ7/3zvK3YyEdSpYohhjFExz04szsP1CZq0w0C+YyXWZP8y+e2xUg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
-    <header class="header">
-        <div class="logo">
-            <a href="/"><img th:src="@{/images/LOGO.png}" alt="Cultivus Co"></a>
-            <span>Cultivus Co</span>
-        </div>
 
-        <nav class="nav">
-            <ul class="nav-links">
-                <li>
-                    <a th:href="@{/product}">
-                        <img th:src="@{/images/shopping-bag.svg}" alt="Productos">
-                        <span>Productos</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/productores}">
-                        <img th:src="@{/images/salad.svg}" alt="Productores">
-                        <span>Productores</span>
-                    </a>
-                </li>
-                <li>
-                    <a th:href="@{/carrito}">
-                        <img th:src="@{/images/shopping-cart.svg}" alt="Carrito">
-                        <span>Carrito</span>
-                    </a>
-                </li>
-
-                <li>
-                    <a th:href="@{/login}">
-                        <img th:src="@{/images/user.svg}" alt="Usuario">
-                        <span>Mi Cuenta</span>
-                    </a>
-                </li>
-
-            </ul>
-        </nav>
-    </header>
-
-
-
-    </div>
+    <!-- Header -->
+    <header th:replace="fragments/header :: siteHeader"></header>
 
     <section id="hero">
-        <div class="slider-container">
-            <div class="carousel">
+        <div class="hero-slider">
 
-                <div class="slide">
-                    <img th:src="@{/images/Imegen 1.jpg}" alt="Imagen 1">
-                    <div class="overlay"></div>
-                    <div class="text-content">
-                        <h1 class="animated-text">Cultivus Co</h1>
-                        <p class="animated-subtext">Conectamos el campo con tu mesa 🌾</p>
-                    </div>
+            <div class="hero-slide">
+                <img th:src="@{/images/Imegen 1.jpg}" alt="Imagen 1">
+                <div class="overlay"></div>
+                <div class="text-content">
+                    <h1 class="animated-text">Cultivus</h1>
+                    <p class="animated-subtext">Conectamos el campo con tu mesa 🌾</p>
                 </div>
-
-                <div class="slide">
-                    <img th:src="@{/images/Imagen 2.jpg}" alt="Imagen 2">
-                    <div class="overlay"></div>
-                    <div class="text-content">
-                        <h1 class="animated-text">Productos Frescos</h1>
-                        <p class="animated-subtext">Del productor directamente a tu hogar 🍅</p>
-                    </div>
-                </div>
-
-                <div class="slide">
-                    <img th:src="@{/images/Imagen 3.jpg}" alt="Imagen 3">
-                    <div class="overlay"></div>
-                    <div class="text-content">
-                        <h1 class="animated-text">Agricultura Sostenible</h1>
-                        <p class="animated-subtext">Cuidando la tierra, cuidamos el futuro 🌱</p>
-                    </div>
-                </div>
-
-                <div class="slide">
-                    <img th:src="@{/images/Imagen 4.jpg}" alt="Imagen 4">
-                    <div class="overlay"></div>
-                    <div class="text-content">
-                        <h1 class="animated-text">Nuestras Raíces</h1>
-                        <p class="animated-subtext">Impulsa el trabajo campesino 💚</p>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="buscardor">
-                <form>
-                    <input type="search" placeholder="¿Qué buscas?...">
-                    <button type="submit" class="buscardor-boton">Buscar</button>
-                </form>
+            <div class="hero-slide">
+                <img th:src="@{/images/Imagen 2.jpg}" alt="Imagen 2">
+                <div class="overlay"></div>
+                <div class="text-content">
+                    <h1 class="animated-text">Productos Frescos</h1>
+                    <p class="animated-subtext">Del productor directamente a tu hogar 🍅</p>
+                </div>
+            </div>
+
+            <div class="hero-slide">
+                <img th:src="@{/images/Imagen 3.jpg}" alt="Imagen 3">
+                <div class="overlay"></div>
+                <div class="text-content">
+                    <h1 class="animated-text">Agricultura Sostenible</h1>
+                    <p class="animated-subtext">Cuidando la tierra, cuidamos el futuro 🌱</p>
+                </div>
+            </div>
+
+            <div class="hero-slide">
+                <img th:src="@{/images/Imagen 4.jpg}" alt="Imagen 4">
+                <div class="overlay"></div>
+                <div class="text-content">
+                    <h1 class="animated-text">Nuestras Raíces</h1>
+                    <p class="animated-subtext">Impulsa el trabajo campesino 💚</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Buscador -->
+        <div class="buscador">
+            <form th:action="@{/buscar}" method="get">
+                <input type="search" name="q" placeholder="¿Qué buscas?..." required>
+                <button type="submit" class="buscador-boton">
+                    <i class="fas fa-search"></i> Buscar
+                </button>
+            </form>
+        </div>
+    </section>
+
+
+
+
+    <!-- Categorías Destacadas -->
+    <section id="categorias">
+        <div class="container">
+            <div class="section-header">
+                <h2>Explora Nuestras Categorías</h2>
+                <p>Encuentra productos frescos y de calidad en cada categoría</p>
+            </div>
+
+            <div class="categorias-grid">
+                <a th:href="@{/categorias/frutas}" class="categoria-card">
+                    <div class="categoria-icon">
+                        <i class="fas fa-apple-alt"></i>
+                    </div>
+                    <h3>Frutas</h3>
+                    <p>Frescas y naturales</p>
+                </a>
+
+                <a th:href="@{/categorias/verduras}" class="categoria-card">
+                    <div class="categoria-icon">
+                        <i class="fas fa-carrot"></i>
+                    </div>
+                    <h3>Verduras</h3>
+                    <p>Directo del campo</p>
+                </a>
+
+                <a th:href="@{/categorias/lacteos}" class="categoria-card">
+                    <div class="categoria-icon">
+                        <i class="fas fa-cheese"></i>
+                    </div>
+                    <h3>Lácteos</h3>
+                    <p>100% naturales</p>
+                </a>
+
+                <a th:href="@{/categorias/cafeYcacao}" class="categoria-card">
+                    <div class="categoria-icon">
+                        <i class="fas fa-mug-hot"></i>
+                    </div>
+                    <h3>Café y Cacao</h3>
+                    <p>Aroma colombiano</p>
+                </a>
+
+
             </div>
         </div>
     </section>
+
+    <!-- Productos Recientes -->
+    <section id="productos-recientes">
+        <div class="container">
+            <div class="section-header">
+                <h2>Productos Recientes</h2>
+                <p>Lo más fresco que tenemos para ti</p>
+            </div>
+
+            <!-- Si hay productos -->
+            <div th:if="${productos != null and !productos.isEmpty()}" class="productos-grid">
+                <div th:each="producto : ${productos}" class="producto-card">
+                    <div class="producto-image">
+                        <img th:src="@{${producto.imagen}}" th:alt="${producto.nombre}">
+                        <div class="producto-overlay">
+                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="ver-detalle">
+                                <i class="fas fa-eye"></i> Ver detalle
+                            </a>
+                        </div>
+                    </div>
+                    <div class="producto-info">
+                        <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+                        <div class="producto-precio">
+                            <span class="precio"
+                                th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">$0</span>
+                        </div>
+                        <button class="btn-agregar-carrito" th:onclick="'agregarAlCarrito(' + ${producto.id} + ')'">
+                            <i class="fas fa-cart-plus"></i> Agregar al carrito
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Si NO hay productos -->
+            <div th:if="${productos == null or productos.isEmpty()}" class="no-productos">
+                <div class="no-productos-icon">
+                    <i class="fas fa-box-open"></i>
+                </div>
+                <h3>Aún no hay productos disponibles</h3>
+                <p>Estamos trabajando para traerte los mejores productos frescos muy pronto.</p>
+            </div>
+
+            <!-- Botón ver todos -->
+            <div th:if="${productos != null and !productos.isEmpty()}" class="ver-todos-container">
+                <a th:href="@{/productos}" class="btn-ver-todos">
+                    Ver todos los productos <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Por Qué Elegirnos -->
+    <section id="beneficios">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Por Qué Elegir Cultivus?</h2>
+                <p>Más que una tienda, somos tu aliado en alimentación saludable</p>
+            </div>
+
+            <div class="beneficios-grid">
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-truck-fast"></i>
+                    </div>
+                    <h3>Entrega Rápida</h3>
+                    <p>Recibe tus productos frescos en tiempo récord. Cobertura en toda Colombia con pedido mínimo de
+                        $200.000</p>
+                </div>
+
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-leaf"></i>
+                    </div>
+                    <h3>100% Frescos</h3>
+                    <p>Conectamos directamente con productores locales para garantizar la máxima frescura en cada
+                        producto</p>
+                </div>
+
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3>Apoyo al Campo</h3>
+                    <p>Cada compra impulsa el trabajo de agricultores colombianos y fortalece la economía local</p>
+                </div>
+
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-shield-halved"></i>
+                    </div>
+                    <h3>Calidad Garantizada</h3>
+                    <p>Rigurosos estándares de calidad en cada producto. Tu satisfacción es nuestra prioridad</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Sobre Nosotros -->
+    <section id="sobre-nosotros">
+        <div class="container">
+            <div class="sobre-content">
+                <div class="sobre-header">
+                    <span class="sobre-tag">Quiénes Somos</span>
+                    <h2>Sobre Nosotros</h2>
+                </div>
+                <div class="sobre-text">
+                    <p class="lead">
+                        Cultivus es una plataforma innovadora que revoluciona la forma en que accedes a productos
+                        frescos y de calidad.
+                    </p>
+                    <p>
+                        Nacimos con una misión clara: <strong>conectar directamente a productores locales con tu
+                            hogar</strong>, eliminando intermediarios y garantizando frescura, calidad y precios justos
+                        para todos.
+                    </p>
+                    <p>
+                        En Cultivus, creemos que la tecnología y la naturaleza pueden trabajar en perfecta armonía. Por
+                        eso, hemos creado una solución moderna que facilita el acceso a productos del campo, apoya a los
+                        agricultores colombianos y cuida tu salud y la del planeta.
+                    </p>
+                    <p class="highlight">
+                        <i class="fas fa-seedling"></i>
+                        Más que una tienda, somos un puente entre el campo y tu mesa. Cada compra que realizas fortalece
+                        la economía local y promueve prácticas agrícolas sostenibles.
+                    </p>
+                    <div class="sobre-stats">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">Municipios Cubiertos</span>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer th:replace="fragments/footer :: siteFooter"></footer>
 
 
 </body>

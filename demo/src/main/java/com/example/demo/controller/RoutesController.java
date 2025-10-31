@@ -21,8 +21,6 @@ public class RoutesController {
     @GetMapping ("/product-detall")
     public String ProductoDetall(){
         return "product-detall";
-    }
-
-    
+    }  
 
 }

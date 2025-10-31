@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inicio de sesión - Cultivus</title>
+    <link rel="stylesheet" th:href="@{/css/login.css}">
+</head>
+<body>
+    <h2>Inicia sesión</h2>
+
+    <form th:action="@{/login}" th:object="${usuario}" method="post">
+        <input type="email" th:field="*{email}" placeholder="Correo" required>
+        <input type="password" th:field="*{contraseña}" placeholder="Contraseña" required>
+        <button type="submit">Entrar</button>
+    </form>
+
+    <p th:text="${mensaje}"></p>
+</body>
+</html>

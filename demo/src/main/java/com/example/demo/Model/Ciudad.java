@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.Model;
 
 public class Ciudad {
     private Integer idCiudad;

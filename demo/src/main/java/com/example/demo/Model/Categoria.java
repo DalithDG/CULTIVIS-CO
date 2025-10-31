@@ -1,4 +1,4 @@
-package com.example.demo.model;
+package com.example.demo.Model;
 
 public class Categoria {
     private Integer idCategoria;

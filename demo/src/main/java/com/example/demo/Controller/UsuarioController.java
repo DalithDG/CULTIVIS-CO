@@ -1,6 +1,6 @@
-package com.example.demo.controller;
+package com.example.demo.Controller;
 
-import com.example.demo.model.Usuario;
+import com.example.demo.Model.Usuario;
 import com.example.demo.services.UsuarioService; 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

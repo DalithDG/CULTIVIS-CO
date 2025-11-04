@@ -1,43 +1,38 @@
 package com.example.demo.Model;
 
 public class Producto {
-    private Integer idProductos;
+    private int id;
     private String nombre;
-    private String imagenUrl;
-    private Float precio;
-    private Integer stock;
-    private Float peso;
+    private double precio;
+    private int stock;
     private String descripcion;
-    private Integer idCategoria;
-    private Integer idUser;
-    private Integer idUnidad;
-    private Integer idCiudad;
+    private String imagenUrl;
+    private int categoria;
+    private UnidadMedida unidadMedida;
+    private Usuario usuario;
+    
 
     public Producto() {
     }
 
-    public Producto(Integer idProductos, String nombre, String imagenUrl, Float precio, Integer stock, 
-                    Float peso, String descripcion, Integer idCategoria, Integer idUser, 
-                    Integer idUnidad, Integer idCiudad) {
-        this.idProductos = idProductos;
+    public Producto(int id, String nombre, double precio, int stock, String descripcion, String imagenUrl, Categoria categoria, UnidadMedida unidadMedida, Usuario usuario) {
+        this.id = id;
         this.nombre = nombre;
-        this.imagenUrl = imagenUrl;
         this.precio = precio;
         this.stock = stock;
-        this.peso = peso;
         this.descripcion = descripcion;
-        this.idCategoria = idCategoria;
-        this.idUser = idUser;
-        this.idUnidad = idUnidad;
-        this.idCiudad = idCiudad;
+        this.imagenUrl = imagenUrl;
+        this.categoria = categoria.getIdCategoria();
+        this.unidadMedida = unidadMedida;
+        this.usuario = usuario;
     }
 
-    public Integer getIdProductos() {
-        return idProductos;
+    public int getId() {
+        return id;
     }
 
-    public void setIdProductos(Integer idProductos) {
-        this.idProductos = idProductos;
+    public void setId(Object id) {
+        this.id = (int) id;
     }
 
     public String getNombre() {
@@ -48,36 +43,20 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public String getImagenUrl() {
-        return imagenUrl;
-    }
-
-    public void setImagenUrl(String imagenUrl) {
-        this.imagenUrl = imagenUrl;
-    }
-
-    public Float getPrecio() {
+    public double getPrecio() {
         return precio;
     }
 
-    public void setPrecio(Float precio) {
+    public void setPrecio(double precio) {
         this.precio = precio;
     }
 
-    public Integer getStock() {
+    public int getStock() {
         return stock;
     }
 
-    public void setStock(Integer stock) {
+    public void setStock(int stock) {
         this.stock = stock;
-    }
-
-    public Float getPeso() {
-        return peso;
-    }
-
-    public void setPeso(Float peso) {
-        this.peso = peso;
     }
 
     public String getDescripcion() {
@@ -88,35 +67,40 @@ public class Producto {
         this.descripcion = descripcion;
     }
 
-    public Integer getIdCategoria() {
-        return idCategoria;
+    public String getImagenUrl() {
+        return imagenUrl;
     }
 
-    public void setIdCategoria(Integer idCategoria) {
-        this.idCategoria = idCategoria;
+    public void setImagenUrl(String imagenUrl) {
+        this.imagenUrl = imagenUrl;
     }
 
-    public Integer getIdUser() {
-        return idUser;
+    public int getCategoria() {
+        return categoria;
     }
 
-    public void setIdUser(Integer idUser) {
-        this.idUser = idUser;
+    public void setCategoria(int categoria) {
+        this.categoria = categoria;
     }
 
-    public Integer getIdUnidad() {
-        return idUnidad;
+    public UnidadMedida getUnidadMedida() {
+        return unidadMedida;
     }
 
-    public void setIdUnidad(Integer idUnidad) {
-        this.idUnidad = idUnidad;
+    public void setUnidadMedida(UnidadMedida unidadMedida) {
+        this.unidadMedida = unidadMedida;
     }
 
-    public Integer getIdCiudad() {
-        return idCiudad;
+    public Usuario getUsuario() {
+        return usuario;
     }
 
-    public void setIdCiudad(Integer idCiudad) {
-        this.idCiudad = idCiudad;
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
+
+    
+    
+
+    
 }

@@ -1,37 +1,46 @@
 package com.example.demo.services;
 
-import org.springframework.stereotype.Service;
-
-import com.example.demo.Model.Usuario;
-
-import java.util.ArrayList;
 import java.util.List;
 
-@Service
-public class UsuarioService {
+import com.example.demo.Model.Usuario;
+import com.example.demo.repository.UsuarioRepositoryImpl;
 
-    private List<Usuario> usuarios = new ArrayList<>();
+public class UsuarioService implements IUsuarioService {
 
-    public String registrarUsuario(Usuario nuevo) {
-        for (Usuario u : usuarios) {
-            if (u.getEmail().equalsIgnoreCase(nuevo.getEmail())) {
-                return "El usuario ya está registrado";
-            }
+    private UsuarioRepositoryImpl repositorio = new UsuarioRepositoryImpl();
+
+    @Override
+    public void guardarUsuario(Usuario usuario) {
+        repositorio.guardarUsuario(usuario);
+   }
+
+    @Override
+    public void actualizarUsuario(Usuario usuario) {
+        repositorio.actualizarUsuario(usuario);
+    }
+
+    @Override
+    public Usuario obtenerUsuarioPorId(int id) {
+        return repositorio.encontrarPorId(id);
+    }
+
+    @Override
+    public Usuario iniciarSesion(String correo, String contraseña) {
+        Usuario usuario = repositorio.encontrarPorEmail(correo);
+        if (usuario != null && usuario.getContraseña().equals(contraseña)) {
+            return usuario;
         }
-        usuarios.add(nuevo);
-        return "Registro exitoso";
+        return null;
     }
 
-    public String iniciarSesion(String email, String contraseña) {
-        for (Usuario u : usuarios) {
-            if (u.getEmail().equalsIgnoreCase(email) && u.getContraseña().equals(contraseña)) {
-                return "Inicio de sesión exitoso, bienvenido " + u.getNombre();
-            }
-        }
-        return "Credenciales incorrectas";
+    @Override
+    public List<Usuario> obtenerTodos() {
+         return repositorio.encontrarTodosUsuarios();
     }
 
-    public List<Usuario> listarUsuarios() {
-        return usuarios;
+    @Override
+    public boolean eliminarUsuario(int id) {
+        return repositorio.eliminarUsuario(id);
     }
+    
 }

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio de sesión - Cultivus</title>
+    <link rel="stylesheet" th:href="@{/loginnew.css}" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="lado-izquierdo">
+        <h2>Bienvenidos <br />de nuevo</h2>
+        <p>
+          ¡Nos alegra verte de regreso! Porque cada semilla que siembras impulsa
+          el futuro del campo y del país.
+        </p>
+        <div class="icoSociales">
+          <a href="#" class="icono"
+            ><span class="material-icons">facebook</span></a
+          >
+          <a href="#" class="icono"
+            ><span class="material-icons">google</span></a
+          >
+          <a href="#" class="icono"
+            ><span class="material-icons">twitter</span></a
+          >
+        </div>
+      </div>
+
+      <div class="lado-derecho">
+        <h2>Iniciar Sesión</h2>
+        <form class="form-login" th:action="@{/loginnew}" th:object="${usuario}" method="post">
+          <label for="Correo">Correo Eletronico</label>
+          <input
+            type="email" th:field="*{email}" id="correo" placeholder="Ingresa tu correo" required />
+          <label for="password">Contraseña</label>
+          <input type="password" th:field="*{contraseña}" id="password" placeholder="Ingrese tu contraseña" required/>
+          <div class="opciones">
+            <label> <input type="checkbox" />Recordarme</label>
+            <a href="#" class="olvido">¿Olvidaste tu contraseña?</a>
+          </div>
+          <button type="submit" class="boton">Ingresar Ahora</button>
+          <p class="terminos">
+            Al iniciar sesión, aceptas nuestros
+            <a href="#">Términos y Condiciones</a> y nuestra
+            <a href="#">Política de Privacidad</a>.
+          </p>
+        </form>
+        <p th:text="${mensaje}" class="mensaje-flotante"></p>
+        <p class="registro">
+          ¿No tienes una cuenta? <a href="/registro">Regístrate</a>
+        </p>
+      </div>
+    </div>
+  </body>
+</html>

@@ -1,22 +1,22 @@
 package com.example.demo.Model;
 
 public class Departamento {
-    private Integer idDepartamento;
+    private int idDepartamento;
     private String nombre;
 
     public Departamento() {
     }
 
-    public Departamento(Integer idDepartamento, String nombre) {
+    public Departamento(int idDepartamento, String nombre) {
         this.idDepartamento = idDepartamento;
         this.nombre = nombre;
     }
 
-    public Integer getIdDepartamento() {
+    public int getIdDepartamento() {
         return idDepartamento;
     }
 
-    public void setIdDepartamento(Integer idDepartamento) {
+    public void setIdDepartamento(int idDepartamento) {
         this.idDepartamento = idDepartamento;
     }
 
@@ -27,4 +27,6 @@ public class Departamento {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    
 }

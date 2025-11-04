@@ -1,55 +1,67 @@
 package com.example.demo.Controller;
 
+import com.example.demo.Model.Ciudad;
 import com.example.demo.Model.Usuario;
-import com.example.demo.services.UsuarioService; 
+import com.example.demo.services.UsuarioService;
+
+import java.util.List;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
+@RequestMapping("/usuarios")
 public class UsuarioController {
 
-    private final UsuarioService usuarioService;
+     private UsuarioService servicio = new UsuarioService();
 
-    // Inyección del servicio (corregido el nombre del atributo)
-    public UsuarioController(UsuarioService usuarioService) {
-        this.usuarioService = usuarioService;
+    // Página principal: lista de usuarios
+    @GetMapping
+    public String listarUsuarios(Model model) {
+        List<Usuario> usuarios = servicio.obtenerTodos();
+        model.addAttribute("usuarios", usuarios);
+        return "usuarios"; // -> usuarios.html
     }
 
-    // Mostrar formulario de registro
-    @GetMapping("/registro")
-    public String mostrarFormularioRegistro(Model model) {
+    // Formulario para registrar un nuevo usuario
+    @GetMapping("/nuevo")
+    public String mostrarFormulario(Model model) {
         model.addAttribute("usuario", new Usuario());
-        return "registro"; // vista registro.html
+        model.addAttribute("ciudad", new Ciudad(1, "Medellín", null, null));
+        return "nuevoUsuario"; // -> nuevoUsuario.html
     }
 
-    // Procesar registro
-    @PostMapping("/registro")
-    public String registrarUsuario(@ModelAttribute Usuario usuario, Model model) {
-        String mensaje = usuarioService.registrarUsuario(usuario);
-        model.addAttribute("mensaje", mensaje);
-        return "login";
+    // Guardar usuario (desde el formulario)
+    @PostMapping("/guardar")
+    public String guardarUsuario(@ModelAttribute Usuario usuario) {
+        servicio.guardarUsuario(usuario);
+        return "redirect:/usuarios";
     }
 
-    // Mostrar formulario de login
-    @GetMapping("/login")
-    public String mostrarFormularioLogin(Model model) {
-        model.addAttribute("usuario", new Usuario());
-        return "login"; // vista login.html
+    // Editar usuario
+    @GetMapping("/editar/{id}")
+    public String editarUsuario(@PathVariable int id, Model model) {
+        Usuario usuario = servicio.obtenerUsuarioPorId(id);
+        model.addAttribute("usuario", usuario);
+        return "editarUsuario"; // -> editarUsuario.html
     }
 
-    // Procesar login
-    @PostMapping("/login")
-    public String procesarLogin(@ModelAttribute Usuario usuario, Model model) {
-        String mensaje = usuarioService.iniciarSesion(usuario.getEmail(), usuario.getContraseña());
-        model.addAttribute("mensaje", mensaje);
+    // Actualizar usuario
+    @PostMapping("/actualizar")
+    public String actualizarUsuario(@ModelAttribute Usuario usuario) {
+        servicio.actualizarUsuario(usuario);
+        return "redirect:/usuarios";
+    }
 
-        if (mensaje.startsWith("Inicio de sesión exitoso")) {
-            return "index"; // vista principal después de iniciar sesión
-        } else {
-            return "login"; // vuelve al login si falla
-        }
+    // Eliminar usuario
+    @GetMapping("/eliminar/{id}")
+    public String eliminarUsuario(@PathVariable int id) {
+        servicio.eliminarUsuario(id);
+        return "redirect:/usuarios";
     }
 }

@@ -3,50 +3,63 @@ package com.example.demo.Model;
 import java.time.LocalDate;
 
 public class DetallePedido {
-    private Integer idDetalles;
-    private Integer idPedidos;
-    private Integer idProductos;
+    private int idDetalle;
+    private Producto producto;
+    private int cantidad;
+    private double precioUnitario;
+    private double subtotal;
     private LocalDate fechaEntrega;
-    private Float precioUnitario;
-    private Integer cantidad;
-    private String estado;
 
     public DetallePedido() {
     }
 
-    public DetallePedido(Integer idDetalles, Integer idPedidos, Integer idProductos, 
-                         LocalDate fechaEntrega, Float precioUnitario, Integer cantidad, String estado) {
-        this.idDetalles = idDetalles;
-        this.idPedidos = idPedidos;
-        this.idProductos = idProductos;
-        this.fechaEntrega = fechaEntrega;
-        this.precioUnitario = precioUnitario;
+    public DetallePedido(int idDetalle, Producto producto, int cantidad, double precioUnitario, double subtotal, LocalDate fechaEntrega) {
+        this.idDetalle = idDetalle;
+        this.producto = producto;
         this.cantidad = cantidad;
-        this.estado = estado;
+        this.precioUnitario = precioUnitario;
+        this.subtotal = subtotal;
+        this.fechaEntrega = fechaEntrega;
     }
 
-    public Integer getIdDetalles() {
-        return idDetalles;
+    public int getIdDetalle() {
+        return idDetalle;
     }
 
-    public void setIdDetalles(Integer idDetalles) {
-        this.idDetalles = idDetalles;
+    public void setIdDetalle(int idDetalle) {
+        this.idDetalle = idDetalle;
     }
 
-    public Integer getIdPedidos() {
-        return idPedidos;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setIdPedidos(Integer idPedidos) {
-        this.idPedidos = idPedidos;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
-    public Integer getIdProductos() {
-        return idProductos;
+    public int getCantidad() {
+        return cantidad;
     }
 
-    public void setIdProductos(Integer idProductos) {
-        this.idProductos = idProductos;
+    public void setCantidad(int cantidad) {
+        this.cantidad = cantidad;
+    }
+
+    public double getPrecioUnitario() {
+        return precioUnitario;
+    }
+
+    public void setPrecioUnitario(double precioUnitario) {
+        this.precioUnitario = precioUnitario;
+    }
+
+    public double getSubtotal() {
+        return precioUnitario * cantidad;
+    }
+
+    public void setSubtotal(double subtotal) {
+        this.subtotal = subtotal; // Se mantiene el campo para compatibilidad, pero el valor real se calcula en getSubtotal()
     }
 
     public LocalDate getFechaEntrega() {
@@ -55,29 +68,5 @@ public class DetallePedido {
 
     public void setFechaEntrega(LocalDate fechaEntrega) {
         this.fechaEntrega = fechaEntrega;
-    }
-
-    public Float getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(Float precioUnitario) {
-        this.precioUnitario = precioUnitario;
-    }
-
-    public Integer getCantidad() {
-        return cantidad;
-    }
-
-    public void setCantidad(Integer cantidad) {
-        this.cantidad = cantidad;
-    }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
     }
 }

@@ -1,61 +1,48 @@
 package com.example.demo.Model;
 
 public class DetalleCarrito {
-    private Integer idDetalle;
-    private Integer idCarrito;
-    private Integer idProducto;
-    private Integer cantidad;
-    private Float precioUnitario;
 
-    public DetalleCarrito() {
-    }
+    private int idCarrito;
+    private Producto producto;
+    private int cantidad;
 
-    public DetalleCarrito(Integer idDetalle, Integer idCarrito, Integer idProducto, 
-                          Integer cantidad, Float precioUnitario) {
-        this.idDetalle = idDetalle;
+    public DetalleCarrito() {}
+
+    public DetalleCarrito(int idCarrito, Producto producto, int cantidad) {
         this.idCarrito = idCarrito;
-        this.idProducto = idProducto;
+        this.producto = producto;
         this.cantidad = cantidad;
-        this.precioUnitario = precioUnitario;
     }
 
-    public Integer getIdDetalle() {
-        return idDetalle;
-    }
-
-    public void setIdDetalle(Integer idDetalle) {
-        this.idDetalle = idDetalle;
-    }
-
-    public Integer getIdCarrito() {
+    public int getIdCarrito() {
         return idCarrito;
     }
 
-    public void setIdCarrito(Integer idCarrito) {
+    public void setIdCarrito(int idCarrito) {
         this.idCarrito = idCarrito;
     }
 
-    public Integer getIdProducto() {
-        return idProducto;
+    public Producto getProducto() {
+        return producto;
     }
 
-    public void setIdProducto(Integer idProducto) {
-        this.idProducto = idProducto;
+    public void setProducto(Producto producto) {
+        this.producto = producto;
     }
 
-    public Integer getCantidad() {
+    public int getCantidad() {
         return cantidad;
     }
 
-    public void setCantidad(Integer cantidad) {
+    public void setCantidad(int cantidad) {
         this.cantidad = cantidad;
     }
 
-    public Float getPrecioUnitario() {
-        return precioUnitario;
-    }
-
-    public void setPrecioUnitario(Float precioUnitario) {
-        this.precioUnitario = precioUnitario;
+    
+    public double getPrecioTotal() {
+        if (producto == null) {
+            return 0.0;
+        }
+        return producto.getPrecio() * cantidad;
     }
 }

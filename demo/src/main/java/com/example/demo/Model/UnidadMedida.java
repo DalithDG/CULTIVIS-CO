@@ -1,24 +1,24 @@
 package com.example.demo.Model;
 
 public class UnidadMedida {
-    private Integer idUnidad;
+    private int idUnidad;
     private String nombre;
     private String abreviatura;
 
     public UnidadMedida() {
     }
 
-    public UnidadMedida(Integer idUnidad, String nombre, String abreviatura) {
+    public UnidadMedida(int idUnidad, String nombre, String abreviatura) {
         this.idUnidad = idUnidad;
         this.nombre = nombre;
         this.abreviatura = abreviatura;
     }
 
-    public Integer getIdUnidad() {
+    public int getIdUnidad() {
         return idUnidad;
     }
 
-    public void setIdUnidad(Integer idUnidad) {
+    public void setIdUnidad(int idUnidad) {
         this.idUnidad = idUnidad;
     }
 
@@ -37,4 +37,7 @@ public class UnidadMedida {
     public void setAbreviatura(String abreviatura) {
         this.abreviatura = abreviatura;
     }
+
+    
+    
 }

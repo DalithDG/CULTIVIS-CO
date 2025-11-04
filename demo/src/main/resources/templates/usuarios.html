@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+</head>
+<body>
+    <h1>👩‍🌾 Lista de Usuarios</h1>
+
+    <a href="/usuarios/nuevo" class="boton">➕ Nuevo Usuario</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Tipo</th>
+                <th>Ciudad</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="usuario : ${usuarios}">
+                <td th:text="${usuario.id}"></td>
+                <td th:text="${usuario.nombre}"></td>
+                <td th:text="${usuario.email}"></td>
+                <td th:text="${usuario.tipo}"></td>
+                <td th:text="${usuario.ciudad != null ? usuario.ciudad.nombre : 'N/A'}"></td>
+                <td>
+                    <a th:href="@{/usuarios/editar/{id}(id=${usuario.id})}" class="boton">✏️ Editar</a>
+                    <a th:href="@{/usuarios/eliminar/{id}(id=${usuario.id})}" class="boton eliminar">🗑 Eliminar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>

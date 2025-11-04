@@ -1,26 +1,26 @@
 package com.example.demo.Model;
 
 public class Ciudad {
-    private Integer idCiudad;
+    private int idCiudad;
     private String nombre;
     private String direccion;
-    private Integer idDepartamento;
+    private Departamento departamento;
 
     public Ciudad() {
     }
 
-    public Ciudad(Integer idCiudad, String nombre, String direccion, Integer idDepartamento) {
+    public Ciudad(int idCiudad, String nombre, String direccion, Departamento departamento) {
         this.idCiudad = idCiudad;
         this.nombre = nombre;
         this.direccion = direccion;
-        this.idDepartamento = idDepartamento;
+        this.departamento = departamento;
     }
 
-    public Integer getIdCiudad() {
+    public int getIdCiudad() {
         return idCiudad;
     }
 
-    public void setIdCiudad(Integer idCiudad) {
+    public void setIdCiudad(int idCiudad) {
         this.idCiudad = idCiudad;
     }
 
@@ -40,11 +40,12 @@ public class Ciudad {
         this.direccion = direccion;
     }
 
-    public Integer getIdDepartamento() {
-        return idDepartamento;
+    public Departamento getDepartamento() {
+        return departamento;
     }
 
-    public void setIdDepartamento(Integer idDepartamento) {
-        this.idDepartamento = idDepartamento;
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
     }
+
 }

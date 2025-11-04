@@ -1,30 +1,32 @@
 package com.example.demo.Model;
 
 public class CarritoCompras {
-    private Integer idCarrito;
-    private Integer idUser;
+    private int idCarrito;
+    private int idUser;
 
     public CarritoCompras() {
     }
-
-    public CarritoCompras(Integer idCarrito, Integer idUser) {
+    public CarritoCompras(int idCarrito, int idUser) {
         this.idCarrito = idCarrito;
         this.idUser = idUser;
     }
 
-    public Integer getIdCarrito() {
+    public int getIdCarrito() {
         return idCarrito;
     }
 
-    public void setIdCarrito(Integer idCarrito) {
+    public void setIdCarrito(int idCarrito) {
         this.idCarrito = idCarrito;
     }
 
-    public Integer getIdUser() {
+    public int getIdUser() {
         return idUser;
     }
 
-    public void setIdUser(Integer idUser) {
+    public void setIdUser(int idUser) {
         this.idUser = idUser;
     }
+
+    
+    
 }

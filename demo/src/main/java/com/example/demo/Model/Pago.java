@@ -3,44 +3,46 @@ package com.example.demo.Model;
 import java.time.LocalDateTime;
 
 public class Pago {
-    private Integer idPago;
-    private String metodo;
-    private Float monto;
+    private int idPago;
+    private Pedido pedido;
+    private Double monto;
     private LocalDateTime fechaPago;
-    private Integer idPedido;
+    private String metodoPago;
+    private String estado;
 
     public Pago() {
     }
 
-    public Pago(Integer idPago, String metodo, Float monto, LocalDateTime fechaPago, Integer idPedido) {
+    public Pago(int idPago, Pedido pedido, Double monto, LocalDateTime fechaPago, String metodoPago, String estado) {
         this.idPago = idPago;
-        this.metodo = metodo;
+        this.pedido = pedido;
         this.monto = monto;
         this.fechaPago = fechaPago;
-        this.idPedido = idPedido;
+        this.metodoPago = metodoPago;
+        this.estado = estado;
     }
 
-    public Integer getIdPago() {
+    public int getIdPago() {
         return idPago;
     }
 
-    public void setIdPago(Integer idPago) {
+    public void setIdPago(int idPago) {
         this.idPago = idPago;
     }
 
-    public String getMetodo() {
-        return metodo;
+    public Pedido getPedido() {
+        return pedido;
     }
 
-    public void setMetodo(String metodo) {
-        this.metodo = metodo;
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
-    public Float getMonto() {
+    public Double getMonto() {
         return monto;
     }
 
-    public void setMonto(Float monto) {
+    public void setMonto(Double monto) {
         this.monto = monto;
     }
 
@@ -52,11 +54,22 @@ public class Pago {
         this.fechaPago = fechaPago;
     }
 
-    public Integer getIdPedido() {
-        return idPedido;
+    public String getMetodoPago() {
+        return metodoPago;
     }
 
-    public void setIdPedido(Integer idPedido) {
-        this.idPedido = idPedido;
+    public void setMetodoPago(String metodoPago) {
+        this.metodoPago = metodoPago;
     }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    
+
 }

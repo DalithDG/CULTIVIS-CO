@@ -1,22 +1,24 @@
 package com.example.demo.Model;
 
 public class Categoria {
-    private Integer idCategoria;
+    private int idCategoria;
     private String nombre;
+    private String descripcion;
 
     public Categoria() {
     }
 
-    public Categoria(Integer idCategoria, String nombre) {
+    public Categoria(int idCategoria, String nombre, String descripcion) {
         this.idCategoria = idCategoria;
         this.nombre = nombre;
+        this.descripcion = descripcion;
     }
 
-    public Integer getIdCategoria() {
+    public int getIdCategoria() {
         return idCategoria;
     }
 
-    public void setIdCategoria(Integer idCategoria) {
+    public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
     }
 
@@ -27,4 +29,15 @@ public class Categoria {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+
+    
+
 }

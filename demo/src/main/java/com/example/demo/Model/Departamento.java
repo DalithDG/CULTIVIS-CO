@@ -1,8 +1,22 @@
 package com.example.demo.Model;
 
+import java.util.List;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Departamento")
 public class Departamento {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_departamento")
     private int idDepartamento;
+
+    @Column(name = "nombre", length = 25, nullable = false)
     private String nombre;
+
+    @OneToMany(mappedBy = "departamento", cascade = CascadeType.ALL)
+    private List<Ciudad> ciudades;
 
     public Departamento() {
     }
@@ -28,5 +42,11 @@ public class Departamento {
         this.nombre = nombre;
     }
 
-    
+    public List<Ciudad> getCiudades() {
+        return ciudades;
+    }
+
+    public void setCiudades(List<Ciudad> ciudades) {
+        this.ciudades = ciudades;
+    }
 }

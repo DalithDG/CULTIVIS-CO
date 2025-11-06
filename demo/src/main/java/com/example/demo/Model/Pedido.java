@@ -1,36 +1,50 @@
 package com.example.demo.Model;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Pedido")
 public class Pedido {
     
-    private int idCarrito;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_pedidos")
+    private int idPedido;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
     private Usuario cliente;
+
+    @Column(name = "fecha_pedido", nullable = false)
     private LocalDateTime fechaPedido;
-    private List<DetallePedido> detalles = new ArrayList<>();
-    private Pago pago;
+
+    @Column(name = "estado", length = 15)
     private String estado;
+
+    @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetallePedido> detalles;
+
+    @OneToOne(mappedBy = "pedido", cascade = CascadeType.ALL)
+    private Pago pago;
 
     public Pedido() {
     }
 
-    public Pedido(int idCarrito, Usuario cliente, LocalDateTime fechaPedido, List<DetallePedido> detalles, Pago pago, String estado) {
-        this.idCarrito = idCarrito;
+    public Pedido(int idPedido, Usuario cliente, LocalDateTime fechaPedido, String estado) {
+        this.idPedido = idPedido;
         this.cliente = cliente;
         this.fechaPedido = fechaPedido;
-        this.detalles = detalles;
-        this.pago = pago;
         this.estado = estado;
     }
 
-    public int getIdCarrito() {
-        return idCarrito;
+    public int getIdPedido() {
+        return idPedido;
     }
 
-    public void setIdCarrito(int idCarrito) {
-        this.idCarrito = idCarrito;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
 
     public Usuario getCliente() {
@@ -72,6 +86,4 @@ public class Pedido {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
-    
 }

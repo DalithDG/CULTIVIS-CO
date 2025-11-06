@@ -1,28 +1,68 @@
 package com.example.demo.Model;
 
+import java.util.List;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "Producto")
 public class Producto {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_productos")
     private int id;
+
+    @Column(name = "nombre", length = 50, nullable = false)
     private String nombre;
-    private double precio;
+
+    @Column(name = "Precio", nullable = false)
+    private Float precio;
+
+    @Column(name = "Stock", nullable = false)
     private int stock;
+
+    @Column(name = "descripcion", length = 35)
     private String descripcion;
+
+    @Column(name = "imagen (url)", length = 50)
     private String imagenUrl;
-    private int categoria;
+
+    @Column(name = "Peso", nullable = false)
+    private Float peso;
+
+    @ManyToOne
+    @JoinColumn(name = "id_categoria", nullable = false)
+    private Categoria categoria;
+
+    @ManyToOne
+    @JoinColumn(name = "id_unidad", nullable = false)
     private UnidadMedida unidadMedida;
+
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
     private Usuario usuario;
-    
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private List<DetalleCarrito> detallesCarrito;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private List<DetallePedido> detallesPedido;
+
+    @OneToMany(mappedBy = "producto", cascade = CascadeType.ALL)
+    private List<Resena> resenas;
 
     public Producto() {
     }
 
-    public Producto(int id, String nombre, double precio, int stock, String descripcion, String imagenUrl, Categoria categoria, UnidadMedida unidadMedida, Usuario usuario) {
+    public Producto(int id, String nombre, Float precio, int stock, String descripcion, String imagenUrl, Float peso, Categoria categoria, UnidadMedida unidadMedida, Usuario usuario) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;
         this.stock = stock;
         this.descripcion = descripcion;
         this.imagenUrl = imagenUrl;
-        this.categoria = categoria.getIdCategoria();
+        this.peso = peso;
+        this.categoria = categoria;
         this.unidadMedida = unidadMedida;
         this.usuario = usuario;
     }
@@ -31,8 +71,8 @@ public class Producto {
         return id;
     }
 
-    public void setId(Object id) {
-        this.id = (int) id;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getNombre() {
@@ -43,11 +83,11 @@ public class Producto {
         this.nombre = nombre;
     }
 
-    public double getPrecio() {
+    public Float getPrecio() {
         return precio;
     }
 
-    public void setPrecio(double precio) {
+    public void setPrecio(Float precio) {
         this.precio = precio;
     }
 
@@ -75,11 +115,19 @@ public class Producto {
         this.imagenUrl = imagenUrl;
     }
 
-    public int getCategoria() {
+    public Float getPeso() {
+        return peso;
+    }
+
+    public void setPeso(Float peso) {
+        this.peso = peso;
+    }
+
+    public Categoria getCategoria() {
         return categoria;
     }
 
-    public void setCategoria(int categoria) {
+    public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
 
@@ -99,8 +147,27 @@ public class Producto {
         this.usuario = usuario;
     }
 
-    
-    
+    public List<DetalleCarrito> getDetallesCarrito() {
+        return detallesCarrito;
+    }
 
-    
+    public void setDetallesCarrito(List<DetalleCarrito> detallesCarrito) {
+        this.detallesCarrito = detallesCarrito;
+    }
+
+    public List<DetallePedido> getDetallesPedido() {
+        return detallesPedido;
+    }
+
+    public void setDetallesPedido(List<DetallePedido> detallesPedido) {
+        this.detallesPedido = detallesPedido;
+    }
+
+    public List<Resena> getResenas() {
+        return resenas;
+    }
+
+    public void setResenas(List<Resena> resenas) {
+        this.resenas = resenas;
+    }
 }

@@ -1,20 +1,30 @@
 package com.example.demo.Model;
 
-import java.util.ArrayList;
 import java.util.List;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "carrito_compras")
 public class Carrito {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_carrito")
     private int idCarrito;
-    private Usuario Cliente;
-    private List<DetalleCarrito> detalles = new ArrayList<>();
+
+    @ManyToOne
+    @JoinColumn(name = "id_user", nullable = false)
+    private Usuario cliente;
+
+    @OneToMany(mappedBy = "carrito", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<DetalleCarrito> detalles;
 
     public Carrito() {
     }
 
     public Carrito(int idCarrito, Usuario cliente, List<DetalleCarrito> detalles) {
         this.idCarrito = idCarrito;
-        Cliente = cliente;
+        this.cliente = cliente;
         this.detalles = detalles;
     }
 
@@ -27,11 +37,11 @@ public class Carrito {
     }
 
     public Usuario getCliente() {
-        return Cliente;
+        return cliente;
     }
 
     public void setCliente(Usuario cliente) {
-        Cliente = cliente;
+        this.cliente = cliente;
     }
 
     public List<DetalleCarrito> getDetalles() {
@@ -41,10 +51,4 @@ public class Carrito {
     public void setDetalles(List<DetalleCarrito> detalles) {
         this.detalles = detalles;
     }
-
-    
-
-    
-
-
 }

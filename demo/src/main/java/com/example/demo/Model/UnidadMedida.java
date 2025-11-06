@@ -1,9 +1,25 @@
 package com.example.demo.Model;
 
+import java.util.List;
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "unidad_medida")
 public class UnidadMedida {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_unidad")
     private int idUnidad;
+
+    @Column(name = "nombre", length = 20, nullable = false)
     private String nombre;
+
+    @Column(name = "abreviatura", length = 3, nullable = false)
     private String abreviatura;
+
+    @OneToMany(mappedBy = "unidadMedida", cascade = CascadeType.ALL)
+    private List<Producto> productos;
 
     public UnidadMedida() {
     }
@@ -38,6 +54,11 @@ public class UnidadMedida {
         this.abreviatura = abreviatura;
     }
 
-    
-    
+    public List<Producto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
+    }
 }

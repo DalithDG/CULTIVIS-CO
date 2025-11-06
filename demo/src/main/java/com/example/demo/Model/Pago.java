@@ -1,25 +1,39 @@
 package com.example.demo.Model;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Pago")
 public class Pago {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "idPago")
     private int idPago;
+
+    @OneToOne
+    @JoinColumn(name = "id_pedido", nullable = false, unique = true)
     private Pedido pedido;
-    private Double monto;
+
+    @Column(name = "Monto", nullable = false)
+    private Float monto;
+
+    @Column(name = "Fecha_pago", nullable = false)
     private LocalDateTime fechaPago;
+
+    @Column(name = "Metodo", length = 15)
     private String metodoPago;
-    private String estado;
 
     public Pago() {
     }
 
-    public Pago(int idPago, Pedido pedido, Double monto, LocalDateTime fechaPago, String metodoPago, String estado) {
+    public Pago(int idPago, Pedido pedido, Float monto, LocalDateTime fechaPago, String metodoPago) {
         this.idPago = idPago;
         this.pedido = pedido;
         this.monto = monto;
         this.fechaPago = fechaPago;
         this.metodoPago = metodoPago;
-        this.estado = estado;
     }
 
     public int getIdPago() {
@@ -38,11 +52,11 @@ public class Pago {
         this.pedido = pedido;
     }
 
-    public Double getMonto() {
+    public Float getMonto() {
         return monto;
     }
 
-    public void setMonto(Double monto) {
+    public void setMonto(Float monto) {
         this.monto = monto;
     }
 
@@ -61,15 +75,4 @@ public class Pago {
     public void setMetodoPago(String metodoPago) {
         this.metodoPago = metodoPago;
     }
-
-    public String getEstado() {
-        return estado;
-    }
-
-    public void setEstado(String estado) {
-        this.estado = estado;
-    }
-
-    
-
 }

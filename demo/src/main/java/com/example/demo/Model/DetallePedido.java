@@ -1,24 +1,43 @@
 package com.example.demo.Model;
 
 import java.time.LocalDate;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "Detalle_pedido")
 public class DetallePedido {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_detalles")
     private int idDetalle;
+
+    @ManyToOne
+    @JoinColumn(name = "id_pedidos", nullable = false)
+    private Pedido pedido;
+
+    @ManyToOne
+    @JoinColumn(name = "id_productos", nullable = false)
     private Producto producto;
+
+    @Column(name = "Cantidad", nullable = false)
     private int cantidad;
-    private double precioUnitario;
-    private double subtotal;
+
+    @Column(name = "precio_unitario", nullable = false)
+    private Float precioUnitario;
+
+    @Column(name = "Fecha_entrega")
     private LocalDate fechaEntrega;
 
     public DetallePedido() {
     }
 
-    public DetallePedido(int idDetalle, Producto producto, int cantidad, double precioUnitario, double subtotal, LocalDate fechaEntrega) {
+    public DetallePedido(int idDetalle, Pedido pedido, Producto producto, int cantidad, Float precioUnitario, LocalDate fechaEntrega) {
         this.idDetalle = idDetalle;
+        this.pedido = pedido;
         this.producto = producto;
         this.cantidad = cantidad;
         this.precioUnitario = precioUnitario;
-        this.subtotal = subtotal;
         this.fechaEntrega = fechaEntrega;
     }
 
@@ -28,6 +47,14 @@ public class DetallePedido {
 
     public void setIdDetalle(int idDetalle) {
         this.idDetalle = idDetalle;
+    }
+
+    public Pedido getPedido() {
+        return pedido;
+    }
+
+    public void setPedido(Pedido pedido) {
+        this.pedido = pedido;
     }
 
     public Producto getProducto() {
@@ -46,20 +73,19 @@ public class DetallePedido {
         this.cantidad = cantidad;
     }
 
-    public double getPrecioUnitario() {
+    public Float getPrecioUnitario() {
         return precioUnitario;
     }
 
-    public void setPrecioUnitario(double precioUnitario) {
+    public void setPrecioUnitario(Float precioUnitario) {
         this.precioUnitario = precioUnitario;
     }
 
     public double getSubtotal() {
+        if (precioUnitario == null) {
+            return 0.0;
+        }
         return precioUnitario * cantidad;
-    }
-
-    public void setSubtotal(double subtotal) {
-        this.subtotal = subtotal; // Se mantiene el campo para compatibilidad, pero el valor real se calcula en getSubtotal()
     }
 
     public LocalDate getFechaEntrega() {

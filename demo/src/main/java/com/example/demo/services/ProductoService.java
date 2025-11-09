@@ -12,4 +12,7 @@ public interface ProductoService {
     Producto actualizarProducto(Producto producto);
     List<Producto> buscarPorCategoria(int categoriaId);
     List<Producto> buscarPorUsuario(int userId);
+    List<Producto> buscarPorNombre(String nombre);
+    List<Producto> buscarConStock();
+    List<Producto> buscarPorRangoPrecio(Float precioMin, Float precioMax);
 }

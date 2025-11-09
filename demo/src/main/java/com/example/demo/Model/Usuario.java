@@ -21,9 +21,6 @@ public class Usuario {
     @Column(name = "email", length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "rol", length = 15)
-    private String rol;
-
     @ManyToOne
     @JoinColumn(name = "id_departamento", nullable = false)
     private Ciudad ciudad;
@@ -40,12 +37,11 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(int id, String nombre, String contrasena, String email, String rol, Ciudad ciudad) {
+    public Usuario(int id, String nombre, String contrasena, String email, Ciudad ciudad) {
         this.id = id;
         this.nombre = nombre;
         this.contrasena = contrasena;
         this.email = email;
-        this.rol = rol;
         this.ciudad = ciudad;
     }
 
@@ -79,14 +75,6 @@ public class Usuario {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getRol() {
-        return rol;
-    }
-
-    public void setRol(String rol) {
-        this.rol = rol;
     }
 
     public Ciudad getCiudad() {

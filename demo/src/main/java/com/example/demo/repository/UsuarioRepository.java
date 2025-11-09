@@ -17,9 +17,6 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
     // Verificar si existe un email
     boolean existsByEmail(String email);
     
-    // Buscar usuarios por rol
-    List<Usuario> findByRol(String rol);
-    
     // Buscar usuarios por ciudad
     List<Usuario> findByCiudadIdCiudad(int idCiudad);
     

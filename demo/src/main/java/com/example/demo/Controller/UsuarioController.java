@@ -1,6 +1,5 @@
 package com.example.demo.Controller;
 
-import com.example.demo.Model.Ciudad;
 import com.example.demo.Model.Usuario;
 import com.example.demo.services.UsuarioService;
 
@@ -22,6 +21,12 @@ public class UsuarioController {
     @Autowired
     private UsuarioService servicio;
 
+    @Autowired
+    private com.example.demo.services.DepartamentoService departamentoService;
+
+    @Autowired
+    private com.example.demo.services.CiudadService ciudadService;
+
     // Página principal: lista de usuarios
     @GetMapping
     public String listarUsuarios(Model model) {
@@ -33,8 +38,14 @@ public class UsuarioController {
     // Formulario para registrar un nuevo usuario
     @GetMapping("/nuevo")
     public String mostrarFormulario(Model model) {
-        model.addAttribute("usuario", new Usuario());
-        model.addAttribute("ciudad", new Ciudad(1, "Medellín", null, null));
+        // Preparar usuario con ciudad y departamento vacíos para el binding Thymeleaf
+        Usuario usuario = new Usuario();
+        usuario.setCiudad(new com.example.demo.Model.Ciudad());
+        usuario.getCiudad().setDepartamento(new com.example.demo.Model.Departamento());
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("departamentos", departamentoService.listarDepartamentos());
+        model.addAttribute("ciudades", ciudadService.listarTodasLasCiudades());
         return "nuevoUsuario"; // -> nuevoUsuario.html
     }
 
@@ -49,7 +60,17 @@ public class UsuarioController {
     @GetMapping("/editar/{id}")
     public String editarUsuario(@PathVariable int id, Model model) {
         Usuario usuario = servicio.obtenerUsuarioPorId(id);
+        // Asegurarse de que existen objetos anidados para el binding
+        if (usuario.getCiudad() == null) {
+            usuario.setCiudad(new com.example.demo.Model.Ciudad());
+        }
+        if (usuario.getCiudad().getDepartamento() == null) {
+            usuario.getCiudad().setDepartamento(new com.example.demo.Model.Departamento());
+        }
+
         model.addAttribute("usuario", usuario);
+        model.addAttribute("departamentos", departamentoService.listarDepartamentos());
+        model.addAttribute("ciudades", ciudadService.listarTodasLasCiudades());
         return "editarUsuario"; // -> editarUsuario.html
     }
 

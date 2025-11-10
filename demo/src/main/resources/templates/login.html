@@ -29,12 +29,12 @@
 
       <div class="lado-derecho">
         <h2>Iniciar Sesión</h2>
-        <form class="form-login" th:action="@{/loginnew}" th:object="${usuario}" method="post">
+        <form class="form-login" th:action="@{/login}" th:object="${usuario}" method="post">
           <label for="Correo">Correo Eletronico</label>
           <input
             type="email" th:field="*{email}" id="correo" placeholder="Ingresa tu correo" required />
           <label for="password">Contraseña</label>
-          <input type="password" th:field="*{contraseña}" id="password" placeholder="Ingrese tu contraseña" required/>
+          <input type="password" th:field="*{contrasena}" id="password" placeholder="Ingrese tu contraseña" required/>
           <div class="opciones">
             <label> <input type="checkbox" />Recordarme</label>
             <a href="#" class="olvido">¿Olvidaste tu contraseña?</a>

@@ -1,96 +1,156 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro - Cultivus</title>
 
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Registro - Cultivus</title>
-  <link rel="shortcut icon" href="/demo/src/main/resources/static/images/home.png" type="image/x-icon">
-  <link rel="stylesheet" href="/demo/src/main/resources/static/register.css">
+    <!-- ✅ Cambiado para Spring Boot -->
+    <link
+      rel="shortcut icon"
+      th:href="@{/images/home.png}"
+      type="image/x-icon"
+    />
+    <link
+      rel="stylesheet"
+      th:href="@{/register.css}"
+    />
+  </head>
 
-</head>
+  <body>
+    <div class="container">
+      <header>Regístrate</header>
 
-<body>
-  <div class="container">
-    <header>Regístrate</header>
-
-    <div class="barra-progreso">
-      <div class="step active">
-        <p>Datos Básicos</p>
-        <div class="circle"><span>1</span></div>
+      <div class="barra-progreso">
+        <div class="step active">
+          <p>Datos Básicos</p>
+          <div class="circle"><span>1</span></div>
+        </div>
+        <div class="step">
+          <p>Acceso</p>
+          <div class="circle"><span>2</span></div>
+        </div>
+        <div class="step">
+          <p>Ubicación</p>
+          <div class="circle"><span>3</span></div>
+        </div>
       </div>
-      <div class="step">
-        <p>Acceso</p>
-        <div class="circle"><span>2</span></div>
-      </div>
-      <div class="step">
-        <p>Ubicación</p>
-        <div class="circle"><span>3</span></div>
+
+      <div class="formularioext">
+  <form th:action="@{/usuarios/guardar}" method="post">
+
+          <!-- PÁGINA 1: Información básica -->
+          <div class="page slide-page">
+            <div class="titulo">Información Básica</div>
+
+            <div class="campos">
+              <div class="etiqueta">Nombre Completo</div>
+              <input
+                type="text"
+                name="nombre"
+                placeholder="Ingrese su nombre completo"
+                required
+              />
+            </div>
+
+            <div class="campos">
+              <div class="etiqueta">Correo Electrónico</div>
+              <input
+                type="email"
+                name="email"
+                placeholder="Ingrese su correo electrónico"
+                required
+              />
+            </div>
+
+            <div class="campos">
+              <div class="etiqueta">Número de Teléfono</div>
+              <input
+                type="text"
+                name="telefono"
+                placeholder="Ingrese su número de teléfono"
+                required
+              />
+            </div>
+
+            <!-- Botones página 1 -->
+            <div class="botones">
+              <button type="button" class="next">Siguiente</button>
+            </div>
+          </div>
+
+          <!-- PÁGINA 2: Datos de acceso -->
+          <div class="page">
+            <div class="titulo">Datos de Acceso</div>
+
+            <div class="campos">
+              <div class="etiqueta">Contraseña</div>
+              <input
+                type="password"
+                name="contrasena"
+                placeholder="Ingrese su contraseña"
+                required
+              />
+            </div>
+
+            <div class="campos">
+              <div class="etiqueta">Confirmar Contraseña</div>
+              <input
+                type="password"
+                name="confirmar_password"
+                placeholder="Confirme su contraseña"
+                required
+              />
+            </div>
+
+            <!-- Botones página 2 -->
+            <div class="botones">
+              <button type="button" class="prev">Atrás</button>
+              <button type="button" class="next">Siguiente</button>
+            </div>
+          </div>
+
+          <!-- PÁGINA 3: Ubicación -->
+          <div class="page">
+            <div class="titulo">Ubicación</div>
+
+            <div class="campos">
+              <div class="etiqueta">Departamento</div>
+              <select id="departamento" name="departamento.idDepartamento" required>
+                <option value="">Seleccione un departamento</option>
+                <option th:each="dep : ${departamentos}"
+                        th:value="${dep.idDepartamento}"
+                        th:text="${dep.nombre}">
+                </option>
+              </select>
+            </div>
+
+            <div class="campos">
+              <div class="etiqueta">Ciudad</div>
+              <select id="ciudad" name="ciudad.idCiudad" required>
+                <option value="">Seleccione una ciudad</option>
+                <option th:each="ciudad : ${ciudades}"
+                        th:value="${ciudad.idCiudad}"
+                        th:text="${ciudad.nombre}"
+                        th:attr="data-departamento=${ciudad.departamento.idDepartamento}">
+                </option>
+              </select>
+            </div>
+
+            <!-- Botones página 3 -->
+            <div class="botones">
+              <button type="button" class="prev">Atrás</button>
+              <button type="submit">Registrar</button>
+            </div>
+          </div>
+
+        </form>
       </div>
     </div>
 
-    <div class="formularioext">
-      <form action="#" method="post">
-
-        <!-- 🧍 Información básica -->
-        <div class="titulo">Información Básica</div>
-
-        <div class="campos">
-          <div class="etiqueta">Nombre Completo</div>
-          <input type="text" name="nombre" placeholder="Ingrese su nombre completo" required>
-        </div>
-
-        <div class="campos">
-          <div class="etiqueta">Correo Electrónico</div>
-          <input type="email" name="correo" placeholder="Ingrese su correo electrónico" required>
-        </div>
-
-        <div class="campos">
-          <div class="etiqueta">Número de Teléfono</div>
-          <input type="text" name="telefono" placeholder="Ingrese su número de teléfono" required>
-        </div>
-
-        <!-- 🔒 Datos de acceso -->
-        <div class="titulo">Datos de Acceso</div>
-
-        <div class="campos">
-          <div class="etiqueta">Contraseña</div>
-          <input type="password" name="password" placeholder="Ingrese su contraseña" required>
-        </div>
-
-        <div class="campos">
-          <div class="etiqueta">Confirmar Contraseña</div>
-          <input type="password" name="confirmar_password" placeholder="Confirme su contraseña" required>
-        </div>
-
-        <!-- 📍 Ubicación -->
-        <div class="titulo">Ubicación</div>
-
-        <div class="campos">
-          <div class="etiqueta">Departamento</div>
-          <select id="departamento" name="departamento" required>
-            <option value="">Seleccione un departamento</option>
-          </select>
-        </div>
-
-        <div class="campos">
-          <div class="etiqueta">Ciudad</div>
-          <select id="ciudad" name="ciudad" required>
-            <option value="">Seleccione una ciudad</option>
-          </select>
-        </div>
-
-        <!-- Botones -->
-        <div class="botones">
-          <button type="reset">Limpiar</button>
-          <button type="submit">Registrar</button>
-        </div>
-
-      </form>
-    </div>
-  </div>
-
-  
-</body>
-
+    <!-- Script para manejar la selección de departamento y ciudad -->
+    
+    <!-- Script para la navegación del formulario -->
+    <script th:src="@{/js/register.js}" defer></script>
+  </body>
 </html>

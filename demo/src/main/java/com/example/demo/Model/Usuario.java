@@ -22,7 +22,7 @@ public class Usuario {
     private String email;
 
     @ManyToOne
-    @JoinColumn(name = "id_departamento", nullable = false)
+    @JoinColumn(name = "id_ciudad", nullable = false)
     private Ciudad ciudad;
 
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)

@@ -12,7 +12,7 @@ public class Ciudad {
     @Column(name = "id_ciudad")
     private int idCiudad;
 
-    @Column(name = "nombre", length = 20, nullable = false)
+    @Column(name = "nombre", length = 50, nullable = false)
     private String nombre;
 
     @Column(name = "direccion", length = 50)

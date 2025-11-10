@@ -19,9 +19,9 @@ public class RoutesController {
         return "index";
     }
 
-    @GetMapping("/product")
-    public String Producto() {
-        return "product";
+    @GetMapping("/category")
+    public String paginaCategoria() {
+        return "category";
     }
 
     @GetMapping("/product-detall")
@@ -41,7 +41,7 @@ public class RoutesController {
     @Autowired
     private CiudadService ciudadService;
 
-    @GetMapping("/registro")
+    @GetMapping("/register")
     public String Registro(Model model) {
         model.addAttribute("usuario", new Usuario());
         model.addAttribute("departamentos", departamentoService.listarDepartamentos());
@@ -49,26 +49,10 @@ public class RoutesController {
         return "register";
     }
 
-    // Rutas compatibles con el header y alias
-    @GetMapping("/newregister")
-    public String aliasNewRegister() {
-        return "redirect:/registro";
-    }
-
-    @GetMapping("/loginnew")
-    public String aliasLoginNew() {
-        return "redirect:/login";
-    }
-
-    @GetMapping("/categorias")
-    public String aliasCategorias() {
-        return "redirect:/product";
-    }
 
     @GetMapping("/carrito")
     public String aliasCarrito() {
-        // A falta de una vista de carrito, redirigimos a la lista de productos por ahora
-        return "redirect:/product";
+        return "carrito";
     }
 
 }

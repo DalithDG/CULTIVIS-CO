@@ -35,6 +35,26 @@ public class RoutesController {
         return "login";
     }
 
+    @GetMapping("/frutas")
+    public String verFrutas(Model model) {
+        return "frutas";
+    }
+    @GetMapping("/verduras")
+    public String verVerduras(Model model) {
+        return "verduras";
+    }
+    @GetMapping("/lacteos")
+    public String verLacteos(Model model) {
+        return "verduras";
+    }
+    @GetMapping("/cafe")
+    public String verCafe(Model model) {
+        return "cafeYcacao";
+    }
+
+
+    
+
     @Autowired
     private DepartamentoService departamentoService;
 

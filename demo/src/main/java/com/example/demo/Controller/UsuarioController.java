@@ -15,76 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/usuarios")
 public class UsuarioController {
 
-    @Autowired
-    private UsuarioService servicio;
 
-    @Autowired
-    private com.example.demo.services.DepartamentoService departamentoService;
 
-    @Autowired
-    private com.example.demo.services.CiudadService ciudadService;
 
-    // Página principal: lista de usuarios
-    @GetMapping
-    public String listarUsuarios(Model model) {
-        List<Usuario> usuarios = servicio.obtenerTodos();
-        model.addAttribute("usuarios", usuarios);
-        return "usuarios"; // -> usuarios.html
-    }
-
-    // Formulario para registrar un nuevo usuario
-    @GetMapping("/nuevo")
-    public String mostrarFormulario(Model model) {
-        // Preparar usuario con ciudad y departamento vacíos para el binding Thymeleaf
-        Usuario usuario = new Usuario();
-        usuario.setCiudad(new com.example.demo.Model.Ciudad());
-        usuario.getCiudad().setDepartamento(new com.example.demo.Model.Departamento());
-
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("departamentos", departamentoService.listarDepartamentos());
-        model.addAttribute("ciudades", ciudadService.listarTodasLasCiudades());
-        return "nuevoUsuario"; // -> nuevoUsuario.html
-    }
-
-    // Guardar usuario (desde el formulario)
-    @PostMapping("/guardar")
-    public String guardarUsuario(@ModelAttribute Usuario usuario) {
-        servicio.guardarUsuario(usuario);
-        return "redirect:/usuarios";
-    }
-
-    // Editar usuario
-    @GetMapping("/editar/{id}")
-    public String editarUsuario(@PathVariable int id, Model model) {
-        Usuario usuario = servicio.obtenerUsuarioPorId(id);
-        // Asegurarse de que existen objetos anidados para el binding
-        if (usuario.getCiudad() == null) {
-            usuario.setCiudad(new com.example.demo.Model.Ciudad());
-        }
-        if (usuario.getCiudad().getDepartamento() == null) {
-            usuario.getCiudad().setDepartamento(new com.example.demo.Model.Departamento());
-        }
-
-        model.addAttribute("usuario", usuario);
-        model.addAttribute("departamentos", departamentoService.listarDepartamentos());
-        model.addAttribute("ciudades", ciudadService.listarTodasLasCiudades());
-        return "editarUsuario"; // -> editarUsuario.html
-    }
-
-    // Actualizar usuario
-    @PostMapping("/actualizar")
-    public String actualizarUsuario(@ModelAttribute Usuario usuario) {
-        servicio.actualizarUsuario(usuario);
-        return "redirect:/usuarios";
-    }
-
-    // Eliminar usuario
-    @GetMapping("/eliminar/{id}")
-    public String eliminarUsuario(@PathVariable int id) {
-        servicio.eliminarUsuario(id);
-        return "redirect:/usuarios";
-    }
 }

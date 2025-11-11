@@ -2,7 +2,7 @@ package com.example.demo.services;
 
 import java.util.List;
 import java.util.ArrayList;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.stereotype.Service;
 import com.example.demo.Model.Ciudad;
 import com.example.demo.repository.CiudadRepository;
@@ -12,7 +12,7 @@ public class CiudadService implements ICiudadService {
 
     private final CiudadRepository repo;
 
-    @Autowired
+
     public CiudadService(CiudadRepository repo) {
         this.repo = repo;
     }

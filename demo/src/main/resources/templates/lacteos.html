@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Lácteos | Cultivus</title>
+  <link rel="stylesheet" th:href="@{/style.css}" />
+  <link rel="stylesheet" th:href="@{/categorias.css}" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+</head>
+<body>
+  <!-- Header -->
+  <header th:replace="fragments/header :: siteHeader"></header>
+
+
+  <!-- Productos -->
+  <section class="productos-categoria">
+    <div class="container">
+      <div class="section-header">
+        <h2>Nuestros Lácteos</h2>
+        <p>Leche, queso, yogur y más — directo del campo 🧀</p>
+      </div>
+
+      <div th:if="${productos != null and !productos.isEmpty()}" class="productos-grid">
+        <div th:each="producto : ${productos}" class="producto-card">
+          <div class="producto-image">
+            <img th:src="@{${producto.imagen}}" th:alt="${producto.nombre}" />
+          </div>
+          <div class="producto-info">
+            <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+            <span class="precio"
+              th:text="'$' + ${#numbers.formatDecimal(producto.precio,0,'COMMA',0,'POINT')}">$0</span>
+            <button
+              class="btn-agregar"
+              th:onclick="'agregarAlCarrito(' + ${producto.id} + ')'"
+            >
+              <i class="fas fa-cart-plus"></i> Agregar
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div th:if="${productos == null or productos.isEmpty()}" class="no-productos">
+        <i class="fas fa-box-open"></i>
+        <h3>No hay lácteos disponibles por ahora</h3>
+        <p>Estamos trayendo productos frescos directamente de la finca 🥛</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer th:replace="fragments/footer :: siteFooter"></footer>
+</body>
+</html>

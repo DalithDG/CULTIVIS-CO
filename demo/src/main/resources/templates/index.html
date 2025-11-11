@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cultivus</title>    
+    <title>Cultivus</title>
+
     <link rel="stylesheet" th:href="@{/style.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-RXf+QSDCUQs6Q0p2U2uD2OeR5xw8n5T6vCJ7/3zvK3YyEdSpYohhjFExz04szsP1CZq0w0C+YyXWZP8y+e2xUg=="
@@ -80,7 +81,7 @@
             </div>
 
             <div class="categorias-grid">
-                <a th:href="@{/categorias/frutas}" class="categoria-card">
+                <a th:href="@{/frutas}" class="categoria-card">
                     <div class="categoria-icon">
                         <i class="fas fa-apple-alt"></i>
                     </div>
@@ -88,7 +89,7 @@
                     <p>Frescas y naturales</p>
                 </a>
 
-                <a th:href="@{/categorias/verduras}" class="categoria-card">
+                <a th:href="@{/verduras}" class="categoria-card">
                     <div class="categoria-icon">
                         <i class="fas fa-carrot"></i>
                     </div>
@@ -96,7 +97,7 @@
                     <p>Directo del campo</p>
                 </a>
 
-                <a th:href="@{/categorias/lacteos}" class="categoria-card">
+                <a th:href="@{/lacteos}" class="categoria-card">
                     <div class="categoria-icon">
                         <i class="fas fa-cheese"></i>
                     </div>
@@ -104,7 +105,7 @@
                     <p>100% naturales</p>
                 </a>
 
-                <a th:href="@{/categorias/cafeYcacao}" class="categoria-card">
+                <a th:href="@{/cafe}" class="categoria-card">
                     <div class="categoria-icon">
                         <i class="fas fa-mug-hot"></i>
                     </div>
@@ -148,7 +149,6 @@
                     </div>
                 </div>
             </div>
-
             <!-- Si NO hay productos -->
             <div th:if="${productos == null or productos.isEmpty()}" class="no-productos">
                 <div class="no-productos-icon">
@@ -160,7 +160,7 @@
 
             <!-- Botón ver todos -->
             <div th:if="${productos != null and !productos.isEmpty()}" class="ver-todos-container">
-                <a th:href="@{/productos}" class="btn-ver-todos">
+                <a th:href="@{/category}" class="btn-ver-todos">
                     Ver todos los productos <i class="fas fa-arrow-right"></i>
                 </a>
             </div>

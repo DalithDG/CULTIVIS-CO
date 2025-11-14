@@ -16,11 +16,6 @@ public class UsuarioService implements IUsuarioService {
     private UsuarioRepository repositorio;
 
     @Override
-    public void guardarUsuario(Usuario usuario) {
-        repositorio.save(usuario);
-    }
-
-    @Override
     public void actualizarUsuario(Usuario usuario) {
         if (usuario.getId() <= 0) {
             throw new IllegalArgumentException("ID de usuario inválido");
@@ -33,16 +28,15 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuario obtenerUsuarioPorId(int id) {
-        Optional<Usuario> usuario = repositorio.findById(id);
-        return usuario.orElse(null);
+        return repositorio.findById(id).orElse(null);
     }
 
     @Override
-    public Usuario iniciarSesion(String correo, String contraseña) {
-        Optional<Usuario> usuarioOpt = repositorio.findByEmail(correo);
+    public Usuario iniciarSesion(String correo, String contrasena) {
+        Optional<Usuario> usuarioOpt = Optional.ofNullable(repositorio.findByEmail(correo));
         if (usuarioOpt.isPresent()) {
             Usuario usuario = usuarioOpt.get();
-            if (usuario.getContrasena().equals(contraseña)) {
+            if (usuario.getContrasena().equals(contrasena)) {
                 return usuario;
             }
         }
@@ -63,5 +57,24 @@ public class UsuarioService implements IUsuarioService {
         return false;
     }
 
-    
+    @Override
+    public Usuario save(Usuario usuario) {
+        return repositorio.save(usuario);
+    }
+
+    @Override
+    public boolean existeEmail(String email) {
+        return repositorio.existsByEmail(email);
+    }
+
+    @Override
+    public Usuario findByEmail(String email) {
+        return repositorio.findByEmail(email);
+    }
+
+    // Método alternativo por si lo necesitas
+    @Override
+    public Usuario findUsuario(String email) {
+        return repositorio.findByEmail(email);
+    }
 }

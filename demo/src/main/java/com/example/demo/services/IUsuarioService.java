@@ -1,16 +1,24 @@
 package com.example.demo.services;
 
 import java.util.List;
-
 import com.example.demo.Model.Usuario;
 
 public interface IUsuarioService {
-
-    void guardarUsuario(Usuario usuario);
-    void actualizarUsuario(Usuario usuario);
+    
+    // Métodos de autenticación
+    Usuario iniciarSesion(String correo, String contrasena);
+    
+    // Métodos de búsqueda
     Usuario obtenerUsuarioPorId(int id);
-    Usuario iniciarSesion(String correo, String contraseña);
+    Usuario findByEmail(String email);  // ✅ Agregado
+    Usuario findUsuario(String email);
     List<Usuario> obtenerTodos();
+    
+    // Métodos de modificación
+    void actualizarUsuario(Usuario usuario);
+    Usuario save(Usuario usuario);
     boolean eliminarUsuario(int id);
     
-} 
+    // Validaciones
+    boolean existeEmail(String email);
+}

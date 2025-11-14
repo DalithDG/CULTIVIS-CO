@@ -1,13 +1,10 @@
 package com.example.demo.Controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import com.example.demo.Model.Usuario;
-import com.example.demo.services.DepartamentoService;
-import com.example.demo.services.CiudadService;
 
 @Controller
 public class RoutesController {
@@ -35,6 +32,16 @@ public class RoutesController {
         return "login";
     }
 
+    @GetMapping("/registro")
+    public String registro() {
+        return "registro";
+    }
+
+    @GetMapping("/register")
+    public String register() {
+        return "redirect:/registro";
+    }
+
     @GetMapping("/frutas")
     public String verFrutas(Model model) {
         return "frutas";
@@ -54,20 +61,6 @@ public class RoutesController {
 
 
     
-
-    @Autowired
-    private DepartamentoService departamentoService;
-
-    @Autowired
-    private CiudadService ciudadService;
-
-    @GetMapping("/register")
-    public String Registro(Model model) {
-        model.addAttribute("usuario", new Usuario());
-        model.addAttribute("departamentos", departamentoService.listarDepartamentos());
-        model.addAttribute("ciudades", ciudadService.listarTodasLasCiudades());
-        return "register";
-    }
 
 
     @GetMapping("/carrito")

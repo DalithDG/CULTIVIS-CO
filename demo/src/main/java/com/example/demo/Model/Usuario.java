@@ -37,7 +37,7 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(String nombre, String contrasena){
+    public Usuario(String nombre, String contrasena) {
         this.nombre = nombre;
         this.contrasena = contrasena;
     }
@@ -48,6 +48,18 @@ public class Usuario {
         this.contrasena = contrasena;
         this.email = email;
         this.ciudad = ciudad;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_departamento")
+    private Departamento departamento;
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
     }
 
     public int getId() {

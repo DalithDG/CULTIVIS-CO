@@ -6,6 +6,7 @@ import com.example.demo.Model.Departamento;
 import com.example.demo.services.UsuarioService;
 import com.example.demo.services.CiudadService;
 import com.example.demo.services.DepartamentoService;
+import com.example.demo.services.VendedorService; // ✅ AGREGAR ESTO
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,14 +23,17 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final CiudadService ciudadService;
     private final DepartamentoService departamentoService;
+    private final VendedorService vendedorService; // Nuevo
 
     @Autowired
     public UsuarioController(UsuarioService usuarioService,
                              CiudadService ciudadService,
-                             DepartamentoService departamentoService) {
+                             DepartamentoService departamentoService,
+                             VendedorService vendedorService) { // Nuevo
         this.usuarioService = usuarioService;
         this.ciudadService = ciudadService;
         this.departamentoService = departamentoService;
+        this.vendedorService = vendedorService; // Nuevo
     }
 
     // ===========================
@@ -103,14 +107,14 @@ public class UsuarioController {
 
             // Guardar usuario
             usuarioService.save(usuario);
-            System.out.println("✅ Usuario guardado: " + usuario.getEmail());
+            System.out.println("Usuario guardado: " + usuario.getEmail());
 
             // Redirigir al login con mensaje
             redirectAttributes.addFlashAttribute("mensaje", "¡Registro exitoso! Por favor inicia sesión.");
             return "redirect:/usuario/login";
 
         } catch (Exception e) {
-            System.err.println("❌ Error al registrar: " + e.getMessage());
+            System.err.println("Error al registrar: " + e.getMessage());
             model.addAttribute("error", "Error al registrar el usuario: " + e.getMessage());
             return "registro";
         }
@@ -125,7 +129,7 @@ public class UsuarioController {
     }
 
     // ===========================
-    // VALIDAR LOGIN
+    // VALIDAR LOGIN (✅ MODIFICADO)
     // ===========================
     @PostMapping("/login")
     public String validarLogin(@RequestParam("email") String email,
@@ -134,45 +138,58 @@ public class UsuarioController {
                                Model model,
                                RedirectAttributes redirectAttributes) {
         try {
-            System.out.println("🔍 Intentando login con email: " + email);
+            System.out.println("Intentando login con email: " + email);
             
             if (email == null || email.trim().isEmpty() ||
                 contrasena == null || contrasena.trim().isEmpty()) {
-                System.out.println("❌ Campos vacíos");
+                System.out.println("Campos vacíos");
                 model.addAttribute("error", "Por favor ingrese su correo y contraseña");
                 return "login";
             }
 
             String emailLimpio = email.trim().toLowerCase();
-            System.out.println("🔍 Buscando usuario: " + emailLimpio);
+            System.out.println("Buscando usuario: " + emailLimpio);
             
             Usuario usuario = usuarioService.findByEmail(emailLimpio);
             
             if (usuario == null) {
-                System.out.println("❌ Usuario no encontrado: " + emailLimpio);
+                System.out.println("Usuario no encontrado: " + emailLimpio);
                 model.addAttribute("error", "No existe una cuenta con ese correo electrónico");
                 return "login";
             }
 
             System.out.println("✓ Usuario encontrado: " + usuario.getNombre());
-            System.out.println("🔍 Contraseña ingresada: [" + contrasena + "]");
-            System.out.println("🔍 Contraseña guardada: [" + usuario.getContrasena() + "]");
 
             if (!usuario.getContrasena().equals(contrasena)) {
-                System.out.println("❌ Contraseña incorrecta");
+                System.out.println("Contraseña incorrecta");
                 model.addAttribute("error", "Contraseña incorrecta");
                 return "login";
             }
 
-            // Guardar usuario en sesión
+            // NUEVO: Cargar perfil de vendedor si existe
+            vendedorService.obtenerPerfilPorUsuarioId(usuario.getId())
+                .ifPresent(perfil -> {
+                    usuario.setPerfilVendedor(perfil);
+                    System.out.println("Perfil de vendedor cargado: " + perfil.getRazonSocial());
+                });
+
+            // Guardar usuario en sesión (ahora con el perfil cargado)
             session.setAttribute("usuarioLogueado", usuario);
-            System.out.println("✅ Login exitoso: " + usuario.getEmail());
+            System.out.println("Login exitoso: " + usuario.getEmail());
 
             redirectAttributes.addFlashAttribute("mensaje", "Bienvenido, " + usuario.getNombre() + "!");
-            return "redirect:/usuario/inicio";
+            
+            // NUEVO: Redirigir según el tipo de usuario
+            if (usuario.esVendedor()) {
+                System.out.println("Usuario es vendedor, redirigiendo a /vendedor/inicio");
+                return "redirect:/vendedor/inicio";
+            } else {
+                System.out.println("Usuario regular, redirigiendo a /usuario/inicio");
+                return "redirect:/usuario/inicio";
+            }
 
         } catch (Exception e) {
-            System.err.println("❌ Error en login: " + e.getMessage());
+            System.err.println("Error en login: " + e.getMessage());
             e.printStackTrace();
             model.addAttribute("error", "Error al iniciar sesión: " + e.getMessage());
             return "login";
@@ -183,17 +200,23 @@ public class UsuarioController {
     // PÁGINA DE INICIO (después del login)
     // ===========================
     @GetMapping("/inicio")
-    public String mostrarInicio(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
-        if (usuario == null) {
-            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
-            return "redirect:/usuario/login";
-        }
-        
-        model.addAttribute("usuario", usuario);
-        return "inicio";
+public String mostrarInicio(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+    Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+    
+    if (usuario == null) {
+        redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+        return "redirect:/usuario/login";
     }
+    
+    model.addAttribute("usuario", usuario);
+    
+    // NUEVO: Mostrar vista según el tipo de usuario
+    if (usuario.esVendedor()) {
+        return "inicio-vendedor";  // Vista para vendedores
+    } else {
+        return "inicio-comprador"; // Vista para compradores
+    }
+}
 
     // ===========================
     // CERRAR SESIÓN

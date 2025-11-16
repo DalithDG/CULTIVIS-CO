@@ -1,0 +1,31 @@
+<header th:fragment="siteHeader">
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <div class="top-bar">
+        <p>Cobertura Toda Colombia. Pedido mínimo $200.000</p>
+    </div>
+
+    <div class="main-header">
+        <div class="header-container">
+            <div class="logo">
+                <a th:href="@{/}">
+                    <img th:src="@{/images/isotipoWhite.png}" alt="Logo">
+                </a>
+            </div>
+
+            <nav class="nav-links">
+                <ul>
+                    <li><a th:href="@{/vendedor/inicio}">Inicio</a></li>
+                    
+                    <li><a th:href="@{/vendedor/Miproductos}">Mis Productos</a></li>
+                    
+                    <li><a th:href="@{/vendedor/productos/nuevo}">Agregar Producto</a></li>
+
+                    <li><a th:href="@{/usuario/logout}">Cerrar Sesión</a></li>
+                    
+                </ul>
+            </nav>
+        </div>
+    </div>
+</header>

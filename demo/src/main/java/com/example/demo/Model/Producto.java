@@ -21,11 +21,12 @@ public class Producto {
     @Column(name = "Stock", nullable = false)
     private int stock;
 
-    @Column(name = "descripcion", length = 35)
+    @Column(name = "descripcion", length = 255)
     private String descripcion;
 
-    @Column(name = "imagen (url)", length = 50)
+    @Column(name = "imagen_url", length = 255)
     private String imagenUrl;
+
 
     @Column(name = "Peso", nullable = false)
     private Float peso;

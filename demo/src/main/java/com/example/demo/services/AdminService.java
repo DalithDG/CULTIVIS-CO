@@ -1,66 +1,129 @@
 package com.example.demo.services;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.example.demo.Model.PerfilAdmin;
+import com.example.demo.Model.Usuario;
+import com.example.demo.repository.PerfilAdminRepository;
+import com.example.demo.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.example.demo.Model.Admin;
-import com.example.demo.repository.AdminRepository;
+import java.util.Optional;
 
 @Service
 public class AdminService {
 
     @Autowired
-    private AdminRepository adminRepository;
+    private PerfilAdminRepository perfilAdminRepository;
 
-    public void guardarAdmin(Admin admin) {
-        if (adminRepository.existsByUserAdm(admin.getUserAdm())) {
-            throw new IllegalArgumentException("El nombre de usuario ya existe");
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+
+    @Autowired
+    private UsuarioService usuarioService;
+
+    /**
+     * Registra un nuevo usuario como administrador
+     * Este método se usa en el registro, creando automáticamente el perfil admin
+     */
+    @Transactional
+    public Usuario registrarAdmin(String nombre, String email, String contrasena,
+                                 String nivelPermisos, String departamentoResponsable) {
+        
+        // Validar email duplicado
+        if (usuarioService.existeEmail(email)) {
+            throw new IllegalArgumentException("Este correo electrónico ya está registrado");
         }
-        adminRepository.save(admin);
+
+        // Crear el usuario base (sin ciudad/departamento si no son necesarios para admin)
+        Usuario usuario = new Usuario();
+        usuario.setNombre(nombre);
+        usuario.setEmail(email.toLowerCase().trim());
+        usuario.setContrasena(contrasena);
+        
+        // Guardar usuario primero
+        usuario = usuarioRepository.save(usuario);
+
+        // Crear el perfil de admin automáticamente
+        PerfilAdmin perfilAdmin = new PerfilAdmin(usuario, nivelPermisos, departamentoResponsable);
+        perfilAdmin = perfilAdminRepository.save(perfilAdmin);
+
+        // Asociar el perfil al usuario
+        usuario.setPerfilAdmin(perfilAdmin);
+
+        System.out.println("✅ Admin registrado: " + email);
+        return usuario;
     }
 
-    public void actualizarAdmin(Admin admin) {
-        if (admin.getIdAdmin() <= 0) {
-            throw new IllegalArgumentException("ID de admin inválido");
+    /**
+     * Verifica si un usuario es administrador
+     */
+    public boolean esAdmin(int usuarioId) {
+        return perfilAdminRepository.existsByUsuarioId(usuarioId);
+    }
+
+    /**
+     * Obtiene el perfil de admin de un usuario
+     */
+    public Optional<PerfilAdmin> obtenerPerfilPorUsuarioId(int usuarioId) {
+        return perfilAdminRepository.findByUsuarioId(usuarioId);
+    }
+
+    /**
+     * Actualiza el perfil de administrador
+     */
+    @Transactional
+    public PerfilAdmin actualizarPerfil(int perfilId, String nivelPermisos, 
+                                       String departamentoResponsable, boolean activo) {
+        
+        PerfilAdmin perfil = perfilAdminRepository.findById(perfilId)
+            .orElseThrow(() -> new IllegalArgumentException("Perfil de admin no encontrado"));
+
+        if (nivelPermisos != null) perfil.setNivelPermisos(nivelPermisos);
+        if (departamentoResponsable != null) perfil.setDepartamentoResponsable(departamentoResponsable);
+        perfil.setActivo(activo);
+
+        return perfilAdminRepository.save(perfil);
+    }
+
+    /**
+     * Desactiva un administrador (no se elimina, solo se desactiva)
+     */
+    @Transactional
+    public void desactivarAdmin(int usuarioId) {
+        Optional<PerfilAdmin> perfilOpt = perfilAdminRepository.findByUsuarioId(usuarioId);
+        
+        perfilOpt.ifPresent(perfil -> {
+            perfil.setActivo(false);
+            perfilAdminRepository.save(perfil);
+        });
+    }
+
+    /**
+     * Login específico para administradores
+     */
+    public Usuario loginAdmin(String email, String contrasena) {
+        Usuario usuario = usuarioService.findByEmail(email.toLowerCase().trim());
+        
+        if (usuario == null) {
+            throw new IllegalArgumentException("Credenciales incorrectas");
         }
-        if (!adminRepository.existsById(admin.getIdAdmin())) {
-            throw new IllegalArgumentException("Admin no encontrado con ID: " + admin.getIdAdmin());
+
+        if (!usuario.getContrasena().equals(contrasena)) {
+            throw new IllegalArgumentException("Credenciales incorrectas");
         }
-        adminRepository.save(admin);
-    }
 
-    public Admin obtenerAdminPorId(int id) {
-        Optional<Admin> admin = adminRepository.findById(id);
-        return admin.orElse(null);
-    }
-
-    public Admin iniciarSesionAdmin(String userAdm, String password) {
-        Optional<Admin> adminOpt = adminRepository.findByUserAdm(userAdm);
-        if (adminOpt.isPresent()) {
-            Admin admin = adminOpt.get();
-            if (admin.getPassword().equals(password)) {
-                return admin;
-            }
+        // Verificar que sea admin
+        if (!esAdmin(usuario.getId())) {
+            throw new IllegalArgumentException("No tienes permisos de administrador");
         }
-        return null;
-    }
 
-    public List<Admin> obtenerTodosAdmins() {
-        return adminRepository.findAll();
-    }
-
-    public boolean eliminarAdmin(int id) {
-        if (adminRepository.existsById(id)) {
-            adminRepository.deleteById(id);
-            return true;
+        // Verificar que el admin esté activo
+        Optional<PerfilAdmin> perfilOpt = obtenerPerfilPorUsuarioId(usuario.getId());
+        if (perfilOpt.isPresent() && !perfilOpt.get().isActivo()) {
+            throw new IllegalArgumentException("Tu cuenta de administrador está inactiva");
         }
-        return false;
-    }
 
-    public boolean existeUserAdm(String userAdm) {
-        return adminRepository.existsByUserAdm(userAdm);
+        return usuario;
     }
 }

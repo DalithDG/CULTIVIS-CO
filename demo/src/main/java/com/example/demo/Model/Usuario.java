@@ -25,6 +25,17 @@ public class Usuario {
     @JoinColumn(name = "id_ciudad", nullable = false)
     private Ciudad ciudad;
 
+    @ManyToOne
+    @JoinColumn(name = "id_departamento")
+    private Departamento departamento;
+
+    // NUEVAS RELACIONES CON PERFILES
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PerfilVendedor perfilVendedor;
+
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    private PerfilAdmin perfilAdmin;
+
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
     private List<Carrito> carritos;
 
@@ -34,6 +45,7 @@ public class Usuario {
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Producto> productos;
 
+    // Constructores
     public Usuario() {
     }
 
@@ -50,18 +62,20 @@ public class Usuario {
         this.ciudad = ciudad;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_departamento")
-    private Departamento departamento;
-
-    public Departamento getDepartamento() {
-        return departamento;
+    // MÉTODOS DE UTILIDAD PARA VERIFICAR ROLES
+    public boolean esVendedor() {
+        return this.perfilVendedor != null;
     }
 
-    public void setDepartamento(Departamento departamento) {
-        this.departamento = departamento;
+    public boolean esAdmin() {
+        return this.perfilAdmin != null;
     }
 
+    public boolean esUsuarioRegular() {
+        return this.perfilVendedor == null && this.perfilAdmin == null;
+    }
+
+    // Getters y Setters
     public int getId() {
         return id;
     }
@@ -100,6 +114,30 @@ public class Usuario {
 
     public void setCiudad(Ciudad ciudad) {
         this.ciudad = ciudad;
+    }
+
+    public Departamento getDepartamento() {
+        return departamento;
+    }
+
+    public void setDepartamento(Departamento departamento) {
+        this.departamento = departamento;
+    }
+
+    public PerfilVendedor getPerfilVendedor() {
+        return perfilVendedor;
+    }
+
+    public void setPerfilVendedor(PerfilVendedor perfilVendedor) {
+        this.perfilVendedor = perfilVendedor;
+    }
+
+    public PerfilAdmin getPerfilAdmin() {
+        return perfilAdmin;
+    }
+
+    public void setPerfilAdmin(PerfilAdmin perfilAdmin) {
+        this.perfilAdmin = perfilAdmin;
     }
 
     public List<Carrito> getCarritos() {

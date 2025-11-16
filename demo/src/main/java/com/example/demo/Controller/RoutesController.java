@@ -13,7 +13,7 @@ public class RoutesController {
 
     @GetMapping("/")
     public String Index() {
-        return "index";
+        return "inicio-publico";
     }
 
     @GetMapping("/category")
@@ -24,6 +24,11 @@ public class RoutesController {
     @GetMapping("/product-detall")
     public String ProductoDetall() {
         return "product-detall";
+    }
+
+    @GetMapping("/registro-vendedor")
+    public String RegistroVendedor() {
+        return "registro-vendedor";
     }
 
     @GetMapping("/login")

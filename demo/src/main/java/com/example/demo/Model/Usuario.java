@@ -1,81 +1,75 @@
 package com.example.demo.Model;
 
 import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "User")
+@Table(name = "usuarios")
 public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_user_")
+    @Column(name = "id_usuario")
     private int id;
 
-    @Column(name = "nombre", length = 50, nullable = false)
+    @Column(length = 50, nullable = false)
     private String nombre;
 
-    @Column(name = "contraseña", length = 50, nullable = false)
-    private String contrasena;
-
-    @Column(name = "email", length = 100, nullable = false, unique = true)
+    @Column(length = 100, nullable = false, unique = true)
     private String email;
 
+    @Column(length = 100, nullable = false)
+    private String contrasena;
+
     @ManyToOne
-    @JoinColumn(name = "id_ciudad", nullable = false)
+    @JoinColumn(name = "id_ciudad")
     private Ciudad ciudad;
 
     @ManyToOne
     @JoinColumn(name = "id_departamento")
     private Departamento departamento;
 
-    // NUEVAS RELACIONES CON PERFILES
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
+    // PERFIL VENDEDOR (solo si lo activa)
+    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL)
     private PerfilVendedor perfilVendedor;
 
-    @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, orphanRemoval = true)
-    private PerfilAdmin perfilAdmin;
-
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Carrito> carritos;
-
-    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
-    private List<Pedido> pedidos;
-
+    // PRODUCTOS PUBLICADOS POR EL VENDEDOR
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Producto> productos;
 
-    // Constructores
+    // CARRITOS COMO COMPRADOR
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Carrito> carritos;
+
+    // PEDIDOS COMO COMPRADOR
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
+    private List<Pedido> pedidos;
+
+    // =========================
+    // RELACIÓN CON ROLES
+    // =========================
+    @ManyToOne
+    @JoinColumn(name = "rol_id", nullable = true)
+    private Roles rol;
+
+    // =========================================
+    // CONSTRUCTORES
+    // =========================================
+
     public Usuario() {
     }
 
-    public Usuario(String nombre, String contrasena) {
+    public Usuario(String nombre, String email, String contrasena) {
         this.nombre = nombre;
-        this.contrasena = contrasena;
-    }
-
-    public Usuario(int id, String nombre, String contrasena, String email, Ciudad ciudad) {
-        this.id = id;
-        this.nombre = nombre;
-        this.contrasena = contrasena;
         this.email = email;
-        this.ciudad = ciudad;
+        this.contrasena = contrasena;
     }
 
-    // MÉTODOS DE UTILIDAD PARA VERIFICAR ROLES
-    public boolean esVendedor() {
-        return this.perfilVendedor != null;
-    }
+    // =========================================
+    // GETTERS Y SETTERS
+    // =========================================
 
-    public boolean esAdmin() {
-        return this.perfilAdmin != null;
-    }
-
-    public boolean esUsuarioRegular() {
-        return this.perfilVendedor == null && this.perfilAdmin == null;
-    }
-
-    // Getters y Setters
     public int getId() {
         return id;
     }
@@ -92,20 +86,20 @@ public class Usuario {
         this.nombre = nombre;
     }
 
-    public String getContrasena() {
-        return contrasena;
-    }
-
-    public void setContrasena(String contrasena) {
-        this.contrasena = contrasena;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getContrasena() {
+        return contrasena;
+    }
+
+    public void setContrasena(String contrasena) {
+        this.contrasena = contrasena;
     }
 
     public Ciudad getCiudad() {
@@ -132,12 +126,12 @@ public class Usuario {
         this.perfilVendedor = perfilVendedor;
     }
 
-    public PerfilAdmin getPerfilAdmin() {
-        return perfilAdmin;
+    public List<Producto> getProductos() {
+        return productos;
     }
 
-    public void setPerfilAdmin(PerfilAdmin perfilAdmin) {
-        this.perfilAdmin = perfilAdmin;
+    public void setProductos(List<Producto> productos) {
+        this.productos = productos;
     }
 
     public List<Carrito> getCarritos() {
@@ -156,11 +150,12 @@ public class Usuario {
         this.pedidos = pedidos;
     }
 
-    public List<Producto> getProductos() {
-        return productos;
+    public Roles getRol() {
+        return rol;
     }
 
-    public void setProductos(List<Producto> productos) {
-        this.productos = productos;
+    public void setRol(Roles rol) {
+        this.rol = rol;
     }
+
 }

@@ -1,13 +1,20 @@
 package com.example.demo.services;
 
+import com.example.demo.Model.DetallePedido;
+import com.example.demo.Model.Pedido;
 import com.example.demo.Model.PerfilVendedor;
+import com.example.demo.Model.Roles;
 import com.example.demo.Model.Usuario;
+import com.example.demo.repository.DetallePedidoRepository;
+import com.example.demo.repository.PedidoRepository;
 import com.example.demo.repository.PerfilVendedorRepository;
 import com.example.demo.repository.UsuarioRepository;
+import com.example.demo.services.RolesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -18,6 +25,15 @@ public class VendedorService {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+    
+    @Autowired
+    private PedidoRepository pedidoRepository;
+    
+    @Autowired
+    private DetallePedidoRepository detallePedidoRepository;
+    
+    @Autowired
+    private RolesService rolesService;
 
     /**
      * Crea un perfil de vendedor para un usuario existente
@@ -54,7 +70,14 @@ public class VendedorService {
         perfil.setBanco(banco);
         perfil.setVerificado(false); // Por defecto no verificado
 
-        return perfilVendedorRepository.save(perfil);
+        perfil = perfilVendedorRepository.save(perfil);
+        
+        // Actualizar el rol del usuario a VENDEDOR
+        Roles rolVendedor = rolesService.crearRolSiNoExiste("VENDEDOR");
+        usuario.setRol(rolVendedor);
+        usuarioRepository.save(usuario);
+
+        return perfil;
     }
 
     /**
@@ -101,5 +124,60 @@ public class VendedorService {
     public void eliminarPerfilVendedor(int usuarioId) {
         Optional<PerfilVendedor> perfil = perfilVendedorRepository.findByUsuarioId(usuarioId);
         perfil.ifPresent(perfilVendedorRepository::delete);
+    }
+    
+    /**
+     * Obtiene todos los pedidos que contienen productos del vendedor
+     */
+    public List<Pedido> obtenerPedidosDelVendedor(int vendedorId) {
+        return pedidoRepository.findPedidosByVendedorId(vendedorId);
+    }
+    
+    /**
+     * Obtiene los pedidos del vendedor filtrados por estado
+     */
+    public List<Pedido> obtenerPedidosDelVendedorPorEstado(int vendedorId, String estado) {
+        return pedidoRepository.findPedidosByVendedorIdAndEstado(vendedorId, estado);
+    }
+    
+    /**
+     * Obtiene los detalles de pedido de un vendedor específico
+     */
+    public List<DetallePedido> obtenerDetallesVentasDelVendedor(int vendedorId) {
+        return detallePedidoRepository.findDetallesByVendedorId(vendedorId);
+    }
+    
+    /**
+     * Obtiene los detalles de un pedido específico que pertenecen al vendedor
+     */
+    public List<DetallePedido> obtenerDetallesPedidoDelVendedor(int pedidoId, int vendedorId) {
+        return detallePedidoRepository.findDetallesByPedidoIdAndVendedorId(pedidoId, vendedorId);
+    }
+    
+    /**
+     * Calcula el total de ventas del vendedor
+     */
+    public double calcularTotalVentas(int vendedorId) {
+        List<DetallePedido> detalles = obtenerDetallesVentasDelVendedor(vendedorId);
+        return detalles.stream()
+                .mapToDouble(d -> d.getSubtotal())
+                .sum();
+    }
+    
+    /**
+     * Actualiza el estado de un pedido (solo si el vendedor tiene productos en ese pedido)
+     */
+    @Transactional
+    public void actualizarEstadoPedido(int pedidoId, int vendedorId, String nuevoEstado) {
+        List<DetallePedido> detalles = obtenerDetallesPedidoDelVendedor(pedidoId, vendedorId);
+        if (detalles.isEmpty()) {
+            throw new IllegalArgumentException("No tienes productos en este pedido");
+        }
+        
+        Pedido pedido = pedidoRepository.findById(pedidoId)
+                .orElseThrow(() -> new IllegalArgumentException("Pedido no encontrado"));
+        
+        pedido.setEstado(nuevoEstado);
+        pedidoRepository.save(pedido);
     }
 }

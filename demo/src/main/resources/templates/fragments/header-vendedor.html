@@ -16,13 +16,25 @@
 
             <nav class="nav-links">
                 <ul>
-                    <li><a th:href="@{/vendedor/inicio}">Inicio</a></li>
+                    <li><a th:href="@{/vendedor/inicio}">
+                        <i class="fa-solid fa-home"></i> Inicio
+                    </a></li>
                     
-                    <li><a th:href="@{/vendedor/Miproductos}">Mis Productos</a></li>
+                    <li><a th:href="@{/vendedor/productos/nuevo}">
+                        <i class="fa-solid fa-plus-circle"></i> Agregar Producto
+                    </a></li>
                     
-                    <li><a th:href="@{/vendedor/productos/nuevo}">Agregar Producto</a></li>
+                    <li><a th:href="@{/vendedor/Miproductos}">
+                        <i class="fa-solid fa-box"></i> Mis Productos
+                    </a></li>
+                    
+                    <li><a th:href="@{/vendedor/ventas}">
+                        <i class="fa-solid fa-chart-line"></i> Mis Ventas
+                    </a></li>
 
-                    <li><a th:href="@{/usuario/logout}">Cerrar Sesión</a></li>
+                    <li><a th:href="@{/usuario/logout}">
+                        <i class="fa-solid fa-sign-out-alt"></i> Cerrar Sesión
+                    </a></li>
                     
                 </ul>
             </nav>

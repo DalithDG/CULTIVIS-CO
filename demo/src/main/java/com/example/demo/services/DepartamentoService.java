@@ -23,20 +23,10 @@ public class DepartamentoService {
                 .orElseThrow(() -> new RuntimeException("Departamento no encontrado con ID: " + id));
     }
     
-    /**
-     * Busca un departamento por nombre (ignorando mayúsculas/minúsculas)
-     * @param nombre El nombre del departamento a buscar
-     * @return El departamento encontrado o null si no existe
-     */
     public Departamento findByNombre(String nombre) {
         return departamentoRepository.findByNombreIgnoreCase(nombre);
     }
     
-    /**
-     * Guarda o actualiza un departamento
-     * @param departamento El departamento a guardar
-     * @return El departamento guardado
-     */
     public Departamento save(Departamento departamento) {
         return departamentoRepository.save(departamento);
     }

@@ -3,10 +3,14 @@ package com.example.demo.Controller;
 import com.example.demo.Model.Usuario;
 import com.example.demo.Model.Ciudad;
 import com.example.demo.Model.Departamento;
+import com.example.demo.Model.Roles;
+import com.example.demo.Model.Producto;
 import com.example.demo.services.UsuarioService;
 import com.example.demo.services.CiudadService;
 import com.example.demo.services.DepartamentoService;
-import com.example.demo.services.VendedorService; // ✅ AGREGAR ESTO
+import com.example.demo.services.RolesService;
+import com.example.demo.services.VendedorService;
+import com.example.demo.services.ProductoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +20,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import jakarta.servlet.http.HttpSession;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -23,17 +29,23 @@ public class UsuarioController {
     private final UsuarioService usuarioService;
     private final CiudadService ciudadService;
     private final DepartamentoService departamentoService;
-    private final VendedorService vendedorService; // Nuevo
+    private final VendedorService vendedorService;
+    private final RolesService rolesService;
+    private final ProductoService productoService;
 
     @Autowired
     public UsuarioController(UsuarioService usuarioService,
                              CiudadService ciudadService,
                              DepartamentoService departamentoService,
-                             VendedorService vendedorService) { // Nuevo
+                             VendedorService vendedorService,
+                             RolesService rolesService,
+                             ProductoService productoService) {
         this.usuarioService = usuarioService;
         this.ciudadService = ciudadService;
         this.departamentoService = departamentoService;
-        this.vendedorService = vendedorService; // Nuevo
+        this.vendedorService = vendedorService;
+        this.rolesService = rolesService;
+        this.productoService = productoService;
     }
 
     // ===========================
@@ -47,7 +59,7 @@ public class UsuarioController {
     }
 
     // ===========================
-    // GUARDAR NUEVO USUARIO
+    // GUARDAR NUEVO USUARIO (FORMULARIO)
     // ===========================
     @PostMapping("/guardar")
     public String guardarUsuario(@RequestParam("nombre") String nombre,
@@ -57,30 +69,22 @@ public class UsuarioController {
                                  @RequestParam("ciudad") String nombreCiudad,
                                  Model model,
                                  RedirectAttributes redirectAttributes) {
-
         try {
-            // Validaciones
-            if (nombre == null || nombre.trim().isEmpty()) {
-                model.addAttribute("error", "El nombre es requerido");
-                return "registro";
-            }
-            if (email == null || email.trim().isEmpty()) {
-                model.addAttribute("error", "El correo electrónico es requerido");
-                return "registro";
-            }
-            if (contrasena == null || contrasena.trim().isEmpty()) {
-                model.addAttribute("error", "La contraseña es requerida");
+            // VALIDACIONES
+            if (nombre == null || nombre.trim().isEmpty() ||
+                email == null || email.trim().isEmpty() ||
+                contrasena == null || contrasena.trim().isEmpty()) {
+                model.addAttribute("error", "Todos los campos son requeridos");
                 return "registro";
             }
 
-            // Validar email duplicado
             String emailLimpio = email.trim().toLowerCase();
             if (usuarioService.existeEmail(emailLimpio)) {
-                model.addAttribute("error", "Este correo electrónico ya está registrado");
+                model.addAttribute("error", "Este correo ya está registrado");
                 return "registro";
             }
 
-            // Buscar o crear departamento
+            // BUSCAR O CREAR DEPARTAMENTO
             Departamento departamento = departamentoService.findByNombre(nombreDepartamento.trim());
             if (departamento == null) {
                 departamento = new Departamento();
@@ -88,7 +92,7 @@ public class UsuarioController {
                 departamento = departamentoService.save(departamento);
             }
 
-            // Buscar o crear ciudad
+            // BUSCAR O CREAR CIUDAD
             Ciudad ciudad = ciudadService.findByNombre(nombreCiudad.trim());
             if (ciudad == null) {
                 ciudad = new Ciudad();
@@ -97,7 +101,7 @@ public class UsuarioController {
                 ciudad = ciudadService.save(ciudad);
             }
 
-            // Crear usuario
+            // CREAR USUARIO
             Usuario usuario = new Usuario();
             usuario.setNombre(nombre.trim());
             usuario.setEmail(emailLimpio);
@@ -105,126 +109,101 @@ public class UsuarioController {
             usuario.setDepartamento(departamento);
             usuario.setCiudad(ciudad);
 
-            // Guardar usuario
-            usuarioService.save(usuario);
-            System.out.println("Usuario guardado: " + usuario.getEmail());
+            // ASIGNAR ROL POR DEFECTO
+            Roles rolComprador = rolesService.crearRolSiNoExiste("COMPRADOR");
+            usuario.setRol(rolComprador);
 
-            // Redirigir al login con mensaje
-            redirectAttributes.addFlashAttribute("mensaje", "¡Registro exitoso! Por favor inicia sesión.");
+            usuarioService.save(usuario);
+
+            redirectAttributes.addFlashAttribute("mensaje", "¡Registro exitoso! Inicie sesión.");
             return "redirect:/usuario/login";
 
         } catch (Exception e) {
-            System.err.println("Error al registrar: " + e.getMessage());
-            model.addAttribute("error", "Error al registrar el usuario: " + e.getMessage());
+            model.addAttribute("error", "Error al registrar: " + e.getMessage());
             return "registro";
         }
     }
 
     // ===========================
-    // MOSTRAR LOGIN
+    // LOGIN
     // ===========================
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
     }
 
-    // ===========================
-    // VALIDAR LOGIN (✅ MODIFICADO)
-    // ===========================
     @PostMapping("/login")
     public String validarLogin(@RequestParam("email") String email,
                                @RequestParam("contrasena") String contrasena,
                                HttpSession session,
                                Model model,
                                RedirectAttributes redirectAttributes) {
-        try {
-            System.out.println("Intentando login con email: " + email);
-            
-            if (email == null || email.trim().isEmpty() ||
-                contrasena == null || contrasena.trim().isEmpty()) {
-                System.out.println("Campos vacíos");
-                model.addAttribute("error", "Por favor ingrese su correo y contraseña");
-                return "login";
-            }
-
-            String emailLimpio = email.trim().toLowerCase();
-            System.out.println("Buscando usuario: " + emailLimpio);
-            
-            Usuario usuario = usuarioService.findByEmail(emailLimpio);
-            
-            if (usuario == null) {
-                System.out.println("Usuario no encontrado: " + emailLimpio);
-                model.addAttribute("error", "No existe una cuenta con ese correo electrónico");
-                return "login";
-            }
-
-            System.out.println("✓ Usuario encontrado: " + usuario.getNombre());
-
-            if (!usuario.getContrasena().equals(contrasena)) {
-                System.out.println("Contraseña incorrecta");
-                model.addAttribute("error", "Contraseña incorrecta");
-                return "login";
-            }
-
-            // NUEVO: Cargar perfil de vendedor si existe
-            vendedorService.obtenerPerfilPorUsuarioId(usuario.getId())
-                .ifPresent(perfil -> {
-                    usuario.setPerfilVendedor(perfil);
-                    System.out.println("Perfil de vendedor cargado: " + perfil.getRazonSocial());
-                });
-
-            // Guardar usuario en sesión (ahora con el perfil cargado)
-            session.setAttribute("usuarioLogueado", usuario);
-            System.out.println("Login exitoso: " + usuario.getEmail());
-
-            redirectAttributes.addFlashAttribute("mensaje", "Bienvenido, " + usuario.getNombre() + "!");
-            
-            // NUEVO: Redirigir según el tipo de usuario
-            if (usuario.esVendedor()) {
-                System.out.println("Usuario es vendedor, redirigiendo a /vendedor/inicio");
-                return "redirect:/vendedor/inicio";
-            } else {
-                System.out.println("Usuario regular, redirigiendo a /usuario/inicio");
-                return "redirect:/usuario/inicio";
-            }
-
-        } catch (Exception e) {
-            System.err.println("Error en login: " + e.getMessage());
-            e.printStackTrace();
-            model.addAttribute("error", "Error al iniciar sesión: " + e.getMessage());
+        if (email == null || email.trim().isEmpty() ||
+            contrasena == null || contrasena.trim().isEmpty()) {
+            model.addAttribute("error", "Correo y contraseña requeridos");
             return "login";
         }
+
+        String emailLimpio = email.trim().toLowerCase();
+        Usuario usuario = usuarioService.findByEmail(emailLimpio);
+
+        if (usuario == null || !usuario.getContrasena().equals(contrasena)) {
+            model.addAttribute("error", "Correo o contraseña incorrectos");
+            return "login";
+        }
+
+        // Recargar usuario desde la base de datos para obtener el rol actualizado
+        Usuario usuarioActualizado = usuarioService.obtenerUsuarioPorId(usuario.getId());
+        if (usuarioActualizado != null) {
+            usuario = usuarioActualizado;
+        }
+        
+        // CARGAR PERFIL DE VENDEDOR SI EXISTE
+        vendedorService.obtenerPerfilPorUsuarioId(usuario.getId())
+                      .ifPresent(usuario::setPerfilVendedor);
+
+        session.setAttribute("usuarioLogueado", usuario);
+        redirectAttributes.addFlashAttribute("mensaje", "Bienvenido, " + usuario.getNombre());
+
+        return "redirect:/usuario/inicio";
     }
 
     // ===========================
-    // PÁGINA DE INICIO (después del login)
+    // INICIO DESPUÉS DEL LOGIN
     // ===========================
     @GetMapping("/inicio")
-public String mostrarInicio(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
-    Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-    
-    if (usuario == null) {
-        redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
-        return "redirect:/usuario/login";
-    }
-    
-    model.addAttribute("usuario", usuario);
-    
-    // NUEVO: Mostrar vista según el tipo de usuario
-    if (usuario.esVendedor()) {
-        return "inicio-vendedor";  // Vista para vendedores
-    } else {
-        return "inicio-comprador"; // Vista para compradores
-    }
-}
+    public String mostrarInicio(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+            return "redirect:/usuario/login";
+        }
 
-    // ===========================
-    // CERRAR SESIÓN
-    // ===========================
-    @GetMapping("/logout")
-    public String cerrarSesion(HttpSession session, RedirectAttributes redirectAttributes) {
-        session.invalidate();
-        return "redirect:/";
+        // Recargar usuario para obtener el rol actualizado
+        Usuario usuarioActualizado = usuarioService.obtenerUsuarioPorId(usuario.getId());
+        if (usuarioActualizado != null) {
+            usuario = usuarioActualizado;
+            vendedorService.obtenerPerfilPorUsuarioId(usuario.getId())
+                          .ifPresent(usuario::setPerfilVendedor);
+            session.setAttribute("usuarioLogueado", usuario);
+        }
+
+        // Cargar productos recientes
+        List<Producto> productos = productoService.listarProductos();
+        productos = productos.stream()
+                .sorted((p1, p2) -> Integer.compare(p2.getId(), p1.getId()))
+                .limit(8)
+                .collect(java.util.stream.Collectors.toList());
+
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("productos", productos);
+
+        // REDIRIGIR SEGÚN ROL
+        if (usuario.getRol() != null && usuario.getRol().getNombre().equalsIgnoreCase("VENDEDOR")) {
+            return "inicio-vendedor";
+        } else {
+            return "inicio-comprador";
+        }
     }
 
     // ===========================
@@ -233,21 +212,21 @@ public String mostrarInicio(HttpSession session, Model model, RedirectAttributes
     @GetMapping("/perfil")
     public String mostrarPerfil(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
         }
-        
+
         model.addAttribute("usuario", usuario);
         return "perfil";
     }
 
     // ===========================
-    // PÁGINA PRINCIPAL (raíz)
+    // CERRAR SESIÓN
     // ===========================
-    @GetMapping("/")
-    public String paginaPrincipal() {
+    @GetMapping("/logout")
+    public String cerrarSesion(HttpSession session, RedirectAttributes redirectAttributes) {
+        session.invalidate();
         return "redirect:/";
     }
 }

@@ -178,7 +178,7 @@
           </button>
         </div>
 
-        <form th:action="@{/categorias}" method="get" id="filtros-form">
+        <form th:action="@{/category}" method="get" id="filtros-form">
           <div class="filtro-grupo">
             <h4>Categoría</h4>
             <div class="filtro-opciones">
@@ -250,15 +250,12 @@
             <div th:each="producto : ${productos}" class="producto-card">
               <a th:href="@{/producto/{id}(id=${producto.id})}" class="producto-link">
                 <div class="producto-imagen">
-                  <img th:src="@{${producto.imagen}}" th:alt="${producto.nombre}"
+                  <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}"
                     onerror="this.src='/images/placeholder.jpg'">
-                  <div class="producto-badge" th:if="${producto.nuevo}">
-                    <span>Nuevo</span>
-                  </div>
                 </div>
                 <div class="producto-info">
                   <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
-                  <p class="producto-categoria" th:text="${producto.categoria}">Categoría</p>
+                  <p class="producto-categoria" th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</p>
                   <div class="producto-precio">
                     <span class="precio-actual"
                       th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">
@@ -267,9 +264,12 @@
                   </div>
                 </div>
               </a>
-              <button class="btn-agregar" th:onclick="'agregarAlCarrito(' + ${producto.id} + ')'">
-                <i class="fas fa-cart-plus"></i> Agregar
-              </button>
+              <form th:action="@{/carrito/agregar}" method="post" style="display: inline;">
+                <input type="hidden" name="productoId" th:value="${producto.id}">
+                <button type="submit" class="btn-agregar">
+                  <i class="fas fa-cart-plus"></i> Agregar
+                </button>
+              </form>
             </div>
           </div>
 

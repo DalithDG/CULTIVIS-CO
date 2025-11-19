@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pago - Cultivus</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        h1 {
+            color: #27ae60;
+            margin-bottom: 30px;
+        }
+        .pago-layout {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 30px;
+        }
+        .form-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .resumen-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            height: fit-content;
+            position: sticky;
+            top: 100px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #27ae60;
+        }
+        .metodo-pago {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        .metodo-option {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        .metodo-option:hover {
+            border-color: #27ae60;
+        }
+        .metodo-option input[type="radio"] {
+            width: auto;
+            margin-right: 8px;
+        }
+        .metodo-option.selected {
+            border-color: #27ae60;
+            background: #f0fdf4;
+        }
+        .resumen-titulo {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        .resumen-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            color: #666;
+        }
+        .resumen-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            padding-top: 20px;
+            border-top: 2px solid #e0e0e0;
+            margin-top: 20px;
+        }
+        .producto-resumen {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .producto-resumen:last-child {
+            border-bottom: none;
+        }
+        .producto-resumen img {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        .producto-resumen-info {
+            flex: 1;
+        }
+        .btn-pagar {
+            width: 100%;
+            padding: 15px;
+            background: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background 0.3s;
+        }
+        .btn-pagar:hover {
+            background: #1ef378;
+        }
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        @media (max-width: 768px) {
+            .pago-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="fragments/header-comprador :: siteHeader"></header>
+
+    <div class="container">
+        <h1><i class="fa-solid fa-credit-card"></i> Proceso de Pago</h1>
+
+        <div th:if="${error}" class="alert alert-error" th:text="${error}"></div>
+
+        <div class="pago-layout">
+            <div class="form-section">
+                <h2 style="margin-bottom: 20px; color: #333;">Información de Pago</h2>
+                
+                <form th:action="@{/pago/procesar}" method="post">
+                    <div class="form-group">
+                        <label>Método de Pago *</label>
+                        <div class="metodo-pago">
+                            <label class="metodo-option" onclick="selectMetodo(this)">
+                                <input type="radio" name="metodoPago" value="TARJETA_CREDITO" required>
+                                <i class="fa-solid fa-credit-card"></i> Tarjeta de Crédito
+                            </label>
+                            <label class="metodo-option" onclick="selectMetodo(this)">
+                                <input type="radio" name="metodoPago" value="TARJETA_DEBITO" required>
+                                <i class="fa-solid fa-credit-card"></i> Tarjeta de Débito
+                            </label>
+                            <label class="metodo-option" onclick="selectMetodo(this)">
+                                <input type="radio" name="metodoPago" value="TRANSFERENCIA" required>
+                                <i class="fa-solid fa-building-columns"></i> Transferencia
+                            </label>
+                            <label class="metodo-option" onclick="selectMetodo(this)">
+                                <input type="radio" name="metodoPago" value="EFECTIVO" required>
+                                <i class="fa-solid fa-money-bill"></i> Contra Entrega
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="direccionEnvio">Dirección de Envío (Opcional)</label>
+                        <textarea id="direccionEnvio" name="direccionEnvio" rows="3" 
+                                  placeholder="Ingrese la dirección de envío si es diferente a la registrada"></textarea>
+                    </div>
+
+                    <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-top: 30px;">
+                        <h3 style="margin-bottom: 15px; color: #333;">Información de Seguridad</h3>
+                        <p style="color: #666; font-size: 14px; line-height: 1.6;">
+                            <i class="fa-solid fa-shield-halved" style="color: #27ae60;"></i>
+                            Sus datos están protegidos. Este es un sistema de demostración. 
+                            En producción, aquí se integraría una pasarela de pago segura.
+                        </p>
+                    </div>
+
+                    <button type="submit" class="btn-pagar">
+                        <i class="fa-solid fa-lock"></i> Confirmar y Pagar
+                    </button>
+                </form>
+            </div>
+
+            <div class="resumen-section">
+                <div class="resumen-titulo">Resumen del Pedido</div>
+                
+                <div style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;">
+                    <div th:each="detalle : ${detalles}" class="producto-resumen">
+                        <img th:src="${detalle.producto.imagenUrl}" 
+                             th:alt="${detalle.producto.nombre}"
+                             onerror="this.src='/images/placeholder.jpg'">
+                        <div class="producto-resumen-info">
+                            <div style="font-weight: 600; margin-bottom: 5px;" th:text="${detalle.producto.nombre}"></div>
+                            <div style="font-size: 14px; color: #666;">
+                                <span th:text="${detalle.cantidad}">1</span> x 
+                                $<span th:text="${#numbers.formatDecimal(detalle.precioUnitario, 0, 'COMMA', 0, 'POINT')}">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="resumen-item">
+                    <span>Subtotal:</span>
+                    <span>$<span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')}">0</span></span>
+                </div>
+                <div class="resumen-item">
+                    <span>Envío:</span>
+                    <span>Gratis</span>
+                </div>
+                <div class="resumen-total">
+                    <span>Total:</span>
+                    <span>$<span th:text="${#numbers.formatDecimal(total, 0, 'COMMA', 0, 'POINT')}">0</span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function selectMetodo(element) {
+            // Remover selección anterior
+            document.querySelectorAll('.metodo-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            // Agregar selección actual
+            element.classList.add('selected');
+            // Marcar el radio button
+            element.querySelector('input[type="radio"]').checked = true;
+        }
+    </script>
+</body>
+</html>
+

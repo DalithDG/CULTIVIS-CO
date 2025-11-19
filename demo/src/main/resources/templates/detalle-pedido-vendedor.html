@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cultivus - Detalle del Pedido</title>
+
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-RXf+QSDCUQs6Q0p2U2uD2OeR5xw8n5T6vCJ7/3zvK3YyEdSpYohhjFExz04szsP1CZq0w0C+YyXWZP8y+e2xUg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        .detalle-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .pedido-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .pedido-header {
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .pedido-id {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 10px;
+        }
+
+        .pedido-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .info-item {
+            color: #666;
+        }
+
+        .info-item strong {
+            color: #333;
+        }
+
+        .estado-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .estado-pendiente {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .estado-proceso {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .estado-completado {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .productos-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .productos-table th,
+        .productos-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .productos-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .productos-table tr:hover {
+            background: #f8f9fa;
+        }
+
+        .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #27ae60;
+            text-align: right;
+        }
+
+        .total-amount {
+            font-size: 24px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .acciones-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .btn-actualizar {
+            background: #27ae60;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s;
+        }
+
+        .btn-actualizar:hover {
+            background: #1ef378;
+        }
+
+        .btn-volver {
+            background: #6c757d;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin-bottom: 20px;
+            transition: background 0.3s;
+        }
+
+        .btn-volver:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+
+<body>
+    <header th:replace="fragments/header-vendedor :: siteHeader"></header>
+
+    <div class="detalle-container">
+        <a th:href="@{/vendedor/ventas}" class="btn-volver">
+            <i class="fa-solid fa-arrow-left"></i> Volver a Mis Ventas
+        </a>
+
+        <div class="pedido-card">
+            <div class="pedido-header">
+                <div class="pedido-id">Pedido #<span th:text="${pedido.idPedido}"></span></div>
+                <div class="pedido-info">
+                    <div class="info-item">
+                        <strong>Fecha:</strong>
+                        <span th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Cliente:</strong>
+                        <span th:text="${pedido.cliente.nombre}"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Email:</strong>
+                        <span th:text="${pedido.cliente.email}"></span>
+                    </div>
+                    <div class="info-item">
+                        <strong>Estado:</strong>
+                        <span class="estado-badge" 
+                              th:classappend="${pedido.estado == 'PENDIENTE' ? 'estado-pendiente' : 
+                                             (pedido.estado == 'EN_PROCESO' || pedido.estado == 'PROCESANDO' ? 'estado-proceso' : 
+                                             'estado-completado')}"
+                              th:text="${pedido.estado}">
+                        </span>
+                    </div>
+                </div>
+            </div>
+
+            <h3 style="margin-top: 30px; color: #27ae60;">Productos en este pedido</h3>
+            <table class="productos-table">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>Cantidad</th>
+                        <th>Precio Unitario</th>
+                        <th>Subtotal</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="detalle : ${detalles}">
+                        <td>
+                            <strong th:text="${detalle.producto.nombre}"></strong><br>
+                            <small style="color: #666;" th:text="${detalle.producto.descripcion}"></small>
+                        </td>
+                        <td th:text="${detalle.cantidad}"></td>
+                        <td th:text="${#numbers.formatDecimal(detalle.precioUnitario, 0, 'COMMA', 2, 'POINT')}">$0.00</td>
+                        <td th:text="${#numbers.formatDecimal(detalle.subtotal, 0, 'COMMA', 2, 'POINT')}">$0.00</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="total-section">
+                <div class="total-amount">
+                    Total: $<span th:text="${#numbers.formatDecimal(#aggregates.sum(detalles.![subtotal]), 0, 'COMMA', 2, 'POINT')}">0.00</span>
+                </div>
+            </div>
+
+            <div class="acciones-section">
+                <h3 style="margin-bottom: 15px; color: #27ae60;">Actualizar Estado del Pedido</h3>
+                <form th:action="@{/vendedor/ventas/pedido/{id}/actualizar-estado(id=${pedido.idPedido})}" method="post">
+                    <div class="form-group">
+                        <label for="estado">Nuevo Estado:</label>
+                        <select id="estado" name="estado" required>
+                            <option value="PENDIENTE" th:selected="${pedido.estado == 'PENDIENTE'}">Pendiente</option>
+                            <option value="EN_PROCESO" th:selected="${pedido.estado == 'EN_PROCESO' || pedido.estado == 'PROCESANDO'}">En Proceso</option>
+                            <option value="COMPLETADO" th:selected="${pedido.estado == 'COMPLETADO' || pedido.estado == 'ENTREGADO'}">Completado</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn-actualizar">
+                        <i class="fa-solid fa-save"></i> Actualizar Estado
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mensajes Flash -->
+    <div th:if="${mensaje}" style="position: fixed; top: 100px; right: 20px; background: #d4edda; color: #155724; padding: 15px; border-radius: 5px; z-index: 1000;">
+        <span th:text="${mensaje}"></span>
+    </div>
+    <div th:if="${error}" style="position: fixed; top: 100px; right: 20px; background: #f8d7da; color: #721c24; padding: 15px; border-radius: 5px; z-index: 1000;">
+        <span th:text="${error}"></span>
+    </div>
+
+</body>
+</html>
+

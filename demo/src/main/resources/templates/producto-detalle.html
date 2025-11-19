@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${producto.nombre} + ' | Cultivus'">Detalle producto</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            background: #f6f7fb;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .detalle-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .volver-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #27ae60;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        .detalle-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            background: #fff;
+            border-radius: 18px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.08);
+            padding: 30px;
+        }
+        .detalle-imagen {
+            background: #f0f3f5;
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+        }
+        .detalle-imagen img {
+            max-width: 100%;
+            border-radius: 12px;
+            object-fit: cover;
+        }
+        .detalle-info h1 {
+            margin: 0 0 10px;
+            color: #2c3e50;
+            font-size: 2.2rem;
+        }
+        .detalle-precio {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin: 10px 0 20px;
+        }
+        .detalle-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 25px;
+        }
+        .meta-item {
+            background: #f8f9fb;
+            border-radius: 10px;
+            padding: 12px 15px;
+            color: #2c3e50;
+            font-size: 0.95rem;
+        }
+        .detalle-descripcion {
+            line-height: 1.6;
+            color: #54606b;
+            margin-bottom: 25px;
+        }
+        .detalle-acciones {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+        }
+        .detalle-acciones input[type="number"] {
+            width: 120px;
+            padding: 10px;
+            border: 1px solid #dfe6e9;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        .btn-add-cart {
+            background: #27ae60;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background 0.3s ease;
+        }
+        .btn-add-cart:hover {
+            background: #1f8a4e;
+        }
+        .detalle-vendedor {
+            margin-top: 30px;
+            padding: 18px;
+            border-radius: 12px;
+            background: #eef8f2;
+            color: #1f562f;
+        }
+        .detalle-vendedor h4 {
+            margin: 0 0 8px;
+        }
+        @media (max-width: 768px) {
+            .detalle-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="fragments/header-publico :: siteHeader"></header>
+
+    <div class="detalle-container" th:if="${producto != null}">
+        <a class="volver-link" th:href="@{/productos}">
+            <i class="fa-solid fa-arrow-left"></i> Volver al catálogo
+        </a>
+
+        <div class="detalle-card">
+            <div class="detalle-imagen">
+                <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}"
+                     onerror="this.src='/images/placeholder.jpg'">
+            </div>
+
+            <div class="detalle-info">
+                <h1 th:text="${producto.nombre}">Nombre del producto</h1>
+                <div class="detalle-precio"
+                     th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">
+                    $0
+                </div>
+
+                <div class="detalle-meta">
+                    <div class="meta-item">
+                        <strong>Categoría:</strong><br>
+                        <span th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</span>
+                    </div>
+                    <div class="meta-item">
+                        <strong>Stock disponible:</strong><br>
+                        <span th:text="${producto.stock} + ' unidades'">0 unidades</span>
+                    </div>
+                    <div class="meta-item">
+                        <strong>Peso:</strong><br>
+                        <span th:text="${producto.peso} + ' ' + ${producto.unidadMedida != null ? producto.unidadMedida.abreviatura : ''}">0 kg</span>
+                    </div>
+                </div>
+
+                <p class="detalle-descripcion" th:text="${producto.descripcion}">
+                    Descripción del producto.
+                </p>
+
+                <div class="detalle-acciones">
+                    <form th:action="@{/carrito/agregar}" method="post" style="display:flex; gap:15px; align-items:center;">
+                        <input type="hidden" name="productoId" th:value="${producto.id}">
+                        <label style="display:flex; flex-direction:column; font-size:0.9rem; color:#555;">
+                            Cantidad
+                            <input type="number" name="cantidad" min="1"
+                                   th:attr="max=${producto.stock}"
+                                   value="1">
+                        </label>
+                        <button type="submit" class="btn-add-cart">
+                            <i class="fa-solid fa-cart-plus"></i> Agregar al carrito
+                        </button>
+                    </form>
+                </div>
+
+                <div class="detalle-vendedor" th:if="${producto.usuario != null}">
+                    <h4><i class="fa-solid fa-user"></i> Vendedor</h4>
+                    <p>
+                        <strong th:text="${producto.usuario.nombre}">Nombre vendedor</strong><br>
+                        <span th:text="${producto.usuario.email}">email@demo.com</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="detalle-container" th:if="${producto == null}">
+        <div class="empty-state">
+            <i class="fa-solid fa-face-frown"></i>
+            <h3>Producto no disponible</h3>
+            <p>Lo sentimos, este producto no existe o fue retirado.</p>
+            <a class="volver-link" th:href="@{/productos}">
+                Volver al catálogo
+            </a>
+        </div>
+    </div>
+
+    <footer th:replace="fragments/footer :: siteFooter"></footer>
+</body>
+</html>
+

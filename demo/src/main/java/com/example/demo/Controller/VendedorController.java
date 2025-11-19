@@ -2,6 +2,7 @@ package com.example.demo.Controller;
 
 import com.example.demo.Model.PerfilVendedor;
 import com.example.demo.Model.Usuario;
+import com.example.demo.repository.UsuarioRepository;
 import com.example.demo.services.VendedorService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class VendedorController {
 
     @Autowired
     private VendedorService vendedorService;
+    
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     /**
      * Muestra el formulario para convertirse en vendedor
@@ -74,6 +78,9 @@ public class VendedorController {
                 banco
             );
 
+            // Recargar usuario desde la base de datos para obtener el rol actualizado
+            usuario = usuarioRepository.findById(usuario.getId()).orElse(usuario);
+            
             // Actualizar el usuario en sesión con el perfil cargado
             usuario.setPerfilVendedor(perfil);
             session.setAttribute("usuarioLogueado", usuario);
@@ -230,6 +237,121 @@ public class VendedorController {
             System.err.println("Error al actualizar perfil: " + e.getMessage());
             redirectAttributes.addFlashAttribute("error", "Error al actualizar el perfil");
             return "redirect:/vendedor/editar";
+        }
+    }
+    
+    /**
+     * Muestra todas las ventas (pedidos) del vendedor
+     */
+    @GetMapping("/ventas")
+    public String mostrarVentas(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+            return "redirect:/usuario/login";
+        }
+
+        if (!vendedorService.esVendedor(usuario.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Debe registrarse como vendedor primero");
+            return "redirect:/vendedor/registro";
+        }
+
+        // Obtener todos los pedidos que contienen productos del vendedor
+        var pedidos = vendedorService.obtenerPedidosDelVendedor(usuario.getId());
+        
+        // Obtener detalles de ventas
+        var detallesVentas = vendedorService.obtenerDetallesVentasDelVendedor(usuario.getId());
+        
+        // Calcular total de ventas
+        double totalVentas = vendedorService.calcularTotalVentas(usuario.getId());
+        
+        // Contar pedidos por estado
+        long pendientes = pedidos.stream().filter(p -> "PENDIENTE".equalsIgnoreCase(p.getEstado())).count();
+        long enProceso = pedidos.stream().filter(p -> "EN_PROCESO".equalsIgnoreCase(p.getEstado()) || "PROCESANDO".equalsIgnoreCase(p.getEstado())).count();
+        long completados = pedidos.stream().filter(p -> "COMPLETADO".equalsIgnoreCase(p.getEstado()) || "ENTREGADO".equalsIgnoreCase(p.getEstado())).count();
+        
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("pedidos", pedidos);
+        model.addAttribute("detallesVentas", detallesVentas);
+        model.addAttribute("totalVentas", totalVentas);
+        model.addAttribute("pendientes", pendientes);
+        model.addAttribute("enProceso", enProceso);
+        model.addAttribute("completados", completados);
+        
+        return "ventas-vendedor"; // Vista de ventas
+    }
+    
+    /**
+     * Muestra los detalles de un pedido específico
+     */
+    @GetMapping("/ventas/pedido/{pedidoId}")
+    public String mostrarDetallePedido(@PathVariable int pedidoId, 
+                                       HttpSession session, 
+                                       Model model, 
+                                       RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+        
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+            return "redirect:/usuario/login";
+        }
+
+        if (!vendedorService.esVendedor(usuario.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Debe registrarse como vendedor primero");
+            return "redirect:/vendedor/registro";
+        }
+
+        // Obtener los detalles del pedido que pertenecen al vendedor
+        var detalles = vendedorService.obtenerDetallesPedidoDelVendedor(pedidoId, usuario.getId());
+        
+        if (detalles.isEmpty()) {
+            redirectAttributes.addFlashAttribute("error", "No tienes productos en este pedido");
+            return "redirect:/vendedor/ventas";
+        }
+        
+        // Obtener el pedido completo
+        var pedido = detalles.get(0).getPedido();
+        
+        model.addAttribute("usuario", usuario);
+        model.addAttribute("pedido", pedido);
+        model.addAttribute("detalles", detalles);
+        
+        return "detalle-pedido-vendedor"; // Vista de detalle del pedido
+    }
+    
+    /**
+     * Actualiza el estado de un pedido
+     */
+    @PostMapping("/ventas/pedido/{pedidoId}/actualizar-estado")
+    public String actualizarEstadoPedido(@PathVariable int pedidoId,
+                                        @RequestParam("estado") String nuevoEstado,
+                                        HttpSession session,
+                                        RedirectAttributes redirectAttributes) {
+        try {
+            Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+            
+            if (usuario == null) {
+                redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+                return "redirect:/usuario/login";
+            }
+
+            if (!vendedorService.esVendedor(usuario.getId())) {
+                redirectAttributes.addFlashAttribute("error", "Debe registrarse como vendedor primero");
+                return "redirect:/vendedor/registro";
+            }
+
+            vendedorService.actualizarEstadoPedido(pedidoId, usuario.getId(), nuevoEstado);
+            
+            redirectAttributes.addFlashAttribute("mensaje", "Estado del pedido actualizado exitosamente");
+            return "redirect:/vendedor/ventas/pedido/" + pedidoId;
+            
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/vendedor/ventas";
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el estado del pedido");
+            return "redirect:/vendedor/ventas";
         }
     }
 }

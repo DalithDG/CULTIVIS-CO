@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmación de Pago - Cultivus</title>
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        .success-card {
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .success-icon {
+            width: 100px;
+            height: 100px;
+            background: #d4edda;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+        }
+        .success-icon i {
+            font-size: 50px;
+            color: #27ae60;
+        }
+        .success-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        .success-message {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 30px;
+        }
+        .pedido-info {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: left;
+        }
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        .info-label {
+            font-weight: 600;
+            color: #333;
+        }
+        .info-value {
+            color: #666;
+        }
+        .productos-list {
+            margin-top: 20px;
+        }
+        .producto-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .producto-item:last-child {
+            border-bottom: none;
+        }
+        .producto-item img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        .producto-item-info {
+            flex: 1;
+        }
+        .producto-item-nombre {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        .producto-item-details {
+            font-size: 14px;
+            color: #666;
+        }
+        .total-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #27ae60;
+            display: flex;
+            justify-content: space-between;
+            font-size: 20px;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        .btn-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        .btn-primary {
+            background: #27ae60;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1ef378;
+        }
+        .btn-secondary {
+            background: #6c757d;
+            color: white;
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+    </style>
+</head>
+<body>
+    <header th:replace="fragments/header-comprador :: siteHeader"></header>
+
+    <div class="container">
+        <div class="success-card">
+            <div class="success-icon">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div class="success-title">¡Pago Exitoso!</div>
+            <div class="success-message">
+                Gracias por tu compra. Tu pedido ha sido procesado correctamente.
+            </div>
+
+            <div class="pedido-info">
+                <div class="info-row">
+                    <span class="info-label">Número de Pedido:</span>
+                    <span class="info-value" style="font-weight: bold; color: #27ae60;" th:text="'#' + ${pedido.idPedido}">#0000</span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Fecha:</span>
+                    <span class="info-value" th:text="${#temporals.format(pedido.fechaPedido, 'dd/MM/yyyy HH:mm')}"></span>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">Estado:</span>
+                    <span class="info-value" th:text="${pedido.estado}"></span>
+                </div>
+                <div th:if="${pago != null}" class="info-row">
+                    <span class="info-label">Método de Pago:</span>
+                    <span class="info-value" th:text="${pago.metodoPago}"></span>
+                </div>
+
+                <div class="productos-list">
+                    <div style="font-weight: 600; margin-bottom: 15px; color: #333;">Productos:</div>
+                    <div th:each="detalle : ${detalles}" class="producto-item">
+                        <img th:src="${detalle.producto.imagenUrl}" 
+                             th:alt="${detalle.producto.nombre}"
+                             onerror="this.src='/images/placeholder.jpg'">
+                        <div class="producto-item-info">
+                            <div class="producto-item-nombre" th:text="${detalle.producto.nombre}"></div>
+                            <div class="producto-item-details">
+                                Cantidad: <span th:text="${detalle.cantidad}">1</span> | 
+                                Precio: $<span th:text="${#numbers.formatDecimal(detalle.precioUnitario, 0, 'COMMA', 0, 'POINT')}">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="total-section">
+                    <span>Total Pagado:</span>
+                    <span>$<span th:text="${#numbers.formatDecimal(pago != null ? pago.monto : 0, 0, 'COMMA', 0, 'POINT')}">0</span></span>
+                </div>
+            </div>
+
+            <div class="btn-group">
+                <a th:href="@{/}" class="btn btn-secondary">
+                    <i class="fa-solid fa-home"></i> Volver al Inicio
+                </a>
+                <a th:href="@{/usuario/inicio}" class="btn btn-primary">
+                    <i class="fa-solid fa-user"></i> Ver Mis Pedidos
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+

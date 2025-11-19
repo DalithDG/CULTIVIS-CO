@@ -48,9 +48,6 @@ public class AdminService {
         PerfilAdmin perfilAdmin = new PerfilAdmin(usuario, nivelPermisos, departamentoResponsable);
         perfilAdmin = perfilAdminRepository.save(perfilAdmin);
 
-        // Asociar el perfil al usuario
-        usuario.setPerfilAdmin(perfilAdmin);
-
         System.out.println("✅ Admin registrado: " + email);
         return usuario;
     }

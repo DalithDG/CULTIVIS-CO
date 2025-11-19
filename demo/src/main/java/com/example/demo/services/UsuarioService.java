@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.Model.Roles;
 import com.example.demo.Model.Usuario;
 import com.example.demo.repository.UsuarioRepository;
 
@@ -14,6 +15,9 @@ public class UsuarioService implements IUsuarioService {
 
     @Autowired
     private UsuarioRepository repositorio;
+
+    @Autowired
+    private RolesService rolesService;
 
     @Override
     public void actualizarUsuario(Usuario usuario) {
@@ -59,9 +63,15 @@ public class UsuarioService implements IUsuarioService {
 
     @Override
     public Usuario save(Usuario usuario) {
+        if (usuario.getRol() == null) {
+            Roles rolComprador = rolesService.crearRolSiNoExiste("COMPRADOR");
+            usuario.setRol(rolComprador);
+        }
+
         return repositorio.save(usuario);
     }
 
+    
     @Override
     public boolean existeEmail(String email) {
         return repositorio.existsByEmail(email);
@@ -72,9 +82,10 @@ public class UsuarioService implements IUsuarioService {
         return repositorio.findByEmail(email);
     }
 
-    // Método alternativo por si lo necesitas
     @Override
     public Usuario findUsuario(String email) {
         return repositorio.findByEmail(email);
     }
+
+    
 }

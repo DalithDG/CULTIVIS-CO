@@ -23,5 +23,7 @@ public interface DetalleCarritoRepository extends JpaRepository<DetalleCarrito, 
     
     @Query("SELECT d FROM DetalleCarrito d WHERE d.carrito.idCarrito = :carritoId")
     List<DetalleCarrito> findByCarritoId(@Param("carritoId") int carritoId);
+    
 }
+
 

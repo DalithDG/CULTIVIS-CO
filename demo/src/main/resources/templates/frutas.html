@@ -7,16 +7,15 @@
     <title>Frutas | Cultivus</title>
     <link rel="stylesheet" th:href="@{/style.css}">
     <link rel="stylesheet" th:href="@{/categorias.css}">
-    <link rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-          integrity="sha512-RXf+QSDCUQs6Q0p2U2uD2OeR5xw8n5T6vCJ7/3zvK3YyEdSpYohhjFExz04szsP1CZq0w0C+YyXWZP8y+e2xUg=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        integrity="sha512-RXf+QSDCUQs6Q0p2U2uD2OeR5xw8n5T6vCJ7/3zvK3YyEdSpYohhjFExz04szsP1CZq0w0C+YyXWZP8y+e2xUg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 
 <body>
 
     <!-- Header -->
-    <header th:replace="fragments/header-publico :: siteHeader"></header>
+    <header th:replace="fragments/header :: siteHeader"></header>
 
     <!-- Lista de productos -->
     <section class="productos-categoria">
@@ -31,11 +30,12 @@
                 <div th:each="producto : ${productos}" class="producto-card">
                     <div class="producto-image">
                         <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}"
-                             onerror="this.src='/images/placeholder.jpg'">
+                            onerror="this.src='/images/placeholder.jpg'">
                     </div>
                     <div class="producto-info">
                         <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
-                        <span class="precio" th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">$0</span>
+                        <span class="precio"
+                            th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">$0</span>
                         <form th:action="@{/carrito/agregar}" method="post" style="display: inline;">
                             <input type="hidden" name="productoId" th:value="${producto.id}">
                             <button type="submit" class="btn-agregar">
@@ -59,4 +59,5 @@
     <footer th:replace="fragments/footer :: siteFooter"></footer>
 
 </body>
+
 </html>

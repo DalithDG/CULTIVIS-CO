@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resultados de Búsqueda - Cultivis</title>
+    <link rel="stylesheet" th:href="@{/busqueda.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <header th:replace="fragments/header-comprador :: siteHeader"></header>
+
+    <div class="busqueda-container">
+        <div class="busqueda-header">
+            <h1>Resultados de Búsqueda</h1>
+            <p th:if="${query}" class="query-text">
+                Buscando: "<span th:text="${query}"></span>"
+            </p>
+            <p class="total-resultados">
+                <span th:text="${totalResultados}">0</span> productos encontrados
+            </p>
+        </div>
+
+        <div class="busqueda-content">
+            <!-- Filtros laterales -->
+            <aside class="filtros">
+                <h3>Filtros</h3>
+
+                <form th:action="@{/buscar}" method="get">
+                    <input type="hidden" name="q" th:value="${query}">
+
+                    <div class="filtro-grupo">
+                        <label>Categoría</label>
+                        <select name="categoria">
+                            <option value="">Todas</option>
+                            <option th:each="cat : ${categorias}" th:value="${cat.idCategoria}" th:text="${cat.nombre}"
+                                th:selected="${cat.idCategoria == categoriaSeleccionada}">
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="filtro-grupo">
+                        <label>Precio Mínimo</label>
+                        <input type="number" name="precioMin" th:value="${precioMin}" placeholder="$0" min="0"
+                            step="100">
+                    </div>
+
+                    <div class="filtro-grupo">
+                        <label>Precio Máximo</label>
+                        <input type="number" name="precioMax" th:value="${precioMax}" placeholder="$10000" min="0"
+                            step="100">
+                    </div>
+
+                    <div class="filtro-grupo">
+                        <label>Ordenar por</label>
+                        <select name="orden">
+                            <option value="recientes" th:selected="${orden == 'recientes'}">Más recientes</option>
+                            <option value="precio-asc" th:selected="${orden == 'precio-asc'}">Precio: Menor a Mayor
+                            </option>
+                            <option value="precio-desc" th:selected="${orden == 'precio-desc'}">Precio: Mayor a Menor
+                            </option>
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn-filtrar">
+                        <i class="fa-solid fa-filter"></i> Aplicar Filtros
+                    </button>
+                </form>
+            </aside>
+
+            <!-- Resultados -->
+            <div class="resultados">
+                <div th:if="${productos.empty}" class="no-resultados">
+                    <i class="fa-solid fa-search"></i>
+                    <p>No se encontraron productos</p>
+                </div>
+
+                <div class="productos-grid">
+                    <div th:each="producto : ${productos}" class="producto-card">
+                        <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}">
+                        <h3 th:text="${producto.nombre}"></h3>
+                        <p class="precio" th:text="'$' + ${producto.precio}"></p>
+                        <p class="stock" th:text="'Stock: ' + ${producto.stock}"></p>
+                        <a th:href="@{/productos/{id}(id=${producto.id})}" class="btn-ver">
+                            Ver Detalles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

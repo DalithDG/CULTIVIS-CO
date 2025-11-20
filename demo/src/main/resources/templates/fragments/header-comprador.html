@@ -7,8 +7,8 @@
 
     <div class="main-header">
         <div class="header-container">
-             <div class="logo">
-                <a th:href="@{/vendedor/inicio}">
+            <div class="logo">
+                <a th:href="@{/}">
                     <img th:src="@{/images/isotipoWhite.png}" alt="Logo">
                 </a>
             </div>
@@ -17,12 +17,23 @@
                 <ul>
                     <li><a th:href="@{/}">Inicio</a></li>
                     <li><a th:href="@{/category}">Categorías</a></li>
-                    
-                    <li><a th:href="@{/vendedor/registro}">
-                        <i class="fa-solid fa-store"></i> Convertirse en Vendedor
-                    </a></li>
 
-                    <li><a th:href="@{/usuario/logout}">Cerrar Sesión</a></li>
+                    <li><a th:href="@{/vendedor/registro}">
+                            <i class="fa-solid fa-store"></i> Convertirse en Vendedor
+                        </a></li>
+
+                    <li class="profile-dropdown">
+                        <a href="#" class="profile-toggle">
+                            <i class="fa-solid fa-user"></i> Perfil
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/usuario/perfil}"><i class="fa-solid fa-user-circle"></i> Mi Perfil</a>
+                            </li>
+                            <li><a th:href="@{/usuario/logout}"><i class="fa-solid fa-sign-out-alt"></i> Cerrar
+                                    Sesión</a></li>
+                        </ul>
+                    </li>
+
                     <li>
                         <a th:href="@{/carrito}" class="cart-link">
                             <i class="fa-solid fa-cart-shopping"></i> Carrito

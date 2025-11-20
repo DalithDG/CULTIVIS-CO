@@ -19,16 +19,16 @@ public class ProductoController {
 
     @Autowired
     private ProductoService productoService;
-    
+
     @Autowired
     private CategoriaRepository categoriaRepository;
-    
+
     @Autowired
     private UnidadMedidaRepository unidadMedidaRepository;
-    
+
     @Autowired
     private ProductoRepository productoRepository;
-    
+
     @Autowired
     private VendedorService vendedorService;
 
@@ -38,7 +38,7 @@ public class ProductoController {
     @GetMapping("/productos/nuevo")
     public String mostrarFormularioProducto(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
@@ -52,13 +52,13 @@ public class ProductoController {
         // Obtener todas las categorías y unidades de medida
         List<Categoria> categorias = categoriaRepository.findAll();
         List<UnidadMedida> unidadesMedida = unidadMedidaRepository.findAll();
-        
+
         // Si no hay categorías, crear algunas por defecto
         if (categorias.isEmpty()) {
             crearCategoriasPorDefecto();
             categorias = categoriaRepository.findAll();
         }
-        
+
         // Si no hay unidades de medida, crear algunas por defecto
         if (unidadesMedida.isEmpty()) {
             crearUnidadesMedidaPorDefecto();
@@ -69,7 +69,7 @@ public class ProductoController {
         model.addAttribute("categorias", categorias);
         model.addAttribute("unidadesMedida", unidadesMedida);
         model.addAttribute("producto", new Producto());
-        
+
         return "agregar-producto";
     }
 
@@ -78,18 +78,18 @@ public class ProductoController {
      */
     @PostMapping("/productos/guardar")
     public String guardarProducto(@RequestParam("nombre") String nombre,
-                                  @RequestParam("precio") Float precio,
-                                  @RequestParam("stock") int stock,
-                                  @RequestParam("descripcion") String descripcion,
-                                  @RequestParam("imagenUrl") String imagenUrl,
-                                  @RequestParam("peso") Float peso,
-                                  @RequestParam("categoriaId") int categoriaId,
-                                  @RequestParam("unidadMedidaId") int unidadMedidaId,
-                                  HttpSession session,
-                                  RedirectAttributes redirectAttributes) {
+            @RequestParam("precio") Float precio,
+            @RequestParam("stock") int stock,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("imagenUrl") String imagenUrl,
+            @RequestParam("peso") Float peso,
+            @RequestParam("categoriaId") int categoriaId,
+            @RequestParam("unidadMedidaId") int unidadMedidaId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
             Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-            
+
             if (usuario == null) {
                 redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
                 return "redirect:/usuario/login";
@@ -103,7 +103,7 @@ public class ProductoController {
             // Obtener categoría y unidad de medida
             Categoria categoria = categoriaRepository.findById(categoriaId)
                     .orElseThrow(() -> new IllegalArgumentException("Categoría no encontrada"));
-            
+
             UnidadMedida unidadMedida = unidadMedidaRepository.findById(unidadMedidaId)
                     .orElseThrow(() -> new IllegalArgumentException("Unidad de medida no encontrada"));
 
@@ -139,7 +139,7 @@ public class ProductoController {
     @GetMapping("/Miproductos")
     public String mostrarMisProductos(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
@@ -155,8 +155,124 @@ public class ProductoController {
 
         model.addAttribute("usuario", usuario);
         model.addAttribute("productos", productos);
-        
+
         return "mis-productos";
+    }
+
+    /**
+     * Muestra el formulario para editar un producto
+     */
+    @GetMapping("/productos/editar/{id}")
+    public String mostrarFormularioEdicion(@PathVariable int id,
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+            return "redirect:/usuario/login";
+        }
+
+        if (!vendedorService.esVendedor(usuario.getId())) {
+            redirectAttributes.addFlashAttribute("error", "Debe ser vendedor para editar productos");
+            return "redirect:/vendedor/registro";
+        }
+
+        Producto producto = productoRepository.findById(id).orElse(null);
+
+        if (producto == null) {
+            redirectAttributes.addFlashAttribute("error", "Producto no encontrado");
+            return "redirect:/vendedor/Miproductos";
+        }
+
+        if (producto.getUsuario().getId() != usuario.getId()) {
+            redirectAttributes.addFlashAttribute("error", "No tienes permiso para editar este producto");
+            return "redirect:/vendedor/Miproductos";
+        }
+
+        List<Categoria> categorias = categoriaRepository.findAll();
+        List<UnidadMedida> unidadesMedida = unidadMedidaRepository.findAll();
+
+        if (categorias.isEmpty()) {
+            crearCategoriasPorDefecto();
+            categorias = categoriaRepository.findAll();
+        }
+
+        if (unidadesMedida.isEmpty()) {
+            crearUnidadesMedidaPorDefecto();
+            unidadesMedida = unidadMedidaRepository.findAll();
+        }
+
+        model.addAttribute("producto", producto);
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("unidadesMedida", unidadesMedida);
+        model.addAttribute("usuario", usuario);
+
+        return "editar-producto";
+    }
+
+    /**
+     * Procesa la actualización de un producto
+     */
+    @PostMapping("/productos/actualizar/{id}")
+    public String actualizarProducto(@PathVariable int id,
+            @RequestParam("nombre") String nombre,
+            @RequestParam("precio") Float precio,
+            @RequestParam("stock") int stock,
+            @RequestParam("descripcion") String descripcion,
+            @RequestParam("peso") Float peso,
+            @RequestParam("imagenUrl") String imagenUrl,
+            @RequestParam("categoriaId") int categoriaId,
+            @RequestParam("unidadMedidaId") int unidadMedidaId,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+
+        if (usuario == null) {
+            redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+            return "redirect:/usuario/login";
+        }
+
+        Producto producto = productoRepository.findById(id).orElse(null);
+
+        if (producto == null) {
+            redirectAttributes.addFlashAttribute("error", "Producto no encontrado");
+            return "redirect:/vendedor/Miproductos";
+        }
+
+        if (producto.getUsuario().getId() != usuario.getId()) {
+            redirectAttributes.addFlashAttribute("error", "No tienes permiso para editar este producto");
+            return "redirect:/vendedor/Miproductos";
+        }
+
+        try {
+            producto.setNombre(nombre);
+            producto.setPrecio(precio);
+            producto.setStock(stock);
+            producto.setDescripcion(descripcion);
+            producto.setPeso(peso);
+            producto.setImagenUrl(imagenUrl);
+
+            Categoria categoria = categoriaRepository.findById(categoriaId).orElse(null);
+            if (categoria != null) {
+                producto.setCategoria(categoria);
+            }
+
+            UnidadMedida unidadMedida = unidadMedidaRepository.findById(unidadMedidaId).orElse(null);
+            if (unidadMedida != null) {
+                producto.setUnidadMedida(unidadMedida);
+            }
+
+            productoRepository.save(producto);
+
+            redirectAttributes.addFlashAttribute("mensaje", "Producto actualizado exitosamente");
+            return "redirect:/vendedor/Miproductos";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el producto: " + e.getMessage());
+            return "redirect:/vendedor/productos/editar/" + id;
+        }
     }
 
     /**
@@ -164,11 +280,11 @@ public class ProductoController {
      */
     @PostMapping("/productos/eliminar/{id}")
     public String eliminarProducto(@PathVariable int id,
-                                   HttpSession session,
-                                   RedirectAttributes redirectAttributes) {
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
             Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-            
+
             if (usuario == null) {
                 redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
                 return "redirect:/usuario/login";
@@ -185,18 +301,18 @@ public class ProductoController {
 
             productoRepository.delete(producto);
             redirectAttributes.addFlashAttribute("mensaje", "Producto eliminado exitosamente");
-            
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al eliminar el producto");
         }
-        
+
         return "redirect:/vendedor/Miproductos";
     }
 
     // Métodos auxiliares para crear datos por defecto
     private void crearCategoriasPorDefecto() {
-        String[] categorias = {"Frutas", "Verduras", "Lácteos", "Carnes y Aves", "Granos y Cereales", 
-                              "Bebidas", "Panadería", "Condimentos", "Otros"};
+        String[] categorias = { "Frutas", "Verduras", "Lácteos", "Carnes y Aves", "Granos y Cereales",
+                "Bebidas", "Panadería", "Condimentos", "Otros" };
         for (String nombre : categorias) {
             if (!categoriaRepository.existsByNombre(nombre)) {
                 Categoria categoria = new Categoria();
@@ -209,15 +325,15 @@ public class ProductoController {
 
     private void crearUnidadesMedidaPorDefecto() {
         String[][] unidades = {
-            {"Kilogramos", "kg"},
-            {"Gramos", "g"},
-            {"Libras", "lb"},
-            {"Litros", "L"},
-            {"Mililitros", "ml"},
-            {"Unidades", "un"},
-            {"Docena", "doc"}
+                { "Kilogramos", "kg" },
+                { "Gramos", "g" },
+                { "Libras", "lb" },
+                { "Litros", "L" },
+                { "Mililitros", "ml" },
+                { "Unidades", "un" },
+                { "Docena", "doc" }
         };
-        
+
         for (String[] unidad : unidades) {
             if (!unidadMedidaRepository.existsByNombre(unidad[0])) {
                 UnidadMedida um = new UnidadMedida();
@@ -228,4 +344,3 @@ public class ProductoController {
         }
     }
 }
-

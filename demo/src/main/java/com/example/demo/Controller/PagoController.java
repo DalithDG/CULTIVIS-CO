@@ -20,19 +20,19 @@ public class PagoController {
 
     @Autowired
     private CarritoRepository carritoRepository;
-    
+
     @Autowired
     private DetalleCarritoRepository detalleCarritoRepository;
-    
+
     @Autowired
     private PedidoRepository pedidoRepository;
-    
+
     @Autowired
     private DetallePedidoRepository detallePedidoRepository;
-    
+
     @Autowired
     private PagoRepository pagoRepository;
-    
+
     @Autowired
     private ProductoRepository productoRepository;
 
@@ -42,7 +42,7 @@ public class PagoController {
     @GetMapping
     public String mostrarPago(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión para realizar el pago");
             return "redirect:/usuario/login";
@@ -57,7 +57,7 @@ public class PagoController {
         Carrito carrito = carritoOpt.orElseThrow();
 
         List<DetalleCarrito> detalles = detalleCarritoRepository.findByCarritoId(carrito.getIdCarrito());
-        
+
         if (detalles.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "Su carrito está vacío");
             return "redirect:/carrito";
@@ -72,7 +72,7 @@ public class PagoController {
         model.addAttribute("carrito", carrito);
         model.addAttribute("detalles", detalles);
         model.addAttribute("total", total);
-        
+
         return "pago";
     }
 
@@ -81,12 +81,12 @@ public class PagoController {
      */
     @PostMapping("/procesar")
     public String procesarPago(@RequestParam("metodoPago") String metodoPago,
-                               @RequestParam(value = "direccionEnvio", required = false) String direccionEnvio,
-                               HttpSession session,
-                               RedirectAttributes redirectAttributes) {
+            @RequestParam(value = "direccionEnvio", required = false) String direccionEnvio,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
             Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-            
+
             if (usuario == null) {
                 redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión para realizar el pago");
                 return "redirect:/usuario/login";
@@ -97,7 +97,7 @@ public class PagoController {
                     .orElseThrow(() -> new IllegalArgumentException("Carrito no encontrado"));
 
             List<DetalleCarrito> detallesCarrito = detalleCarritoRepository.findByCarrito(carrito);
-            
+
             if (detallesCarrito.isEmpty()) {
                 redirectAttributes.addFlashAttribute("error", "Su carrito está vacío");
                 return "redirect:/carrito";
@@ -107,8 +107,8 @@ public class PagoController {
             for (DetalleCarrito detalle : detallesCarrito) {
                 Producto producto = detalle.getProducto();
                 if (producto.getStock() < detalle.getCantidad()) {
-                    redirectAttributes.addFlashAttribute("error", 
-                        "El producto " + producto.getNombre() + " no tiene suficiente stock");
+                    redirectAttributes.addFlashAttribute("error",
+                            "El producto " + producto.getNombre() + " no tiene suficiente stock");
                     return "redirect:/carrito";
                 }
             }
@@ -123,6 +123,7 @@ public class PagoController {
             pedido.setCliente(usuario);
             pedido.setFechaPedido(LocalDateTime.now());
             pedido.setEstado("PENDIENTE");
+            pedido.setTotal((float) total);
             pedido = pedidoRepository.save(pedido);
 
             // Crear detalles del pedido y actualizar stock
@@ -153,9 +154,10 @@ public class PagoController {
             detalleCarritoRepository.deleteByCarrito(carrito);
             carritoRepository.delete(carrito);
 
-            redirectAttributes.addFlashAttribute("mensaje", "¡Pago procesado exitosamente! Pedido #" + pedido.getIdPedido());
+            redirectAttributes.addFlashAttribute("mensaje",
+                    "¡Pago procesado exitosamente! Pedido #" + pedido.getIdPedido());
             return "redirect:/pago/confirmacion/" + pedido.getIdPedido();
-            
+
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("error", "Error al procesar el pago: " + e.getMessage());
             return "redirect:/pago";
@@ -167,11 +169,11 @@ public class PagoController {
      */
     @GetMapping("/confirmacion/{pedidoId}")
     public String mostrarConfirmacion(@PathVariable int pedidoId,
-                                     HttpSession session,
-                                     Model model,
-                                     RedirectAttributes redirectAttributes) {
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             return "redirect:/usuario/login";
         }
@@ -192,8 +194,7 @@ public class PagoController {
         model.addAttribute("pedido", pedido);
         model.addAttribute("detalles", detalles);
         model.addAttribute("pago", pagoOpt.orElse(null));
-        
+
         return "confirmacion-pago";
     }
 }
-

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+</head>
+
+<body>
+    <header th:fragment="adminHeader" class="admin-header">
+        <div class="header-container">
+            <div class="logo">
+                <i class="fa-solid fa-shield-halved"></i>
+                <span>CULTIVIS Admin</span>
+            </div>
+
+            <nav class="admin-nav">
+                <a th:href="@{/admin/dashboard}">
+                    <i class="fa-solid fa-chart-line"></i> Dashboard
+                </a>
+                <a th:href="@{/admin/usuarios}">
+                    <i class="fa-solid fa-users"></i> Usuarios
+                </a>
+                <a th:href="@{/admin/productos}">
+                    <i class="fa-solid fa-box"></i> Productos
+                </a>
+                <a th:href="@{/admin/resenas}">
+                    <i class="fa-solid fa-star"></i> Reseñas
+                </a>
+            </nav>
+
+            <div class="admin-user">
+                <span th:text="${admin != null ? admin.nombre : 'Admin'}"></span>
+                <a th:href="@{/usuario/logout}" class="logout-btn">
+                    <i class="fa-solid fa-sign-out-alt"></i> Salir
+                </a>
+            </div>
+        </div>
+    </header>
+</body>
+
+</html>

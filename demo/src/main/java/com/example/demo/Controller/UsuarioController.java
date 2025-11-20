@@ -35,11 +35,11 @@ public class UsuarioController {
 
     @Autowired
     public UsuarioController(UsuarioService usuarioService,
-                             CiudadService ciudadService,
-                             DepartamentoService departamentoService,
-                             VendedorService vendedorService,
-                             RolesService rolesService,
-                             ProductoService productoService) {
+            CiudadService ciudadService,
+            DepartamentoService departamentoService,
+            VendedorService vendedorService,
+            RolesService rolesService,
+            ProductoService productoService) {
         this.usuarioService = usuarioService;
         this.ciudadService = ciudadService;
         this.departamentoService = departamentoService;
@@ -63,17 +63,17 @@ public class UsuarioController {
     // ===========================
     @PostMapping("/guardar")
     public String guardarUsuario(@RequestParam("nombre") String nombre,
-                                 @RequestParam("email") String email,
-                                 @RequestParam("contrasena") String contrasena,
-                                 @RequestParam("departamento") String nombreDepartamento,
-                                 @RequestParam("ciudad") String nombreCiudad,
-                                 Model model,
-                                 RedirectAttributes redirectAttributes) {
+            @RequestParam("email") String email,
+            @RequestParam("contrasena") String contrasena,
+            @RequestParam("departamento") String nombreDepartamento,
+            @RequestParam("ciudad") String nombreCiudad,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         try {
             // VALIDACIONES
             if (nombre == null || nombre.trim().isEmpty() ||
-                email == null || email.trim().isEmpty() ||
-                contrasena == null || contrasena.trim().isEmpty()) {
+                    email == null || email.trim().isEmpty() ||
+                    contrasena == null || contrasena.trim().isEmpty()) {
                 model.addAttribute("error", "Todos los campos son requeridos");
                 return "registro";
             }
@@ -134,12 +134,12 @@ public class UsuarioController {
 
     @PostMapping("/login")
     public String validarLogin(@RequestParam("email") String email,
-                               @RequestParam("contrasena") String contrasena,
-                               HttpSession session,
-                               Model model,
-                               RedirectAttributes redirectAttributes) {
+            @RequestParam("contrasena") String contrasena,
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         if (email == null || email.trim().isEmpty() ||
-            contrasena == null || contrasena.trim().isEmpty()) {
+                contrasena == null || contrasena.trim().isEmpty()) {
             model.addAttribute("error", "Correo y contraseña requeridos");
             return "login";
         }
@@ -157,13 +157,31 @@ public class UsuarioController {
         if (usuarioActualizado != null) {
             usuario = usuarioActualizado;
         }
-        
+
         // CARGAR PERFIL DE VENDEDOR SI EXISTE
         vendedorService.obtenerPerfilPorUsuarioId(usuario.getId())
-                      .ifPresent(usuario::setPerfilVendedor);
+                .ifPresent(usuario::setPerfilVendedor);
 
         session.setAttribute("usuarioLogueado", usuario);
         redirectAttributes.addFlashAttribute("mensaje", "Bienvenido, " + usuario.getNombre());
+
+        // VERIFICAR SI ES ADMINISTRADOR Y REDIRIGIR AL DASHBOARD
+        try {
+            // Intentar obtener AdminService si existe
+            org.springframework.context.ApplicationContext context = org.springframework.web.context.support.WebApplicationContextUtils
+                    .getWebApplicationContext(session.getServletContext());
+
+            if (context != null && context.containsBean("adminService")) {
+                com.example.demo.services.AdminService adminService = context
+                        .getBean(com.example.demo.services.AdminService.class);
+
+                if (adminService.esAdmin(usuario.getId())) {
+                    return "redirect:/admin/dashboard";
+                }
+            }
+        } catch (Exception e) {
+            // Si hay error, continuar con flujo normal
+        }
 
         return "redirect:/usuario/inicio";
     }
@@ -184,7 +202,7 @@ public class UsuarioController {
         if (usuarioActualizado != null) {
             usuario = usuarioActualizado;
             vendedorService.obtenerPerfilPorUsuarioId(usuario.getId())
-                          .ifPresent(usuario::setPerfilVendedor);
+                    .ifPresent(usuario::setPerfilVendedor);
             session.setAttribute("usuarioLogueado", usuario);
         }
 
@@ -217,8 +235,101 @@ public class UsuarioController {
             return "redirect:/usuario/login";
         }
 
+        // Recargar usuario para obtener datos actualizados
+        Usuario usuarioActualizado = usuarioService.obtenerUsuarioPorId(usuario.getId());
+        if (usuarioActualizado != null) {
+            usuario = usuarioActualizado;
+            session.setAttribute("usuarioLogueado", usuario);
+        }
+
         model.addAttribute("usuario", usuario);
+        model.addAttribute("departamentos", departamentoService.findAll());
         return "perfil";
+    }
+
+    // ===========================
+    // ACTUALIZAR PERFIL DEL USUARIO
+    // ===========================
+    @PostMapping("/perfil/actualizar")
+    public String actualizarPerfil(@RequestParam("nombre") String nombre,
+            @RequestParam("email") String email,
+            @RequestParam("departamento") String nombreDepartamento,
+            @RequestParam("ciudad") String nombreCiudad,
+            @RequestParam(value = "contrasena", required = false) String contrasena,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
+        try {
+            Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
+            if (usuario == null) {
+                redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
+                return "redirect:/usuario/login";
+            }
+
+            // Validaciones
+            if (nombre == null || nombre.trim().isEmpty() ||
+                    email == null || email.trim().isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Nombre y email son requeridos");
+                return "redirect:/usuario/perfil";
+            }
+
+            String emailLimpio = email.trim().toLowerCase();
+
+            // Verificar si el email ya existe (excepto el del usuario actual)
+            Usuario usuarioConEmail = usuarioService.findByEmail(emailLimpio);
+            if (usuarioConEmail != null && usuarioConEmail.getId() != usuario.getId()) {
+                redirectAttributes.addFlashAttribute("error", "Este correo ya está registrado por otro usuario");
+                return "redirect:/usuario/perfil";
+            }
+
+            // Obtener usuario actualizado de la base de datos
+            Usuario usuarioActualizado = usuarioService.obtenerUsuarioPorId(usuario.getId());
+            if (usuarioActualizado == null) {
+                redirectAttributes.addFlashAttribute("error", "Usuario no encontrado");
+                return "redirect:/usuario/login";
+            }
+
+            // Actualizar datos básicos
+            usuarioActualizado.setNombre(nombre.trim());
+            usuarioActualizado.setEmail(emailLimpio);
+
+            // Actualizar contraseña solo si se proporcionó una nueva
+            if (contrasena != null && !contrasena.trim().isEmpty()) {
+                usuarioActualizado.setContrasena(contrasena);
+            }
+
+            // Buscar o crear departamento
+            Departamento departamento = departamentoService.findByNombre(nombreDepartamento.trim());
+            if (departamento == null) {
+                departamento = new Departamento();
+                departamento.setNombre(nombreDepartamento.trim());
+                departamento = departamentoService.save(departamento);
+            }
+
+            // Buscar o crear ciudad
+            Ciudad ciudad = ciudadService.findByNombre(nombreCiudad.trim());
+            if (ciudad == null) {
+                ciudad = new Ciudad();
+                ciudad.setNombre(nombreCiudad.trim());
+                ciudad.setDepartamento(departamento);
+                ciudad = ciudadService.save(ciudad);
+            }
+
+            usuarioActualizado.setDepartamento(departamento);
+            usuarioActualizado.setCiudad(ciudad);
+
+            // Guardar cambios
+            usuarioService.actualizarUsuario(usuarioActualizado);
+
+            // Actualizar sesión
+            session.setAttribute("usuarioLogueado", usuarioActualizado);
+
+            redirectAttributes.addFlashAttribute("mensaje", "Perfil actualizado exitosamente");
+            return "redirect:/usuario/perfil";
+
+        } catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", "Error al actualizar el perfil: " + e.getMessage());
+            return "redirect:/usuario/perfil";
+        }
     }
 
     // ===========================

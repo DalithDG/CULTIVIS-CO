@@ -1,7 +1,7 @@
 <header th:fragment="siteHeader">
     <link rel="stylesheet" th:href="@{/header.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
+
     <div class="top-bar">
         <p>Cobertura Toda Colombia. Pedido mínimo $200.000</p>
     </div>
@@ -17,25 +17,33 @@
             <nav class="nav-links">
                 <ul>
                     <li><a th:href="@{/vendedor/inicio}">
-                        <i class="fa-solid fa-home"></i> Inicio
-                    </a></li>
-                    
-                    <li><a th:href="@{/vendedor/productos/nuevo}">
-                        <i class="fa-solid fa-plus-circle"></i> Agregar Producto
-                    </a></li>
-                    
-                    <li><a th:href="@{/vendedor/Miproductos}">
-                        <i class="fa-solid fa-box"></i> Mis Productos
-                    </a></li>
-                    
-                    <li><a th:href="@{/vendedor/ventas}">
-                        <i class="fa-solid fa-chart-line"></i> Mis Ventas
-                    </a></li>
+                            <i class="fa-solid fa-home"></i> Inicio
+                        </a></li>
 
-                    <li><a th:href="@{/usuario/logout}">
-                        <i class="fa-solid fa-sign-out-alt"></i> Cerrar Sesión
-                    </a></li>
-                    
+                    <li><a th:href="@{/vendedor/productos/nuevo}">
+                            <i class="fa-solid fa-plus-circle"></i> Agregar Producto
+                        </a></li>
+
+                    <li><a th:href="@{/vendedor/Miproductos}">
+                            <i class="fa-solid fa-box"></i> Mis Productos
+                        </a></li>
+
+                    <li><a th:href="@{/vendedor/ventas}">
+                            <i class="fa-solid fa-chart-line"></i> Mis Ventas
+                        </a></li>
+
+                    <li class="profile-dropdown">
+                        <a href="#" class="profile-toggle">
+                            <i class="fa-solid fa-user"></i> Perfil
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a th:href="@{/usuario/perfil}"><i class="fa-solid fa-user-circle"></i> Mi Perfil</a>
+                            </li>
+                            <li><a th:href="@{/usuario/logout}"><i class="fa-solid fa-sign-out-alt"></i> Cerrar
+                                    Sesión</a></li>
+                        </ul>
+                    </li>
+
                 </ul>
             </nav>
         </div>

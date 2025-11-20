@@ -19,7 +19,7 @@
 <body>
 
   <!-- Header -->
-  <header th:replace="fragments/header-publico :: siteHeader"></header>
+  <header th:replace="fragments/header :: siteHeader"></header>
 
   <!-- Banner de Categorías -->
   <section class="banner-categorias">
@@ -255,7 +255,8 @@
                 </div>
                 <div class="producto-info">
                   <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
-                  <p class="producto-categoria" th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</p>
+                  <p class="producto-categoria"
+                    th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</p>
                   <div class="producto-precio">
                     <span class="precio-actual"
                       th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">

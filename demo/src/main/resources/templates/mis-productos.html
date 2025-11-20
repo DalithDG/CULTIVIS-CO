@@ -1,141 +1,14 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Productos - Cultivus</title>
-    <link rel="stylesheet" th:href="@{/style.css}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f4f6f8;
-            margin: 0;
-            padding: 0;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 0 20px;
-        }
-        .header-section {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        h1 {
-            color: #27ae60;
-            margin: 0;
-        }
-        .btn-add {
-            background: #27ae60;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 8px;
-            text-decoration: none;
-            font-weight: 600;
-            transition: background 0.3s;
-        }
-        .btn-add:hover {
-            background: #1ef378;
-        }
-        .productos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        .producto-card {
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .producto-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        }
-        .producto-imagen {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-        }
-        .producto-info {
-            padding: 20px;
-        }
-        .producto-nombre {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 10px;
-        }
-        .producto-descripcion {
-            color: #666;
-            font-size: 14px;
-            margin-bottom: 15px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
-        .producto-precio {
-            font-size: 20px;
-            font-weight: bold;
-            color: #27ae60;
-            margin-bottom: 10px;
-        }
-        .producto-stock {
-            font-size: 14px;
-            color: #666;
-            margin-bottom: 15px;
-        }
-        .producto-acciones {
-            display: flex;
-            gap: 10px;
-        }
-        .btn-eliminar {
-            background: #dc3545;
-            color: white;
-            padding: 8px 16px;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background 0.3s;
-        }
-        .btn-eliminar:hover {
-            background: #c82333;
-        }
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            background: white;
-            border-radius: 12px;
-        }
-        .empty-state i {
-            font-size: 64px;
-            color: #ccc;
-            margin-bottom: 20px;
-        }
-        .alert {
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-        }
-        .alert-success {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-        .alert-error {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/mis-productos.css}">
+
 </head>
+
 <body>
     <header th:replace="fragments/header-vendedor :: siteHeader"></header>
 
@@ -161,10 +34,8 @@
 
         <div th:if="${productos != null && !productos.isEmpty()}" class="productos-grid">
             <div th:each="producto : ${productos}" class="producto-card">
-                <img th:src="${producto.imagenUrl}" 
-                     th:alt="${producto.nombre}" 
-                     class="producto-imagen"
-                     onerror="this.src='/images/placeholder.jpg'">
+                <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}" class="producto-imagen"
+                    onerror="this.src='/images/placeholder.jpg'">
                 <div class="producto-info">
                     <div class="producto-nombre" th:text="${producto.nombre}"></div>
                     <div class="producto-descripcion" th:text="${producto.descripcion}"></div>
@@ -178,10 +49,11 @@
                         <i class="fa-solid fa-tag"></i> <span th:text="${producto.categoria.nombre}"></span>
                     </div>
                     <div class="producto-acciones">
-                        <form th:action="@{/vendedor/productos/eliminar/{id}(id=${producto.id})}" 
-                              method="post" 
-                              style="flex: 1;"
-                              onsubmit="return confirm('¿Está seguro de eliminar este producto?');">
+                        <a th:href="@{/vendedor/productos/editar/{id}(id=${producto.id})}" class="btn-editar">
+                            <i class="fa-solid fa-pen"></i> Editar
+                        </a>
+                        <form th:action="@{/vendedor/productos/eliminar/{id}(id=${producto.id})}" method="post"
+                            style="flex: 1;" onsubmit="return confirm('¿Está seguro de eliminar este producto?');">
                             <button type="submit" class="btn-eliminar">
                                 <i class="fa-solid fa-trash"></i> Eliminar
                             </button>
@@ -192,5 +64,5 @@
         </div>
     </div>
 </body>
-</html>
 
+</html>

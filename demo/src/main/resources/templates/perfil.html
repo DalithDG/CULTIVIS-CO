@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - CULTIVIS-CO</title>
+    <link rel="stylesheet" th:href="@{/perfil.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- Header dinámico según el rol del usuario -->
+    <div th:if="${usuario.rol != null and usuario.rol.nombre == 'VENDEDOR'}">
+        <div th:replace="~{fragments/header-vendedor :: siteHeader}"></div>
+    </div>
+    <div th:if="${usuario.rol == null or usuario.rol.nombre != 'VENDEDOR'}">
+        <div th:replace="~{fragments/header-comprador :: siteHeader}"></div>
+    </div>
+
+    <div class="profile-container">
+        <div class="profile-card">
+            <div class="profile-header">
+                <div class="profile-icon">
+                    <i class="fa-solid fa-user-circle"></i>
+                </div>
+                <h1>Mi Perfil</h1>
+                <p class="profile-subtitle">Gestiona tu información personal</p>
+            </div>
+
+            <!-- Mensajes de éxito/error -->
+            <div th:if="${mensaje}" class="alert alert-success">
+                <i class="fa-solid fa-check-circle"></i>
+                <span th:text="${mensaje}"></span>
+            </div>
+            <div th:if="${error}" class="alert alert-error">
+                <i class="fa-solid fa-exclamation-circle"></i>
+                <span th:text="${error}"></span>
+            </div>
+
+            <!-- Información actual del usuario -->
+            <div class="info-section">
+                <h2><i class="fa-solid fa-info-circle"></i> Información Actual</h2>
+                <div class="info-grid">
+                    <div class="info-item">
+                        <label>Nombre:</label>
+                        <p th:text="${usuario.nombre}">Nombre del usuario</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Email:</label>
+                        <p th:text="${usuario.email}">email@ejemplo.com</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Departamento:</label>
+                        <p th:text="${usuario.departamento != null ? usuario.departamento.nombre : 'No especificado'}">
+                            Departamento</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Ciudad:</label>
+                        <p th:text="${usuario.ciudad != null ? usuario.ciudad.nombre : 'No especificado'}">Ciudad</p>
+                    </div>
+                    <div class="info-item">
+                        <label>Rol:</label>
+                        <p th:text="${usuario.rol != null ? usuario.rol.nombre : 'COMPRADOR'}">Rol</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formulario de edición -->
+            <div class="edit-section">
+                <h2><i class="fa-solid fa-edit"></i> Editar Información</h2>
+                <form th:action="@{/usuario/perfil/actualizar}" method="post" class="edit-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre">
+                                <i class="fa-solid fa-user"></i> Nombre Completo
+                            </label>
+                            <input type="text" id="nombre" name="nombre" th:value="${usuario.nombre}" required
+                                placeholder="Ingrese su nombre completo">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fa-solid fa-envelope"></i> Correo Electrónico
+                            </label>
+                            <input type="email" id="email" name="email" th:value="${usuario.email}" required
+                                placeholder="correo@ejemplo.com">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="departamento">
+                                <i class="fa-solid fa-map-marked-alt"></i> Departamento
+                            </label>
+                            <select id="departamento" name="departamento" required>
+                                <option value="">Seleccione un departamento</option>
+                                <option th:each="dept : ${departamentos}" th:value="${dept.nombre}"
+                                    th:text="${dept.nombre}"
+                                    th:selected="${usuario.departamento != null and usuario.departamento.nombre == dept.nombre}">
+                                </option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ciudad">
+                                <i class="fa-solid fa-city"></i> Ciudad
+                            </label>
+                            <input type="text" id="ciudad" name="ciudad"
+                                th:value="${usuario.ciudad != null ? usuario.ciudad.nombre : ''}" required
+                                placeholder="Ingrese su ciudad">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contrasena">
+                            <i class="fa-solid fa-lock"></i> Nueva Contraseña (opcional)
+                        </label>
+                        <input type="password" id="contrasena" name="contrasena"
+                            placeholder="Dejar en blanco para mantener la actual">
+                        <small>Solo complete este campo si desea cambiar su contraseña</small>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa-solid fa-save"></i> Guardar Cambios
+                        </button>
+                        <a th:href="@{/usuario/inicio}" class="btn btn-secondary">
+                            <i class="fa-solid fa-times"></i> Cancelar
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -1,145 +1,73 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Usuario</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-        }
-        
-        h2 {
-            color: #333;
-            margin-bottom: 30px;
-            text-align: center;
-            font-size: 28px;
-        }
-        
-        .form-group {
-            margin-bottom: 25px;
-        }
-        
-        label {
-            display: block;
-            color: #555;
-            font-weight: 600;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-        
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-        
-        input[type="text"]:focus,
-        input[type="email"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-        
-        button {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            margin-top: 10px;
-        }
-        
-        button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
-        }
-        
-        button:active {
-            transform: translateY(0);
-        }
-        
-        .info-text {
-            text-align: center;
-            color: #666;
-            font-size: 13px;
-            margin-top: 20px;
-        }
-    </style>
+    <title>Registro Usuario - Cultivus</title>
+    <link rel="stylesheet" th:href="@{/registro.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
+
 <body>
     <div class="container">
-        <h2>Registro de Usuario</h2>
-        
+        <h2><i class="fa-solid fa-user-plus"></i> Registro de Usuario</h2>
+
         <!-- Mensaje de error -->
-        <div th:if="${error}" style="background-color: #fee; color: #c33; padding: 12px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #fcc;">
-            <strong>Error:</strong> <span th:text="${error}"></span>
+        <div th:if="${error}" class="alert-error">
+            <strong><i class="fa-solid fa-exclamation-circle"></i> Error:</strong> <span th:text="${error}"></span>
         </div>
-        
+
         <form action="/usuario/guardar" method="post">
-            
+
             <div class="form-group">
-                <label for="nombre">Nombre Completo</label>
+                <label for="nombre">
+                    <i class="fa-solid fa-user"></i> Nombre Completo
+                </label>
                 <input type="text" id="nombre" name="nombre" required placeholder="Ingresa tu nombre">
             </div>
-            
+
             <div class="form-group">
-                <label for="email">Correo Electrónico</label>
+                <label for="email">
+                    <i class="fa-solid fa-envelope"></i> Correo Electrónico
+                </label>
                 <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com">
             </div>
-            
+
             <div class="form-group">
-                <label for="contrasena">Contraseña</label>
+                <label for="contrasena">
+                    <i class="fa-solid fa-lock"></i> Contraseña
+                </label>
                 <input type="password" id="contrasena" name="contrasena" required placeholder="Mínimo 6 caracteres">
             </div>
-            
+
             <div class="form-group">
-                <label for="departamento">Departamento</label>
+                <label for="departamento">
+                    <i class="fa-solid fa-map-marked-alt"></i> Departamento
+                </label>
                 <input type="text" id="departamento" name="departamento" required placeholder="Ej: Bolívar">
             </div>
-            
+
             <div class="form-group">
-                <label for="ciudad">Ciudad</label>
+                <label for="ciudad">
+                    <i class="fa-solid fa-city"></i> Ciudad
+                </label>
                 <input type="text" id="ciudad" name="ciudad" required placeholder="Ej: Cartagena">
             </div>
-            
-            <button type="submit">Registrarse</button>
-            
-            <p class="info-text">Al registrarte aceptas nuestros términos y condiciones</p>
+
+            <button type="submit">
+                <i class="fa-solid fa-check"></i> Registrarse
+            </button>
+
+            <p class="info-text">
+                Al registrarte aceptas nuestros términos y condiciones
+            </p>
+
+            <a th:href="@{/usuario/login}" class="back-link">
+                <i class="fa-solid fa-arrow-left"></i> ¿Ya tienes cuenta? Inicia sesión
+            </a>
         </form>
     </div>
 </body>
+
 </html>

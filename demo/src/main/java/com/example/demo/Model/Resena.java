@@ -20,8 +20,15 @@ public class Resena {
     @JoinColumn(name = "id_productos", nullable = false)
     private Producto producto;
 
-    @Column(name = "Calificacion", length = 1, nullable = false)
-    private String calificacion;
+    @ManyToOne
+    @JoinColumn(name = "id_usuario", nullable = false)
+    private Usuario usuario;
+
+    @Column(name = "Calificacion", nullable = false)
+    private int calificacion;
+
+    @Column(name = "Comentario", length = 500)
+    private String comentario;
 
     @Column(name = "Fecha", nullable = false)
     private LocalDate fecha;
@@ -29,11 +36,13 @@ public class Resena {
     public Resena() {
     }
 
-    public Resena(int idResena, Pedido pedido, Producto producto, String calificacion, LocalDate fecha) {
-        this.idResena = idResena;
+    public Resena(Pedido pedido, Producto producto, Usuario usuario, int calificacion, String comentario,
+            LocalDate fecha) {
         this.pedido = pedido;
         this.producto = producto;
+        this.usuario = usuario;
         this.calificacion = calificacion;
+        this.comentario = comentario;
         this.fecha = fecha;
     }
 
@@ -61,12 +70,28 @@ public class Resena {
         this.producto = producto;
     }
 
-    public String getCalificacion() {
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public int getCalificacion() {
         return calificacion;
     }
 
-    public void setCalificacion(String calificacion) {
+    public void setCalificacion(int calificacion) {
         this.calificacion = calificacion;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 
     public LocalDate getFecha() {

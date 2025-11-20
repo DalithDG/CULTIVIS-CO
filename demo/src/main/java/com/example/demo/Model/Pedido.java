@@ -1,5 +1,6 @@
 package com.example.demo.Model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import jakarta.persistence.*;
@@ -7,7 +8,7 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "Pedido")
 public class Pedido {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_pedidos")
@@ -22,6 +23,9 @@ public class Pedido {
 
     @Column(name = "estado", length = 15)
     private String estado;
+
+    @Column(name = "total")
+    private float total;
 
     @OneToMany(mappedBy = "pedido", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<DetallePedido> detalles;
@@ -63,6 +67,12 @@ public class Pedido {
         this.fechaPedido = fechaPedido;
     }
 
+    // Método auxiliar para compatibilidad con LocalDate (usado en algunos
+    // controladores)
+    public void setFecha(LocalDate fecha) {
+        this.fechaPedido = fecha.atStartOfDay();
+    }
+
     public List<DetallePedido> getDetalles() {
         return detalles;
     }
@@ -85,5 +95,13 @@ public class Pedido {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
     }
 }

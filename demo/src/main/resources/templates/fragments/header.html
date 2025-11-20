@@ -1,0 +1,25 @@
+<!-- Header dinámico que selecciona el header correcto según el rol del usuario -->
+<header th:fragment="siteHeader">
+    <!-- Si el usuario está logueado, mostrar header según su rol -->
+    <div th:if="${session.usuarioLogueado != null}">
+        <!-- Header para Admin -->
+        <div th:if="${session.usuarioLogueado.rol != null and session.usuarioLogueado.rol.nombre == 'ADMIN'}">
+            <div th:replace="fragments/header-admin :: siteHeader"></div>
+        </div>
+
+        <!-- Header para Vendedor -->
+        <div th:if="${session.usuarioLogueado.rol != null and session.usuarioLogueado.rol.nombre == 'VENDEDOR'}">
+            <div th:replace="fragments/header-vendedor :: siteHeader"></div>
+        </div>
+
+        <!-- Header para Comprador -->
+        <div th:if="${session.usuarioLogueado.rol != null and session.usuarioLogueado.rol.nombre == 'COMPRADOR'}">
+            <div th:replace="fragments/header-comprador :: siteHeader"></div>
+        </div>
+    </div>
+
+    <!-- Si no está logueado, mostrar header público -->
+    <div th:if="${session.usuarioLogueado == null}">
+        <div th:replace="fragments/header-publico :: siteHeader"></div>
+    </div>
+</header>

@@ -27,7 +27,6 @@ public class Producto {
     @Column(name = "imagen_url", length = 500)
     private String imagenUrl;
 
-
     @Column(name = "Peso", nullable = false)
     private Float peso;
 
@@ -55,7 +54,8 @@ public class Producto {
     public Producto() {
     }
 
-    public Producto(int id, String nombre, Float precio, int stock, String descripcion, String imagenUrl, Float peso, Categoria categoria, UnidadMedida unidadMedida, Usuario usuario) {
+    public Producto(int id, String nombre, Float precio, int stock, String descripcion, String imagenUrl, Float peso,
+            Categoria categoria, UnidadMedida unidadMedida, Usuario usuario) {
         this.id = id;
         this.nombre = nombre;
         this.precio = precio;

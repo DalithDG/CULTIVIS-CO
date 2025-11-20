@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Admin</title>
+    <link rel="stylesheet" th:href="@{/admin.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+
+<body>
+    <div th:replace="fragments/header-admin :: adminHeader"></div>
+
+    <div class="admin-container">
+        <h1><i class="fa-solid fa-chart-line"></i> Dashboard</h1>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <i class="fa-solid fa-users"></i>
+                <h3 th:text="${estadisticas.totalUsuarios}">0</h3>
+                <p>Usuarios Totales</p>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-box"></i>
+                <h3 th:text="${estadisticas.totalProductos}">0</h3>
+                <p>Productos</p>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-shopping-cart"></i>
+                <h3 th:text="${estadisticas.totalPedidos}">0</h3>
+                <p>Pedidos</p>
+            </div>
+
+            <div class="stat-card">
+                <i class="fa-solid fa-star"></i>
+                <h3 th:text="${estadisticas.totalResenas}">0</h3>
+                <p>Reseñas</p>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <h2>Acciones Rápidas</h2>
+            <div class="actions-grid">
+                <a th:href="@{/admin/usuarios}" class="action-btn">
+                    <i class="fa-solid fa-users-cog"></i>
+                    Gestionar Usuarios
+                </a>
+                <a th:href="@{/admin/productos}" class="action-btn">
+                    <i class="fa-solid fa-boxes"></i>
+                    Gestionar Productos
+                </a>
+                <a th:href="@{/admin/resenas}" class="action-btn">
+                    <i class="fa-solid fa-comments"></i>
+                    Gestionar Reseñas
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

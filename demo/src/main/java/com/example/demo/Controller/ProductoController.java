@@ -32,9 +32,9 @@ public class ProductoController {
     @Autowired
     private VendedorService vendedorService;
 
-    /**
-     * Muestra el formulario para agregar un nuevo producto
-     */
+    
+    //Muestra el formulario para agregar un nuevo producto
+
     @GetMapping("/productos/nuevo")
     public String mostrarFormularioProducto(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
@@ -128,7 +128,7 @@ public class ProductoController {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/vendedor/productos/nuevo";
         } catch (Exception e) {
-            redirectAttributes.addFlashAttribute("error", "Error al crear el producto: " + e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Error al crear el producto , intente nuevamente: " + e.getMessage());
             return "redirect:/vendedor/productos/nuevo";
         }
     }

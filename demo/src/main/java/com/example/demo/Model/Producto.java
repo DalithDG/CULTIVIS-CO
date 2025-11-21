@@ -24,7 +24,7 @@ public class Producto {
     @Column(name = "descripcion", length = 255)
     private String descripcion;
 
-    @Column(name = "imagen_url", length = 500)
+    @Column(name = "imagen_url", length = 2000)
     private String imagenUrl;
 
     @Column(name = "Peso", nullable = false)

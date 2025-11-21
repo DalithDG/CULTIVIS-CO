@@ -83,7 +83,7 @@
                         <h3 th:text="${producto.nombre}"></h3>
                         <p class="precio" th:text="'$' + ${producto.precio}"></p>
                         <p class="stock" th:text="'Stock: ' + ${producto.stock}"></p>
-                        <a th:href="@{/productos/{id}(id=${producto.id})}" class="btn-ver">
+                        <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn-ver">
                             Ver Detalles
                         </a>
                     </div>

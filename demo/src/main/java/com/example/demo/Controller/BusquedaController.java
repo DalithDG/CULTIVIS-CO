@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 public class BusquedaController {
@@ -21,7 +23,8 @@ public class BusquedaController {
     private CategoriaRepository categoriaRepository;
 
     @GetMapping("/buscar")
-    public String buscarProductos(@RequestParam(value = "q", required = false) String query,
+    public String buscarProductos(
+            @RequestParam(value = "q", required = false, defaultValue = "") String query,
             @RequestParam(value = "categoria", required = false) Integer categoriaId,
             @RequestParam(value = "precioMin", required = false) Float precioMin,
             @RequestParam(value = "precioMax", required = false) Float precioMax,
@@ -39,26 +42,38 @@ public class BusquedaController {
             productos = busquedaService.buscarConStock();
         }
 
-        // Aplicar ordenamiento
-        if ("precio-asc".equals(orden)) {
-            productos = busquedaService.ordenarPorPrecioAsc();
-        } else if ("precio-desc".equals(orden)) {
-            productos = busquedaService.ordenarPorPrecioDesc();
-        } else if ("recientes".equals(orden)) {
-            productos = busquedaService.obtenerMasRecientes();
+        // Aplicar ordenamiento sobre los resultados existentes
+        if (productos != null && !productos.isEmpty()) {
+            switch (orden) {
+                case "precio-asc":
+                    productos = productos.stream()
+                            .sorted((p1, p2) -> Float.compare(p1.getPrecio(), p2.getPrecio()))
+                            .collect(Collectors.toList());
+                    break;
+                case "precio-desc":
+                    productos = productos.stream()
+                            .sorted((p1, p2) -> Float.compare(p2.getPrecio(), p1.getPrecio()))
+                            .collect(Collectors.toList());
+                    break;
+                case "recientes":
+                    productos = productos.stream()
+                            .sorted((p1, p2) -> Integer.compare(p2.getId(), p1.getId()))
+                            .collect(Collectors.toList());
+                    break;
+            }
         }
 
         // Obtener categorías para filtros
         List<Categoria> categorias = categoriaRepository.findAll();
 
-        model.addAttribute("productos", productos);
+        model.addAttribute("productos", productos != null ? productos : new ArrayList<>());
         model.addAttribute("categorias", categorias);
         model.addAttribute("query", query);
         model.addAttribute("categoriaSeleccionada", categoriaId);
         model.addAttribute("precioMin", precioMin);
         model.addAttribute("precioMax", precioMax);
         model.addAttribute("orden", orden);
-        model.addAttribute("totalResultados", productos.size());
+        model.addAttribute("totalResultados", productos != null ? productos.size() : 0);
 
         return "busqueda-resultados";
     }

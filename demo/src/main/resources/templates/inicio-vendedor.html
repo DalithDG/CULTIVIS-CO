@@ -63,7 +63,7 @@
     <div class="container">
         <div class="buscador">
             <form th:action="@{/buscar}" method="get">
-                <input type="search" name="q" placeholder="¿Qué buscas?..." required>
+                <input type="search" name="q" placeholder="¿Qué buscas?..." >
                 <button type="submit" class="buscador-boton">
                     <i class="fas fa-search"></i> Buscar
                 </button>
@@ -72,107 +72,7 @@
         </div>
 
 
-
-
-    <!-- Categorías Destacadas -->
-    <section id="categorias">
-        <div class="container">
-            <div class="section-header">
-                <h2>Explora Nuestras Categorías</h2>
-                <p>Encuentra productos frescos y de calidad en cada categoría</p>
-            </div>
-
-            <div class="categorias-grid">
-                <a th:href="@{/frutas}" class="categoria-card">
-                    <div class="categoria-icon">
-                        <i class="fas fa-apple-alt"></i>
-                    </div>
-                    <h3>Frutas</h3>
-                    <p>Frescas y naturales</p>
-                </a>
-
-                <a th:href="@{/verduras}" class="categoria-card">
-                    <div class="categoria-icon">
-                        <i class="fas fa-carrot"></i>
-                    </div>
-                    <h3>Verduras</h3>
-                    <p>Directo del campo</p>
-                </a>
-
-                <a th:href="@{/lacteos}" class="categoria-card">
-                    <div class="categoria-icon">
-                        <i class="fas fa-cheese"></i>
-                    </div>
-                    <h3>Lácteos</h3>
-                    <p>100% naturales</p>
-                </a>
-
-                <a th:href="@{/cafe}" class="categoria-card">
-                    <div class="categoria-icon">
-                        <i class="fas fa-mug-hot"></i>
-                    </div>
-                    <h3>Café y Cacao</h3>
-                    <p>Aroma colombiano</p>
-                </a>
-
-
-            </div>
-        </div>
-    </section>
-
-    <!-- Productos Recientes -->
-    <section id="productos-recientes">
-        <div class="container">
-            <div class="section-header">
-                <h2>Productos Recientes</h2>
-                <p>Lo más fresco que tenemos para ti</p>
-            </div>
-
-            <!-- Si hay productos -->
-            <div th:if="${productos != null and !productos.isEmpty()}" class="productos-grid">
-                <div th:each="producto : ${productos}" class="producto-card">
-                    <div class="producto-image">
-                        <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}"
-                             onerror="this.src='/images/placeholder.jpg'">
-                        <div class="producto-overlay">
-                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="ver-detalle">
-                                <i class="fas fa-eye"></i> Ver detalle
-                            </a>
-                        </div>
-                    </div>
-                    <div class="producto-info">
-                        <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
-                        <div class="producto-precio">
-                            <span class="precio"
-                                th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">$0</span>
-                        </div>
-                        <form th:action="@{/carrito/agregar}" method="post" style="display: inline;">
-                            <input type="hidden" name="productoId" th:value="${producto.id}">
-                            <button type="submit" class="btn-agregar-carrito">
-                                <i class="fas fa-cart-plus"></i> Agregar al carrito
-                            </button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            <!-- Si NO hay productos -->
-            <div th:if="${productos == null or productos.isEmpty()}" class="no-productos">
-                <div class="no-productos-icon">
-                    <i class="fas fa-box-open"></i>
-                </div>
-                <h3>Aún no hay productos disponibles</h3>
-                <p>Estamos trabajando para traerte los mejores productos frescos muy pronto.</p>
-            </div>
-
-            <!-- Botón ver todos -->
-            <div th:if="${productos != null and !productos.isEmpty()}" class="ver-todos-container">
-                <a th:href="@{/category}" class="btn-ver-todos">
-                    Ver todos los productos <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-        </div>
-    </section>
-
+        
     <!-- Por Qué Elegirnos -->
     <section id="beneficios">
         <div class="container">

@@ -11,8 +11,6 @@ import com.example.demo.services.DepartamentoService;
 import com.example.demo.services.RolesService;
 import com.example.demo.services.VendedorService;
 import com.example.demo.services.ProductoService;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +31,6 @@ public class UsuarioController {
     private final RolesService rolesService;
     private final ProductoService productoService;
 
-    @Autowired
     public UsuarioController(UsuarioService usuarioService,
             CiudadService ciudadService,
             DepartamentoService departamentoService,
@@ -48,9 +45,6 @@ public class UsuarioController {
         this.productoService = productoService;
     }
 
-    // ===========================
-    // MOSTRAR FORMULARIO DE REGISTRO
-    // ===========================
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
         model.addAttribute("usuario", new Usuario());
@@ -58,9 +52,6 @@ public class UsuarioController {
         return "registro";
     }
 
-    // ===========================
-    // GUARDAR NUEVO USUARIO (FORMULARIO)
-    // ===========================
     @PostMapping("/guardar")
     public String guardarUsuario(@RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
@@ -70,21 +61,124 @@ public class UsuarioController {
             Model model,
             RedirectAttributes redirectAttributes) {
         try {
-            // VALIDACIONES
-            if (nombre == null || nombre.trim().isEmpty() ||
-                    email == null || email.trim().isEmpty() ||
-                    contrasena == null || contrasena.trim().isEmpty()) {
-                model.addAttribute("error", "Todos los campos son requeridos");
+
+            if (nombre == null || nombre.trim().isEmpty()) {
+                model.addAttribute("error", "El nombre es requerido");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+            if (email == null || email.trim().isEmpty()) {
+                model.addAttribute("error", "El correo electrónico es requerido");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+            if (contrasena == null || contrasena.trim().isEmpty()) {
+                model.addAttribute("error", "La contraseña es requerida");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+            if (nombreDepartamento == null || nombreDepartamento.trim().isEmpty()) {
+                model.addAttribute("error", "El departamento es requerido");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+            if (nombreCiudad == null || nombreCiudad.trim().isEmpty()) {
+                model.addAttribute("error", "La ciudad es requerida");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            String nombreLimpio = nombre.trim();
+
+            // Validar longitud del nombre (mínimo 3, máximo 50 caracteres)
+            if (nombreLimpio.length() < 3) {
+                model.addAttribute("error", "El nombre debe tener al menos 3 caracteres");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+            if (nombreLimpio.length() > 50) {
+                model.addAttribute("error", "El nombre no puede exceder 50 caracteres");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Validar que el nombre solo contenga letras y espacios
+            if (!nombreLimpio.matches("^[a-zA-ZáéíóúÁÉÍÓÚñÑ\\s]+$")) {
+                model.addAttribute("error", "El nombre solo puede contener letras y espacios");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
                 return "registro";
             }
 
             String emailLimpio = email.trim().toLowerCase();
-            if (usuarioService.existeEmail(emailLimpio)) {
-                model.addAttribute("error", "Este correo ya está registrado");
+
+            // Validar formato de email
+            String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+            if (!emailLimpio.matches(emailRegex)) {
+                model.addAttribute("error", "El formato del correo electrónico no es válido");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
                 return "registro";
             }
 
+            // Validar longitud del email (máximo 100 caracteres)
+            if (emailLimpio.length() > 100) {
+                model.addAttribute("error", "El correo electrónico no puede exceder 100 caracteres");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Verificar si el email ya existe
+            if (usuarioService.existeEmail(emailLimpio)) {
+                model.addAttribute("error", "Este correo ya está registrado");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Validar longitud mínima de contraseña
+            if (contrasena.length() < 8) {
+                model.addAttribute("error", "La contraseña debe tener al menos 8 caracteres");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Validar longitud máxima de contraseña
+            if (contrasena.length() > 100) {
+                model.addAttribute("error", "La contraseña no puede exceder 100 caracteres");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Validar que contenga al menos una letra mayúscula
+            if (!contrasena.matches(".*[A-Z].*")) {
+                model.addAttribute("error", "La contraseña debe contener al menos una letra mayúscula");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Validar que contenga al menos una letra minúscula
+            if (!contrasena.matches(".*[a-z].*")) {
+                model.addAttribute("error", "La contraseña debe contener al menos una letra minúscula");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Validar que contenga al menos un número
+            if (!contrasena.matches(".*[0-9].*")) {
+                model.addAttribute("error", "La contraseña debe contener al menos un número");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // Validar que contenga al menos un carácter especial
+            if (!contrasena.matches(".*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>\\/?].*")) {
+                model.addAttribute("error",
+                        "La contraseña debe contener al menos un carácter especial (!@#$%^&*()_+-=[]{}etc.)");
+                preservarDatosFormulario(model, nombre, email, nombreDepartamento, nombreCiudad);
+                return "registro";
+            }
+
+            // ========================================
             // BUSCAR O CREAR DEPARTAMENTO
+            // ========================================
             Departamento departamento = departamentoService.findByNombre(nombreDepartamento.trim());
             if (departamento == null) {
                 departamento = new Departamento();
@@ -92,7 +186,9 @@ public class UsuarioController {
                 departamento = departamentoService.save(departamento);
             }
 
+            // ========================================
             // BUSCAR O CREAR CIUDAD
+            // ========================================
             Ciudad ciudad = ciudadService.findByNombre(nombreCiudad.trim());
             if (ciudad == null) {
                 ciudad = new Ciudad();
@@ -101,9 +197,11 @@ public class UsuarioController {
                 ciudad = ciudadService.save(ciudad);
             }
 
+            // ========================================
             // CREAR USUARIO
+            // ========================================
             Usuario usuario = new Usuario();
-            usuario.setNombre(nombre.trim());
+            usuario.setNombre(nombreLimpio);
             usuario.setEmail(emailLimpio);
             usuario.setContrasena(contrasena);
             usuario.setDepartamento(departamento);
@@ -124,9 +222,6 @@ public class UsuarioController {
         }
     }
 
-    // ===========================
-    // LOGIN
-    // ===========================
     @GetMapping("/login")
     public String mostrarLogin() {
         return "login";
@@ -186,9 +281,6 @@ public class UsuarioController {
         return "redirect:/usuario/inicio";
     }
 
-    // ===========================
-    // INICIO DESPUÉS DEL LOGIN
-    // ===========================
     @GetMapping("/inicio")
     public String mostrarInicio(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
@@ -224,9 +316,6 @@ public class UsuarioController {
         }
     }
 
-    // ===========================
-    // PERFIL DEL USUARIO
-    // ===========================
     @GetMapping("/perfil")
     public String mostrarPerfil(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
@@ -247,9 +336,6 @@ public class UsuarioController {
         return "perfil";
     }
 
-    // ===========================
-    // ACTUALIZAR PERFIL DEL USUARIO
-    // ===========================
     @PostMapping("/perfil/actualizar")
     public String actualizarPerfil(@RequestParam("nombre") String nombre,
             @RequestParam("email") String email,
@@ -332,12 +418,20 @@ public class UsuarioController {
         }
     }
 
-    // ===========================
-    // CERRAR SESIÓN
-    // ===========================
     @GetMapping("/logout")
     public String cerrarSesion(HttpSession session, RedirectAttributes redirectAttributes) {
         session.invalidate();
         return "redirect:/";
+    }
+
+    private void preservarDatosFormulario(Model model, String nombre, String email, String departamento,
+            String ciudad) {
+        if (nombre != null)
+            model.addAttribute("nombre", nombre);
+        if (email != null)
+            model.addAttribute("email", email);
+        if (departamento != null)
+            model.addAttribute("departamento", departamento);
+        model.addAttribute("ciudad", ciudad);
     }
 }

@@ -1,0 +1,267 @@
+/* Hero Vendedor */
+.hero-vendedor {
+  background: linear-gradient(
+      135deg,
+      rgba(39, 174, 96, 0.95),
+      rgba(30, 180, 100, 0.9)
+    ),
+    url("/images/imageIndex.jpg") center/cover no-repeat;
+  min-height: 450px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #ffffff;
+  padding: 80px 20px;
+  box-sizing: border-box;
+}
+
+.hero-vendedor-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.hero-vendedor h1 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+  color: #ffffff;
+}
+
+.hero-vendedor p {
+  font-size: 1.2rem;
+  margin: 0 auto 30px;
+  color: #ffffff;
+  line-height: 1.6;
+}
+
+.btn-hero {
+  background: #ffffff;
+  color: #27ae60;
+  padding: 15px 40px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1.1rem;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.btn-hero:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  color: #1e8449;
+}
+
+/* Secciones */
+.section {
+  padding: 80px 20px;
+}
+
+.section-light {
+  background: #fff;
+}
+
+.section-gray {
+  background: #f8f9fa;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+.section-title h2 {
+  font-size: 2.2rem;
+  color: #2c3e50;
+  margin-bottom: 15px;
+}
+
+.section-title p {
+  color: #7f8c8d;
+  font-size: 1.1rem;
+}
+
+/* Por qué vender */
+.beneficios-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 30px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.beneficio-item {
+  text-align: center;
+  padding: 30px 20px;
+}
+
+.beneficio-item i {
+  font-size: 3rem;
+  color: #27ae60;
+  margin-bottom: 20px;
+}
+
+.beneficio-item h3 {
+  font-size: 1.3rem;
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.beneficio-item p {
+  color: #7f8c8d;
+  line-height: 1.6;
+}
+@media (max-width: 1024px) {
+  .beneficios-vendedor {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+  }
+
+  .beneficio-item h3 {
+    font-size: 1rem;
+  }
+
+  .beneficio-item p {
+    font-size: 0.85rem;
+  }
+
+  .beneficio-item i {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .beneficios-vendedor {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .beneficios-vendedor {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Cómo funciona */
+.pasos-container {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.paso {
+  text-align: center;
+  max-width: 250px;
+}
+
+.paso-numero {
+  width: 70px;
+  height: 70px;
+  background: linear-gradient(135deg, #27ae60, #1ef378);
+  color: #fff;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 0 auto 20px;
+}
+
+.paso h3 {
+  color: #2c3e50;
+  margin-bottom: 10px;
+}
+
+.paso p {
+  color: #7f8c8d;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+/* Cifras */
+.cifras-container {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.cifra {
+  text-align: center;
+}
+
+.cifra-numero {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #27ae60;
+}
+
+.cifra p {
+  color: #7f8c8d;
+  font-size: 1rem;
+}
+
+/* CTA Final */
+.cta-section {
+  background: linear-gradient(135deg, #27ae60, #1ef378);
+  text-align: center;
+  padding: 60px 20px;
+  color: #fff;
+}
+
+.cta-section h2 {
+  font-size: 2rem;
+  margin-bottom: 15px;
+}
+
+.cta-section p {
+  margin-bottom: 25px;
+  opacity: 0.95;
+}
+
+.cta-section .btn-cta {
+  background: #fff;
+  color: #27ae60;
+  padding: 15px 35px;
+  border-radius: 30px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s;
+  display: inline-block;
+}
+
+.cta-section .btn-cta:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .hero-vendedor h1 {
+    font-size: 2rem;
+  }
+
+  .hero-vendedor p {
+    font-size: 1rem;
+  }
+
+  .section-title h2 {
+    font-size: 1.8rem;
+  }
+
+  .cifras-container {
+    gap: 30px;
+  }
+
+  .cifra-numero {
+    font-size: 2.2rem;
+  }
+}

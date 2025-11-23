@@ -19,7 +19,7 @@ public class VendedorController {
 
     @Autowired
     private VendedorService vendedorService;
-    
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
@@ -29,7 +29,7 @@ public class VendedorController {
     @GetMapping("/registro")
     public String mostrarFormularioVendedor(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
@@ -50,43 +50,82 @@ public class VendedorController {
      */
     @PostMapping("/guardar")
     public String guardarPerfilVendedor(@RequestParam("razonSocial") String razonSocial,
-                                       @RequestParam("telefonoContacto") String telefonoContacto,
-                                       @RequestParam("direccionNegocio") String direccionNegocio,
-                                       @RequestParam("tipoProductos") String tipoProductos,
-                                       @RequestParam(value = "descripcionNegocio", required = false) String descripcionNegocio,
-                                       @RequestParam(value = "cuentaBancaria", required = false) String cuentaBancaria,
-                                       @RequestParam(value = "banco", required = false) String banco,
-                                       HttpSession session,
-                                       RedirectAttributes redirectAttributes) {
+            @RequestParam("telefonoContacto") String telefonoContacto,
+            @RequestParam("direccionNegocio") String direccionNegocio,
+            @RequestParam("tipoProductos") String tipoProductos,
+            @RequestParam(value = "descripcionNegocio", required = false) String descripcionNegocio,
+            @RequestParam(value = "cuentaBancaria", required = false) String cuentaBancaria,
+            @RequestParam(value = "banco", required = false) String banco,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
+
             Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-            
+
             if (usuario == null) {
                 redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
                 return "redirect:/usuario/login";
             }
 
-            // Crear perfil de vendedor
-            PerfilVendedor perfil = vendedorService.crearPerfilVendedor(
-                usuario.getId(),
-                razonSocial,
-                telefonoContacto,
-                direccionNegocio,
-                tipoProductos,
-                descripcionNegocio,
-                cuentaBancaria,
-                banco
-            );
+            // Razón social obligatoria
+            if (razonSocial == null || razonSocial.trim().isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "La razón social es obligatoria.");
+                return "redirect:/vendedor/registro";
+            }
 
-            // Recargar usuario desde la base de datos para obtener el rol actualizado
+            // Teléfono: mínimo 8 dígitos, solo números
+            if (!telefonoContacto.matches("\\d{8,}")) {
+                redirectAttributes.addFlashAttribute("error",
+                        "El teléfono debe tener al menos 8 dígitos y solo números.");
+                return "redirect:/vendedor/registro";
+            }
+
+            // Dirección obligatoria
+            if (direccionNegocio == null || direccionNegocio.trim().isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "La dirección del negocio es obligatoria.");
+                return "redirect:/vendedor/registro";
+            }
+
+            // Tipo de productos obligatorio
+            if (tipoProductos == null || tipoProductos.trim().isEmpty()) {
+                redirectAttributes.addFlashAttribute("error", "Debe ingresar el tipo de productos.");
+                return "redirect:/vendedor/registro";
+            }
+
+            // Cuenta bancaria mínimo 8 caracteres si viene
+            if (cuentaBancaria != null && !cuentaBancaria.isBlank() && cuentaBancaria.length() < 8) {
+                redirectAttributes.addFlashAttribute("error", "La cuenta bancaria debe tener mínimo 8 dígitos.");
+                return "redirect:/vendedor/registro";
+            }
+
+            // Banco obligatorio si cuenta bancaria viene
+            if (cuentaBancaria != null && !cuentaBancaria.isBlank()) {
+                if (banco == null || banco.trim().isEmpty()) {
+                    redirectAttributes.addFlashAttribute("error", "Debe indicar el banco de la cuenta.");
+                    return "redirect:/vendedor/registro";
+                }
+            }
+
+            // Crear perfil de vendedor (tu lógica original intacta)
+            PerfilVendedor perfil = vendedorService.crearPerfilVendedor(
+                    usuario.getId(),
+                    razonSocial,
+                    telefonoContacto,
+                    direccionNegocio,
+                    tipoProductos,
+                    descripcionNegocio,
+                    cuentaBancaria,
+                    banco);
+
+            // Recargar usuario desde BD (tu lógica original)
             usuario = usuarioRepository.findById(usuario.getId()).orElse(usuario);
-            
-            // Actualizar el usuario en sesión con el perfil cargado
+
+            // Actualizar usuario en sesión con perfil cargado (tu lógica original)
             usuario.setPerfilVendedor(perfil);
             session.setAttribute("usuarioLogueado", usuario);
 
             System.out.println("Perfil de vendedor creado para: " + usuario.getEmail());
-            
+
             redirectAttributes.addFlashAttribute("mensaje", "¡Felicidades! Ahora eres vendedor en Cultivus");
             return "redirect:/vendedor/inicio";
 
@@ -130,7 +169,7 @@ public class VendedorController {
     @GetMapping("/dashboard")
     public String mostrarDashboard(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
@@ -155,14 +194,14 @@ public class VendedorController {
     @GetMapping("/perfil")
     public String mostrarPerfil(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
         }
 
         Optional<PerfilVendedor> perfilOpt = vendedorService.obtenerPerfilPorUsuarioId(usuario.getId());
-        
+
         if (perfilOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "No tienes un perfil de vendedor");
             return "redirect:/vendedor/registro";
@@ -179,14 +218,14 @@ public class VendedorController {
     @GetMapping("/editar")
     public String mostrarFormularioEditar(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
         }
 
         Optional<PerfilVendedor> perfilOpt = vendedorService.obtenerPerfilPorUsuarioId(usuario.getId());
-        
+
         if (perfilOpt.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "No tienes un perfil de vendedor");
             return "redirect:/vendedor/registro";
@@ -202,33 +241,32 @@ public class VendedorController {
      */
     @PostMapping("/actualizar")
     public String actualizarPerfil(@RequestParam("perfilId") int perfilId,
-                                   @RequestParam("razonSocial") String razonSocial,
-                                   @RequestParam("telefonoContacto") String telefonoContacto,
-                                   @RequestParam("direccionNegocio") String direccionNegocio,
-                                   @RequestParam("tipoProductos") String tipoProductos,
-                                   @RequestParam(value = "descripcionNegocio", required = false) String descripcionNegocio,
-                                   @RequestParam(value = "cuentaBancaria", required = false) String cuentaBancaria,
-                                   @RequestParam(value = "banco", required = false) String banco,
-                                   HttpSession session,
-                                   RedirectAttributes redirectAttributes) {
+            @RequestParam("razonSocial") String razonSocial,
+            @RequestParam("telefonoContacto") String telefonoContacto,
+            @RequestParam("direccionNegocio") String direccionNegocio,
+            @RequestParam("tipoProductos") String tipoProductos,
+            @RequestParam(value = "descripcionNegocio", required = false) String descripcionNegocio,
+            @RequestParam(value = "cuentaBancaria", required = false) String cuentaBancaria,
+            @RequestParam(value = "banco", required = false) String banco,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
             Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-            
+
             if (usuario == null) {
                 redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
                 return "redirect:/usuario/login";
             }
 
             vendedorService.actualizarPerfil(
-                perfilId,
-                razonSocial,
-                telefonoContacto,
-                direccionNegocio,
-                tipoProductos,
-                descripcionNegocio,
-                cuentaBancaria,
-                banco
-            );
+                    perfilId,
+                    razonSocial,
+                    telefonoContacto,
+                    direccionNegocio,
+                    tipoProductos,
+                    descripcionNegocio,
+                    cuentaBancaria,
+                    banco);
 
             redirectAttributes.addFlashAttribute("mensaje", "Perfil actualizado exitosamente");
             return "redirect:/vendedor/perfil";
@@ -239,14 +277,14 @@ public class VendedorController {
             return "redirect:/vendedor/editar";
         }
     }
-    
+
     /**
      * Muestra todas las ventas (pedidos) del vendedor
      */
     @GetMapping("/ventas")
     public String mostrarVentas(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
@@ -259,18 +297,22 @@ public class VendedorController {
 
         // Obtener todos los pedidos que contienen productos del vendedor
         var pedidos = vendedorService.obtenerPedidosDelVendedor(usuario.getId());
-        
+
         // Obtener detalles de ventas
         var detallesVentas = vendedorService.obtenerDetallesVentasDelVendedor(usuario.getId());
-        
+
         // Calcular total de ventas
         double totalVentas = vendedorService.calcularTotalVentas(usuario.getId());
-        
+
         // Contar pedidos por estado
         long pendientes = pedidos.stream().filter(p -> "PENDIENTE".equalsIgnoreCase(p.getEstado())).count();
-        long enProceso = pedidos.stream().filter(p -> "EN_PROCESO".equalsIgnoreCase(p.getEstado()) || "PROCESANDO".equalsIgnoreCase(p.getEstado())).count();
-        long completados = pedidos.stream().filter(p -> "COMPLETADO".equalsIgnoreCase(p.getEstado()) || "ENTREGADO".equalsIgnoreCase(p.getEstado())).count();
-        
+        long enProceso = pedidos.stream().filter(
+                p -> "EN_PROCESO".equalsIgnoreCase(p.getEstado()) || "PROCESANDO".equalsIgnoreCase(p.getEstado()))
+                .count();
+        long completados = pedidos.stream().filter(
+                p -> "COMPLETADO".equalsIgnoreCase(p.getEstado()) || "ENTREGADO".equalsIgnoreCase(p.getEstado()))
+                .count();
+
         model.addAttribute("usuario", usuario);
         model.addAttribute("pedidos", pedidos);
         model.addAttribute("detallesVentas", detallesVentas);
@@ -278,20 +320,20 @@ public class VendedorController {
         model.addAttribute("pendientes", pendientes);
         model.addAttribute("enProceso", enProceso);
         model.addAttribute("completados", completados);
-        
+
         return "ventas-vendedor"; // Vista de ventas
     }
-    
+
     /**
      * Muestra los detalles de un pedido específico
      */
     @GetMapping("/ventas/pedido/{pedidoId}")
-    public String mostrarDetallePedido(@PathVariable int pedidoId, 
-                                       HttpSession session, 
-                                       Model model, 
-                                       RedirectAttributes redirectAttributes) {
+    public String mostrarDetallePedido(@PathVariable int pedidoId,
+            HttpSession session,
+            Model model,
+            RedirectAttributes redirectAttributes) {
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-        
+
         if (usuario == null) {
             redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
             return "redirect:/usuario/login";
@@ -304,33 +346,33 @@ public class VendedorController {
 
         // Obtener los detalles del pedido que pertenecen al vendedor
         var detalles = vendedorService.obtenerDetallesPedidoDelVendedor(pedidoId, usuario.getId());
-        
+
         if (detalles.isEmpty()) {
             redirectAttributes.addFlashAttribute("error", "No tienes productos en este pedido");
             return "redirect:/vendedor/ventas";
         }
-        
+
         // Obtener el pedido completo
         var pedido = detalles.get(0).getPedido();
-        
+
         model.addAttribute("usuario", usuario);
         model.addAttribute("pedido", pedido);
         model.addAttribute("detalles", detalles);
-        
+
         return "detalle-pedido-vendedor"; // Vista de detalle del pedido
     }
-    
+
     /**
      * Actualiza el estado de un pedido
      */
     @PostMapping("/ventas/pedido/{pedidoId}/actualizar-estado")
     public String actualizarEstadoPedido(@PathVariable int pedidoId,
-                                        @RequestParam("estado") String nuevoEstado,
-                                        HttpSession session,
-                                        RedirectAttributes redirectAttributes) {
+            @RequestParam("estado") String nuevoEstado,
+            HttpSession session,
+            RedirectAttributes redirectAttributes) {
         try {
             Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
-            
+
             if (usuario == null) {
                 redirectAttributes.addFlashAttribute("error", "Debe iniciar sesión primero");
                 return "redirect:/usuario/login";
@@ -342,10 +384,10 @@ public class VendedorController {
             }
 
             vendedorService.actualizarEstadoPedido(pedidoId, usuario.getId(), nuevoEstado);
-            
+
             redirectAttributes.addFlashAttribute("mensaje", "Estado del pedido actualizado exitosamente");
             return "redirect:/vendedor/ventas/pedido/" + pedidoId;
-            
+
         } catch (IllegalArgumentException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
             return "redirect:/vendedor/ventas";

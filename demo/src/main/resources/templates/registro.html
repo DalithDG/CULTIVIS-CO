@@ -24,35 +24,40 @@
                 <label for="nombre">
                     <i class="fa-solid fa-user"></i> Nombre Completo
                 </label>
-                <input type="text" id="nombre" name="nombre" required placeholder="Ingresa tu nombre">
+                <input type="text" id="nombre" name="nombre" required placeholder="Ingresa tu nombre" 
+                       th:value="${nombre}">
             </div>
 
             <div class="form-group">
                 <label for="email">
                     <i class="fa-solid fa-envelope"></i> Correo Electrónico
                 </label>
-                <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com">
+                <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com" 
+                       th:value="${email}">
             </div>
 
             <div class="form-group">
                 <label for="contrasena">
                     <i class="fa-solid fa-lock"></i> Contraseña
                 </label>
-                <input type="password" id="contrasena" name="contrasena" required placeholder="Mínimo 6 caracteres">
+                <input type="password" id="contrasena" name="contrasena" required 
+                       placeholder="Mínimo 8 caracteres con mayúscula, número y carácter especial">
             </div>
 
             <div class="form-group">
                 <label for="departamento">
                     <i class="fa-solid fa-map-marked-alt"></i> Departamento
                 </label>
-                <input type="text" id="departamento" name="departamento" required placeholder="Ej: Bolívar">
+                <input type="text" id="departamento" name="departamento" required placeholder="Ej: Bolívar" 
+                       th:value="${departamento}">
             </div>
 
             <div class="form-group">
                 <label for="ciudad">
                     <i class="fa-solid fa-city"></i> Ciudad
                 </label>
-                <input type="text" id="ciudad" name="ciudad" required placeholder="Ej: Cartagena">
+                <input type="text" id="ciudad" name="ciudad" required placeholder="Ej: Cartagena" 
+                       th:value="${ciudad}">
             </div>
 
             <button type="submit">

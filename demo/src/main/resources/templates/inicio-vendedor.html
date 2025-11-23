@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cultivus - Panel de Vendedor</title>
 
-    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/vendedor.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
         integrity="sha512-RXf+QSDCUQs6Q0p2U2uD2OeR5xw8n5T6vCJ7/3zvK3YyEdSpYohhjFExz04szsP1CZq0w0C+YyXWZP8y+e2xUg=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -14,153 +14,117 @@
 
 <body>
 
-    <!-- ✅ ÚNICO CAMBIO: header de vendedor en lugar de headerMain -->
+    <!-- Header Vendedor -->
     <header th:replace="fragments/header-vendedor :: siteHeader"></header>
 
-    <section id="hero-section">
-        <div class="hero-slider active">
-
-            <div class="hero-slide">
-                <img th:src="@{/images/imageIndex.jpg}" alt="Imagen 1">
-                <div class="overlay"></div>
-                <div class="text-content">
-                    <h1 class="animated-text">Cultivus</h1>
-                    <p class="animated-subtext">Conectamos el campo con tu mesa 🌾</p>
-                </div>
-            </div>
-
-            <div class="hero-slide">
-                <img th:src="@{/images/ImageIndex2.jpg}" alt="Imagen 2">
-                <div class="overlay"></div>
-                <div class="text-content">
-                    <h1 class="animated-text">Productos Frescos</h1>
-                    <p class="animated-subtext">Del productor directamente a tu hogar 🍅</p>
-                </div>
-            </div>
-
-            <div class="hero-slide">
-                <img th:src="@{/images/ImageIndex3.jpg}" alt="Imagen 3">
-                <div class="overlay"></div>
-                <div class="text-content">
-                    <h1 class="animated-text">Agricultura Sostenible</h1>
-                    <p class="animated-subtext">Cuidando la tierra, cuidamos el futuro 🌱</p>
-                </div>
-            </div>
-
-            <div class="hero-slide">
-                <img th:src="@{/images/ImagenIndex4.jpg}" alt="Imagen 4">
-                <div class="overlay"></div>
-                <div class="text-content">
-                    <h1 class="animated-text">Nuestras Raíces</h1>
-                    <p class="animated-subtext">Impulsa el trabajo campesino 💚</p>
-                </div>
-            </div>
-
+    <!-- Hero -->
+    <section class="hero-vendedor">
+        <div>
+            <h1>Conecta tus productos con toda Colombia</h1>
+            <p>Cultivus es el puente entre tu trabajo en el campo y miles de hogares que valoran lo natural y lo local.</p>
+            <a th:href="@{/vendedor/productos/nuevo}" class="btn-hero">
+                <i class="fas fa-plus"></i> Publicar Producto
+            </a>
         </div>
-          
     </section>
 
-    <div class="container">
-        <div class="buscador">
-            <form th:action="@{/buscar}" method="get">
-                <input type="search" name="q" placeholder="¿Qué buscas?..." >
-                <button type="submit" class="buscador-boton">
-                    <i class="fas fa-search"></i> Buscar
-                </button>
-            </form>
-        </div>
+    <!-- Por qué vender en Cultivus -->
+    <section class="section section-light">
+        <div class="section-title">
+            <h2>¿Por qué vender en Cultivus?</h2>
+            <p>Hacemos que vender sea simple y justo</p>
         </div>
 
-
-        
-    <!-- Por Qué Elegirnos -->
-    <section id="beneficios">
-        <div class="container">
-            <div class="section-header">
-                <h2>¿Por Qué Elegir Cultivus?</h2>
-                <p>Más que una tienda, somos tu aliado en alimentación saludable</p>
+        <div class="beneficios-grid">
+            <div class="beneficio-item">
+                <i class="fas fa-hand-holding-dollar"></i>
+                <h3>Sin comisiones ocultas</h3>
+                <p>Transparencia total. Sabes exactamente cuánto ganas por cada venta.</p>
             </div>
 
-            <div class="beneficios-grid">
-                <div class="beneficio-card">
-                    <div class="beneficio-icon">
-                        <i class="fas fa-truck-fast"></i>
-                    </div>
-                    <h3>Entrega Rápida</h3>
-                    <p>Recibe tus productos frescos en tiempo récord. Cobertura en toda Colombia con pedido mínimo de
-                        $200.000</p>
-                </div>
+            <div class="beneficio-item">
+                <i class="fas fa-map-marked-alt"></i>
+                <h3>Alcance nacional</h3>
+                <p>Tus productos llegan a clientes en toda Colombia, desde la ciudad hasta el pueblo.</p>
+            </div>
 
-                <div class="beneficio-card">
-                    <div class="beneficio-icon">
-                        <i class="fas fa-leaf"></i>
-                    </div>
-                    <h3>100% Frescos</h3>
-                    <p>Conectamos directamente con productores locales para garantizar la máxima frescura en cada
-                        producto</p>
-                </div>
+            <div class="beneficio-item">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Fácil de usar</h3>
+                <p>Publica, gestiona y vende desde cualquier dispositivo sin complicaciones.</p>
+            </div>
 
-                <div class="beneficio-card">
-                    <div class="beneficio-icon">
-                        <i class="fas fa-hand-holding-heart"></i>
-                    </div>
-                    <h3>Apoyo al Campo</h3>
-                    <p>Cada compra impulsa el trabajo de agricultores colombianos y fortalece la economía local</p>
-                </div>
-
-                <div class="beneficio-card">
-                    <div class="beneficio-icon">
-                        <i class="fas fa-shield-halved"></i>
-                    </div>
-                    <h3>Calidad Garantizada</h3>
-                    <p>Rigurosos estándares de calidad en cada producto. Tu satisfacción es nuestra prioridad</p>
-                </div>
+            <div class="beneficio-item">
+                <i class="fas fa-seedling"></i>
+                <h3>Apoyo al campo</h3>
+                <p>Somos parte de una comunidad que valora y apoya el trabajo del productor local.</p>
             </div>
         </div>
     </section>
 
-    <!-- Sobre Nosotros -->
-    <section id="sobre-nosotros">
-        <div class="container">
-            <div class="sobre-content">
-                <div class="sobre-header">
-                    <span class="sobre-tag">Quiénes Somos</span>
-                    <h2>Sobre Nosotros</h2>
-                </div>
-                <div class="sobre-text">
-                    <p class="lead">
-                        Cultivus es una plataforma innovadora que revoluciona la forma en que accedes a productos
-                        frescos y de calidad.
-                    </p>
-                    <p>
-                        Nacimos con una misión clara: <strong>conectar directamente a productores locales con tu
-                            hogar</strong>, eliminando intermediarios y garantizando frescura, calidad y precios justos
-                        para todos.
-                    </p>
-                    <p>
-                        En Cultivus, creemos que la tecnología y la naturaleza pueden trabajar en perfecta armonía. Por
-                        eso, hemos creado una solución moderna que facilita el acceso a productos del campo, apoya a los
-                        agricultores colombianos y cuida tu salud y la del planeta.
-                    </p>
-                    <p class="highlight">
-                        <i class="fas fa-seedling"></i>
-                        Más que una tienda, somos un puente entre el campo y tu mesa. Cada compra que realizas fortalece
-                        la economía local y promueve prácticas agrícolas sostenibles.
-                    </p>
-                    <div class="sobre-stats">
-                        <span class="stat-number">50+</span>
-                        <span class="stat-label">Municipios Cubiertos</span>
-                    </div>
+    <!-- Cómo funciona -->
+    <section class="section section-gray">
+        <div class="section-title">
+            <h2>Así de fácil es vender</h2>
+            <p>Tres pasos y ya estás vendiendo</p>
+        </div>
 
-                </div>
+        <div class="pasos-container">
+            <div class="paso">
+                <div class="paso-numero">1</div>
+                <h3>Publica tus productos</h3>
+                <p>Sube fotos, agrega descripción y define tu precio. En minutos tu producto está listo.</p>
+            </div>
+
+            <div class="paso">
+                <div class="paso-numero">2</div>
+                <h3>Recibe pedidos</h3>
+                <p>Los clientes encuentran tus productos y hacen sus pedidos. Te notificamos al instante.</p>
+            </div>
+
+            <div class="paso">
+                <div class="paso-numero">3</div>
+                <h3>Envía y gana</h3>
+                <p>Prepara el pedido, coordina el envío y recibe tu pago. Así de simple.</p>
             </div>
         </div>
+    </section>
+
+    <!-- Cifras -->
+    <section class="section section-light">
+        <div class="section-title">
+            <h2>Cultivus en números</h2>
         </div>
+
+        <div class="cifras-container">
+            <div class="cifra">
+                <div class="cifra-numero">50+</div>
+                <p>Municipios con cobertura</p>
+            </div>
+
+            <div class="cifra">
+                <div class="cifra-numero">100%</div>
+                <p>Productos colombianos</p>
+            </div>
+
+            <div class="cifra">
+                <div class="cifra-numero">0</div>
+                <p>Comisiones ocultas</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section class="cta-section">
+        <h2>¿Listo para empezar?</h2>
+        <p>Tu próximo cliente está esperando tus productos</p>
+        <a th:href="@{/vendedor/productos/nuevo}" class="btn-cta">
+            <i class="fas fa-rocket"></i> Agregar mi primer producto
+        </a>
     </section>
 
     <!-- Footer -->
     <footer th:replace="fragments/footer :: siteFooter"></footer>
-
 
 </body>
 

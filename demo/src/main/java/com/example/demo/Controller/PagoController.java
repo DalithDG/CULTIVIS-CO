@@ -73,6 +73,12 @@ public class PagoController {
         model.addAttribute("detalles", detalles);
         model.addAttribute("total", total);
 
+        // si total es < 200.000, no se puede pagar
+        if (total < 200000) {
+            redirectAttributes.addFlashAttribute("error", "El total debe ser mayor a 200.000");
+            return "redirect:/carrito";
+        }
+
         return "pago";
     }
 

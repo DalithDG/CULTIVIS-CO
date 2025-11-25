@@ -1,148 +1,598 @@
-# CULTIVUS-CO
+# 🌱 CULTIVUS-CO
 
-## Resumen del Proyecto
+<div align="center">
 
-**Cultivus Co** es una aplicación web desarrollada en Java con Spring Boot que funciona como una plataforma para conectar productores locales con consumidores. La aplicación está diseñada para facilitar la venta y compra de productos agrícolas y locales.
+**Plataforma E-Commerce para Productos Agrícolas Locales**
 
-### Características Principales
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://www.oracle.com/java/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.5.6-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/)
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-- **Plataforma de Productos Locales**: Enfocada en productos agrícolas y artesanales de productores locales
-- **Sistema de Búsqueda**: Funcionalidad para buscar productos disponibles en la plataforma
-- **Gestión de Usuarios**: Sistema de registro e inicio de sesión para productores y compradores
-- **Interfaz Web Responsiva**: Diseño moderno y limpio con navegación intuitiva
+</div>
 
-### Tecnologías Utilizadas
+---
 
-- **Backend**: Java 17 con Spring Boot 3.5.6
-- **Frontend**: HTML5, CSS3 con Thymeleaf como motor de plantillas
-- **Gestión de Dependencias**: Maven
-- **Base de Datos**: Configurada para GraphQL (con plugin de generación de código)
-- **Estilo**: CSS personalizado con diseño minimalista y profesional
+## 📋 Tabla de Contenidos
+
+- [Descripción](#-descripción)
+- [Características](#-características)
+- [Tecnologías](#️-tecnologías)
+- [Arquitectura](#-arquitectura)
+- [Instalación](#-instalación)
+- [Configuración](#️-configuración)
+- [Uso](#-uso)
+- [API Endpoints](#-api-endpoints)
+- [Seguridad](#-seguridad)
+- [Problemas Conocidos](#-problemas-conocidos)
+- [Roadmap](#-roadmap)
+- [Contribuir](#-contribuir)
+
+---
+
+## 📖 Descripción
+
+**CULTIVUS-CO** es una plataforma web completa de e-commerce diseñada para conectar **productores agrícolas locales** con **consumidores**, facilitando la venta directa de productos frescos y artesanales. La aplicación implementa un sistema multi-rol que permite a usuarios actuar como compradores, vendedores, o administradores.
+
+### 🎯 Objetivo
+
+Crear un marketplace digital que apoye la economía local, reduzca intermediarios, y proporcione acceso directo a productos agrícolas de calidad.
+
+---
+
+## ✨ Características
+
+### 👤 Gestión de Usuarios
+
+- ✅ Registro de usuarios con ubicación (departamento/ciudad)
+- ✅ Sistema de autenticación (login/logout)
+- ✅ Gestión de perfiles
+- ✅ Sistema de roles: **Público**, **Comprador**, **Vendedor**, **Administrador**
+
+### 📦 Gestión de Productos
+
+- ✅ CRUD completo de productos
+- ✅ Categorización (Frutas, Verduras, Lácteos, Café & Cacao)
+- ✅ Unidades de medida configurables
+- ✅ Gestión de stock y precios
+- ✅ Imágenes de productos
+- ✅ Sistema de búsqueda y filtrado
+
+### 🛒 Carrito y Compras
+
+- ✅ Carrito de compras funcional
+- ✅ Modificación de cantidades
+- ✅ Proceso de checkout
+- ✅ Generación de pedidos
+- ✅ Sistema de pagos
+
+### 🏪 Panel de Vendedor
+
+- ✅ Gestión de productos propios
+- ✅ Visualización de ventas
+- ✅ Detalles de pedidos recibidos
+- ✅ Estadísticas de ventas
+
+### 👨‍💼 Panel de Administración
+
+- ✅ Gestión de usuarios
+- ✅ Gestión de productos
+- ✅ Moderación de reseñas
+- ✅ Dashboard administrativo
+
+### ⭐ Características Adicionales
+
+- ✅ Sistema de reseñas de productos
+- ✅ Búsqueda avanzada
+- ✅ Selección dinámica de ubicación
+- ✅ Interfaz responsiva
+
+---
+
+## 🛠️ Tecnologías
+
+### Backend
+
+```
+├── Java 17
+├── Spring Boot 3.5.6
+│   ├── Spring Web
+│   ├── Spring Data JPA
+│   └── Thymeleaf
+├── MySQL 8.0
+└── Maven
+```
+
+### Frontend
+
+```
+├── HTML5
+├── CSS3 (17 archivos personalizados)
+├── JavaScript (Vanilla)
+└── Thymeleaf Templates (34 plantillas)
+```
+
+### Dependencias Principales
+
+```xml
+<!-- Spring Boot Starters -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-jpa</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-thymeleaf</artifactId>
+</dependency>
+
+<!-- Database -->
+<dependency>
+    <groupId>com.mysql</groupId>
+    <artifactId>mysql-connector-j</artifactId>
+    <scope>runtime</scope>
+</dependency>
+```
+
+---
+
+## 🏗️ Arquitectura
 
 ### Estructura del Proyecto
 
-# CULTIVIS-CO
+```
+CULTIVIS-CO/
+└── demo/
+    ├── src/main/java/com/example/demo/
+    │   ├── DemoApplication.java          # Punto de entrada
+    │   ├── Config/
+    │   │   └── DataLoader.java           # Inicialización de datos
+    │   ├── Controller/                   # 11 controladores
+    │   │   ├── UsuarioController.java
+    │   │   ├── ProductoController.java
+    │   │   ├── CarritoController.java
+    │   │   ├── CatalogoController.java
+    │   │   ├── PagoController.java
+    │   │   ├── VendedorController.java
+    │   │   ├── AdminController.java
+    │   │   ├── BusquedaController.java
+    │   │   ├── ResenaController.java
+    │   │   └── RoutesController.java
+    │   ├── Model/                        # 12 entidades JPA
+    │   │   ├── Usuario.java
+    │   │   ├── Producto.java
+    │   │   ├── Carrito.java
+    │   │   ├── Pedido.java
+    │   │   ├── Pago.java
+    │   │   ├── Categoria.java
+    │   │   ├── Ciudad.java
+    │   │   ├── Departamento.java
+    │   │   └── ... (otros)
+    │   ├── repository/                   # 12 repositorios
+    │   └── services/                     # Capa de servicios
+    │       ├── UsuarioService.java
+    │       ├── ProductoService.java
+    │       └── ... (otros)
+    └── src/main/resources/
+        ├── application.properties
+        ├── templates/                    # 34 plantillas HTML
+        │   ├── registro.html
+        │   ├── login.html
+        │   ├── carrito.html
+        │   ├── admin-dashboard.html
+        │   └── fragments/
+        │       ├── header.html
+        │       ├── header-admin.html
+        │       ├── header-comprador.html
+        │       ├── header-vendedor.html
+        │       └── footer.html
+        └── static/
+            ├── *.css                     # 17 archivos CSS
+            └── images/
+```
 
-## Resumen
-
-Cultivus Co es una aplicación web (Spring Boot + Thymeleaf) pensada para conectar productores locales con consumidores. Ofrece páginas de catálogo, registro de usuarios y APIs mínimas para productos y ubicación.
-
-Este README se ha actualizado para reflejar el estado actual del repo (noviembre 2025): rutas disponibles, cómo ejecutar, y soluciones rápidas a problemas comunes que surgieron durante el desarrollo.
-
-## Tecnologías
-
-- Java 17+ (se recomienda JDK 17 o 21)
-- Spring Boot 3.5.x
-- Thymeleaf (plantillas del lado servidor)
-- Maven (wrapper incluido: `./mvnw`)
-- MySQL (configurado en `application.properties` por defecto)
-
-## Estructura relevante
+### Modelo de Datos (Simplificado)
 
 ```
-demo/
-├── src/main/java/com/example/demo/
-│   ├── DemoApplication.java
-│   ├── Controller/            # Controladores web y REST
-│   ├── Model/                 # Entidades JPA
-│   ├── repository/            # Repositorios Spring Data
-│   └── services/              # Lógica de negocio
-├── src/main/resources/
-│   ├── templates/             # Plantillas Thymeleaf (HTML)
-│   └── static/                # JS/CSS/imagenes
-└── pom.xml
+Usuario (1) ──── (N) Producto
+   │                   │
+   │                   │
+   ├── (1:1) PerfilVendedor
+   ├── (1:N) Carrito
+   ├── (1:N) Pedido
+   └── (N:1) Roles
+
+Producto (N) ──── (1) Categoria
+         (N) ──── (1) UnidadMedida
+         (1) ──── (N) Resena
 ```
 
-## Rutas principales (vistas)
+---
 
-- GET / -> `index.html`
-- GET /registro -> `register.html`
-- GET /login -> `login.html`
-- GET /product -> `product.html`
-- GET /product-detall -> `product-detall.html`
-- GET /usuarios -> `usuarios.html`
-- GET /usuarios/nuevo -> `nuevoUsuario.html` (formulario)
-- GET /usuarios/editar/{id} -> `editarUsuario.html`
+## 🚀 Instalación
 
-Además se añadieron aliases para compatibilidad con el header:
-- /newregister -> redirect:/registro
-- /loginnew -> redirect:/login
-- /categorias -> redirect:/product
-- /carrito -> redirect:/product (temporal)
+### Prerrequisitos
 
-## Endpoints API relevantes
+- **JDK 17 o superior** ([Descargar](https://www.oracle.com/java/technologies/downloads/))
+- **MySQL 8.0+** ([Descargar](https://dev.mysql.com/downloads/))
+- **Maven** (incluido con wrapper `./mvnw`)
 
-- GET /api/ubicacion/departamentos -> lista departamentos
-- GET /api/ubicacion/ciudades/{idDepartamento} -> ciudades por departamento (path)
-- GET /api/departamentos and /api/ciudades etc. (expuestas en controladores auxiliares según el código)
-- Productos: `/api/productos` (endpoints REST para CRUD de productos)
+### Pasos de Instalación
 
-Puedes probar las APIs con curl o Postman.
+1. **Clonar el repositorio**
 
-## Cómo ejecutar (desarrollo)
+```bash
+git clone https://github.com/tu-usuario/CULTIVIS-CO.git
+cd CULTIVIS-CO/demo
+```
 
-1. Asegúrate de tener JDK instalado y `JAVA_HOME` configurado. Ejemplo (Linux):
+2. **Configurar base de datos**
+
+```sql
+-- Crear base de datos
+CREATE DATABASE cultivus CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- Crear usuario (opcional)
+CREATE USER 'cultivus_user'@'localhost' IDENTIFIED BY 'tu_password';
+GRANT ALL PRIVILEGES ON cultivus.* TO 'cultivus_user'@'localhost';
+FLUSH PRIVILEGES;
+
+-- Fix para columna ciudad (si es necesario)
+USE cultivus;
+ALTER TABLE ciudad MODIFY nombre VARCHAR(100);
+```
+
+3. **Configurar variables de entorno**
+
+**Linux/Mac:**
 
 ```bash
 export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
 export PATH=$JAVA_HOME/bin:$PATH
 ```
 
-2. Configura la base de datos en `demo/src/main/resources/application.properties` (por defecto apunta a `jdbc:mysql://localhost:3306/cultivus`).
+**Windows:**
 
-3. Ejecuta desde la carpeta `demo`:
+```cmd
+set JAVA_HOME=C:\Program Files\Java\jdk-17
+set PATH=%JAVA_HOME%\bin;%PATH%
+```
+
+4. **Compilar el proyecto**
 
 ```bash
-# Compilar (opcional)
-./mvnw -DskipTests package
+./mvnw clean package -DskipTests
+```
 
-# O arrancar directamente
+5. **Ejecutar la aplicación**
+
+```bash
 ./mvnw spring-boot:run
 ```
 
-Accede a la app en `http://localhost:8080`.
+6. **Acceder a la aplicación**
 
-## Notas importantes / Troubleshooting
-
-- JAVA_HOME: si `./mvnw` falla con "The JAVA_HOME environment variable is not defined correctly", define `JAVA_HOME` apuntando a una instalación JDK válida y vuelve a intentarlo.
-
-- DataInitializer / errores al insertar ciudades: durante la inicialización de datos se detectó un `Data truncation: Data too long for column 'nombre'` porque la columna `nombre` de la tabla `ciudad` era demasiado corta para algunos nombres. Dos opciones:
-	- Aumentar la longitud de la columna en la base de datos (ejemplo):
-
-		```sql
-		ALTER TABLE ciudad MODIFY nombre VARCHAR(100);
-		```
-
-	- O ajustar la entidad `Ciudad` y dejar que `spring.jpa.hibernate.ddl-auto=update` aplique el cambio (revisar `application.properties`).
-
-- Si ves 404 en vistas referenciadas por los enlaces del header (ej. `/newregister`, `/loginnew`, `/categorias`, `/carrito`) ahora existen alias en `RoutesController` que hacen redirect a las vistas reales.
-
-## Formularios y comportamiento cliente
-
-- El formulario de registro y los formularios de usuario (`nuevoUsuario.html`, `editarUsuario.html`) usan dos selects dependientes: `departamento` y `ciudad`.
-- El filtrado de ciudades se hace en el cliente (JS) usando el archivo `static/js/register.js`. Cada option de ciudad incluye un atributo `data-departamento` que permite ocultar/mostrar ciudades según el departamento seleccionado.
-- También existe un endpoint REST para obtener ciudades por departamento si se prefiere cargar dinámicamente (AJAX).
-
-## Archivos que añadimos / actualizamos recientemente
-
-- `src/main/java/com/example/demo/Controller/CiudadesController.java` — API para departamentos/ciudades (GET /api/ubicacion/...)
-- `src/main/java/com/example/demo/Controller/UbicacionController.java` — (si está presente) controller REST alternativo
-- `src/main/resources/templates/nuevoUsuario.html` — plantilla creada para nuevo usuario
-- `src/main/resources/templates/editarUsuario.html` — plantilla creada para editar usuario
-- `src/main/resources/static/js/register.js` — manejo de pasos del formulario y filtrado de ciudades
-
-## Próximos pasos recomendados
-
-1. Verificar que la base de datos `cultivus` existe y que el usuario configurado en `application.properties` tiene permisos.
-2. Ejecutar la aplicación localmente y probar las rutas mencionadas.
-3. (Opcional) Cambiar el filtrado de ciudades a carga por AJAX si la lista crece mucho.
-4. Añadir pruebas unitarias para servicios y controladores.
-
-Si quieres, puedo:
-- (A) intentar arrancar la aplicación aquí y comprobar endpoints (necesito que `JAVA_HOME` sea válido en el entorno del runner), o
-- (B) crear una versión AJAX del select de ciudades para reducir la carga inicial.
+```
+http://localhost:8080
+```
 
 ---
 
-Si necesitas que agregue más documentación (diagramas, endpoints completos, ejemplos curl o configuración Docker), dime cuál prefieres y lo añado.
+## ⚙️ Configuración
 
+### application.properties
+
+Editar `src/main/resources/application.properties`:
+
+```properties
+# Servidor
+server.port=8080
+
+# Base de datos
+spring.datasource.url=jdbc:mysql://localhost:3306/cultivus
+spring.datasource.username=root
+spring.datasource.password=
+spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# JPA/Hibernate
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQLDialect
+
+# Thymeleaf
+spring.thymeleaf.cache=false
+```
+
+### Configuración de Producción
+
+Para producción, cambiar:
+
+```properties
+spring.jpa.hibernate.ddl-auto=validate
+spring.jpa.show-sql=false
+spring.thymeleaf.cache=true
+```
+
+---
+
+## 💻 Uso
+
+### Rutas Principales
+
+#### Públicas
+
+```
+GET  /                    → Página de inicio pública
+GET  /registro            → Formulario de registro
+GET  /login               → Formulario de login
+GET  /productos-listado   → Catálogo de productos
+GET  /producto-detalle    → Detalle de producto
+```
+
+#### Comprador
+
+```
+GET  /inicio              → Dashboard del comprador
+GET  /carrito             → Carrito de compras
+GET  /pago                → Proceso de pago
+GET  /perfil              → Perfil de usuario
+POST /carrito/agregar     → Agregar producto al carrito
+```
+
+#### Vendedor
+
+```
+GET  /vendedor/inicio                  → Dashboard del vendedor
+GET  /vendedor/productos               → Mis productos
+GET  /vendedor/productos/nuevo         → Agregar producto
+GET  /vendedor/productos/editar/{id}   → Editar producto
+POST /vendedor/productos/guardar       → Guardar producto
+DELETE /vendedor/productos/{id}        → Eliminar producto
+GET  /vendedor/ventas                  → Historial de ventas
+```
+
+#### Administrador
+
+```
+GET  /admin/dashboard     → Panel de administración
+GET  /admin/usuarios      → Gestión de usuarios
+GET  /admin/productos     → Gestión de productos
+GET  /admin/resenas       → Moderación de reseñas
+```
+
+### Aliases (Redirects)
+
+```
+/newregister  → /registro
+/loginnew     → /login
+/categorias   → /productos-listado
+```
+
+---
+
+## 🔌 API Endpoints
+
+### Ubicación
+
+```http
+GET /api/ubicacion/departamentos
+Response: [{"id": 1, "nombre": "Antioquia"}, ...]
+
+GET /api/ubicacion/ciudades/{idDepartamento}
+Response: [{"id": 1, "nombre": "Medellín", "departamento": {...}}, ...]
+```
+
+### Productos (REST API)
+
+```http
+GET    /api/productos           # Listar todos
+GET    /api/productos/{id}      # Obtener por ID
+POST   /api/productos           # Crear nuevo
+PUT    /api/productos/{id}      # Actualizar
+DELETE /api/productos/{id}      # Eliminar
+```
+
+### Ejemplo con cURL
+
+```bash
+# Obtener departamentos
+curl http://localhost:8080/api/ubicacion/departamentos
+
+# Obtener ciudades de un departamento
+curl http://localhost:8080/api/ubicacion/ciudades/1
+```
+
+---
+
+## 🔒 Seguridad
+
+### ⚠️ ADVERTENCIAS IMPORTANTES
+
+> **🔴 CRÍTICO**: Este proyecto actualmente tiene las siguientes vulnerabilidades de seguridad:
+
+1. **Contraseñas sin encriptar**: Las contraseñas se almacenan en texto plano en la base de datos
+2. **Sin Spring Security**: No hay protección CSRF ni autenticación robusta
+3. **Sesiones manuales**: Sistema de sesiones implementado manualmente con `HttpSession`
+
+### 🛡️ Mejoras de Seguridad Recomendadas (URGENTE)
+
+#### 1. Implementar BCrypt para contraseñas
+
+```xml
+<!-- Agregar a pom.xml -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-security</artifactId>
+</dependency>
+```
+
+```java
+// En UsuarioService
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+
+// Al registrar
+String hashedPassword = encoder.encode(plainPassword);
+usuario.setContrasena(hashedPassword);
+
+// Al validar login
+if (encoder.matches(plainPassword, usuario.getContrasena())) {
+    // Login exitoso
+}
+```
+
+#### 2. Migrar a Spring Security
+
+Ver documentación oficial: [Spring Security Reference](https://docs.spring.io/spring-security/reference/)
+
+---
+
+## 🐛 Problemas Conocidos
+
+### 🔴 Críticos
+
+1. **Contraseñas en texto plano**
+
+   - **Impacto**: Alto riesgo de seguridad
+   - **Solución**: Implementar BCrypt (ver sección Seguridad)
+
+2. **Sin Spring Security**
+   - **Impacto**: Vulnerabilidades CSRF, XSS
+   - **Solución**: Migrar a Spring Security
+
+### 🟡 Importantes
+
+3. **Columna `ciudad.nombre` muy corta**
+
+   - **Error**: `Data truncation: Data too long for column 'nombre'`
+   - **Solución**:
+
+   ```sql
+   ALTER TABLE ciudad MODIFY nombre VARCHAR(100);
+   ```
+
+4. **Sin validación robusta**
+
+   - **Impacto**: Datos inconsistentes
+   - **Solución**: Implementar Bean Validation
+
+   ```java
+   @NotBlank(message = "El nombre es obligatorio")
+   @Size(min = 3, max = 50)
+   private String nombre;
+   ```
+
+5. **Sin tests**
+   - **Impacto**: Dificulta mantenimiento
+   - **Solución**: Agregar JUnit y Mockito
+
+### 🟢 Menores
+
+6. **Dependencia innecesaria**: `scala-library` en pom.xml
+7. **Sin documentación API**: Falta Swagger/OpenAPI
+
+---
+
+## 🗺️ Roadmap
+
+### Versión 1.1 (Próxima Release) - Seguridad
+
+- [ ] Implementar BCrypt para contraseñas
+- [ ] Migrar a Spring Security
+- [ ] Agregar protección CSRF
+- [ ] Implementar rate limiting
+- [ ] Validación robusta de inputs
+
+### Versión 1.2 - Calidad
+
+- [ ] Tests unitarios (>50% coverage)
+- [ ] Tests de integración
+- [ ] Documentación Swagger/OpenAPI
+- [ ] Manejo centralizado de errores (@ControllerAdvice)
+- [ ] Logging estructurado
+
+### Versión 1.3 - Optimización
+
+- [ ] Índices en base de datos
+- [ ] Caché con Redis
+- [ ] Optimización de consultas JPA
+- [ ] Compresión de imágenes
+- [ ] CDN para assets estáticos
+
+### Versión 2.0 - Nuevas Características
+
+- [ ] Sistema de notificaciones (email)
+- [ ] Chat vendedor-comprador
+- [ ] Sistema de favoritos
+- [ ] Dashboard con gráficos
+- [ ] API REST completa
+- [ ] App móvil (React Native)
+
+### DevOps
+
+- [ ] Dockerización
+- [ ] CI/CD con GitHub Actions
+- [ ] Monitoreo con Prometheus
+- [ ] Logs centralizados (ELK Stack)
+
+---
+
+## 🤝 Contribuir
+
+Las contribuciones son bienvenidas. Por favor:
+
+1. Fork el proyecto
+2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
+3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
+4. Push a la rama (`git push origin feature/AmazingFeature`)
+5. Abre un Pull Request
+
+### Prioridades de Contribución
+
+🔥 **Alta prioridad**: Seguridad (BCrypt, Spring Security)  
+📈 **Media prioridad**: Tests, validación, documentación  
+🔮 **Baja prioridad**: Nuevas features
+
+---
+
+## 📞 Soporte
+
+Si encuentras algún problema o tienes preguntas:
+
+- 📧 Email: soporte@cultivus.co
+- 🐛 Issues: [GitHub Issues](https://github.com/tu-usuario/CULTIVIS-CO/issues)
+- 📖 Wiki: [Documentación completa](https://github.com/tu-usuario/CULTIVIS-CO/wiki)
+
+---
+
+## 📄 Licencia
+
+Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detalles.
+
+---
+
+## 👥 Autores
+
+- **Tu Nombre** - _Desarrollo inicial_ - [@tu-usuario](https://github.com/tu-usuario)
+
+---
+
+## 🙏 Agradecimientos
+
+- Spring Boot Team
+- Comunidad de desarrolladores Java
+- Productores locales que inspiraron este proyecto
+
+---
+
+<div align="center">
+
+**Hecho con ❤️ para apoyar la agricultura local**
+
+[⬆ Volver arriba](#-cultivus-co)
+
+</div>

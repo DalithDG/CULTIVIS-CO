@@ -1,78 +1,168 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro Usuario - Cultivus</title>
+    <title>Registro - Cultivus</title>
     <link rel="stylesheet" th:href="@{/registro.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
-
 <body>
-    <div class="container">
-        <h2><i class="fa-solid fa-user-plus"></i> Registro de Usuario</h2>
-
-        <!-- Mensaje de error -->
-        <div th:if="${error}" class="alert-error">
-            <strong><i class="fa-solid fa-exclamation-circle"></i> Error:</strong> <span th:text="${error}"></span>
+    <div class="registro-container">
+        <!-- Lado Izquierdo - Hero Section -->
+        <div class="hero-section">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-leaf"></i>
+                    <span>Cultivus</span>
+                </div>
+                <h1>Únete a la revolución agrícola</h1>
+                <p>Conecta directamente con productores locales y apoya el campo colombiano</p>
+                
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-truck-fast"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h3>Entrega Rápida</h3>
+                            <p>Productos frescos en tiempo récord</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h3>100% Frescos</h3>
+                            <p>Directo del campo a tu mesa</p>
+                        </div>
+                    </div>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <div class="feature-text">
+                            <h3>Apoyo al Campo</h3>
+                            <p>Impulsa la economía local</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <form action="/usuario/guardar" method="post">
+        <!-- Lado Derecho - Formulario -->
+        <div class="form-section">
+            <div class="form-wrapper">
+                <div class="form-header">
+                    <h2><i class="fas fa-user-plus"></i> Crear Cuenta</h2>
+                    <p>Completa tus datos para comenzar</p>
+                </div>
 
-            <div class="form-group">
-                <label for="nombre">
-                    <i class="fa-solid fa-user"></i> Nombre Completo
-                </label>
-                <input type="text" id="nombre" name="nombre" required placeholder="Ingresa tu nombre" 
-                       th:value="${nombre}">
+                <!-- Alertas -->
+                <div th:if="${error}" class="alert alert-error">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span th:text="${error}"></span>
+                </div>
+
+                <form action="/usuario/guardar" method="post" class="registro-form">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre">
+                                <i class="fa-solid fa-user"></i> Nombre Completo
+                            </label>
+                            <input type="text" id="nombre" name="nombre" required 
+                                   placeholder="Juan Pérez" th:value="${nombre}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="email">
+                                <i class="fa-solid fa-envelope"></i> Correo Electrónico
+                            </label>
+                            <input type="email" id="email" name="email" required 
+                                   placeholder="tu@correo.com" th:value="${email}">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="contrasena">
+                                <i class="fa-solid fa-lock"></i> Contraseña
+                            </label>
+                            <div class="password-field">
+                                <input type="password" id="contrasena" name="contrasena" required 
+                                       placeholder="Mínimo 8 caracteres">
+                                <button type="button" class="toggle-password" onclick="togglePassword('contrasena')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                            <div class="password-hint">
+                                <i class="fas fa-info-circle"></i>
+                                <span>Debe incluir mayúscula, número y carácter especial</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-row two-columns">
+                        <div class="form-group">
+                            <label for="departamento">
+                                <i class="fa-solid fa-map-marked-alt"></i> Departamento
+                            </label>
+                            <input type="text" id="departamento" name="departamento" required 
+                                   placeholder="Ej: Bolívar" th:value="${departamento}">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="ciudad">
+                                <i class="fa-solid fa-city"></i> Ciudad
+                            </label>
+                            <input type="text" id="ciudad" name="ciudad" required 
+                                   placeholder="Ej: Cartagena" th:value="${ciudad}">
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-submit">
+                        <span>Crear mi cuenta</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+
+                    <p class="terms-text">
+                        Al registrarte, aceptas nuestros
+                        <a href="#">Términos y Condiciones</a> y
+                        <a href="#">Política de Privacidad</a>
+                    </p>
+                </form>
+
+                <div class="form-footer">
+                    <p>¿Ya tienes cuenta? <a th:href="@{/usuario/login}">Inicia sesión</a></p>
+                    <a th:href="@{/}" class="back-link">
+                        <i class="fa-solid fa-arrow-left"></i> Volver al inicio
+                    </a>
+                </div>
             </div>
-
-            <div class="form-group">
-                <label for="email">
-                    <i class="fa-solid fa-envelope"></i> Correo Electrónico
-                </label>
-                <input type="email" id="email" name="email" required placeholder="ejemplo@correo.com" 
-                       th:value="${email}">
-            </div>
-
-            <div class="form-group">
-                <label for="contrasena">
-                    <i class="fa-solid fa-lock"></i> Contraseña
-                </label>
-                <input type="password" id="contrasena" name="contrasena" required 
-                       placeholder="Mínimo 8 caracteres con mayúscula, número y carácter especial">
-            </div>
-
-            <div class="form-group">
-                <label for="departamento">
-                    <i class="fa-solid fa-map-marked-alt"></i> Departamento
-                </label>
-                <input type="text" id="departamento" name="departamento" required placeholder="Ej: Bolívar" 
-                       th:value="${departamento}">
-            </div>
-
-            <div class="form-group">
-                <label for="ciudad">
-                    <i class="fa-solid fa-city"></i> Ciudad
-                </label>
-                <input type="text" id="ciudad" name="ciudad" required placeholder="Ej: Cartagena" 
-                       th:value="${ciudad}">
-            </div>
-
-            <button type="submit">
-                <i class="fa-solid fa-check"></i> Registrarse
-            </button>
-
-            <p class="info-text">
-                Al registrarte aceptas nuestros términos y condiciones
-            </p>
-
-            <a th:href="@{/usuario/login}" class="back-link">
-                <i class="fa-solid fa-arrow-left"></i> ¿Ya tienes cuenta? Inicia sesión
-            </a>
-        </form>
+        </div>
     </div>
-</body>
 
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const button = input.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
 </html>

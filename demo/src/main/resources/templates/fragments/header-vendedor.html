@@ -1,51 +1,107 @@
 <header th:fragment="siteHeader">
     <link rel="stylesheet" th:href="@{/header.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-    <div class="top-bar">
-        <p>Cobertura Toda Colombia. Pedido mínimo $200.000</p>
-    </div>
-
-    <div class="main-header">
+    
+    <div class="header-premium" id="mainHeader">
         <div class="header-container">
-            <div class="logo">
+            <!-- Logo -->
+            <div class="header-logo">
                 <a th:href="@{/vendedor/inicio}">
-                    <img th:src="@{/images/isotipoWhite.png}" alt="Logo">
+                    <img th:src="@{/images/isotipoWhite.png}" alt="Cultivus">
+                    <span class="logo-text">Cultivus</span>
                 </a>
             </div>
 
-            <nav class="nav-links">
-                <ul>
-                    <li><a th:href="@{/vendedor/inicio}">
-                            <i class="fa-solid fa-home"></i> Inicio
-                        </a></li>
-
-                    <li><a th:href="@{/vendedor/productos/nuevo}">
-                            <i class="fa-solid fa-plus-circle"></i> Agregar Producto
-                        </a></li>
-
-                    <li><a th:href="@{/vendedor/Miproductos}">
-                            <i class="fa-solid fa-box"></i> Mis Productos
-                        </a></li>
-
-                    <li><a th:href="@{/vendedor/ventas}">
-                            <i class="fa-solid fa-chart-line"></i> Mis Ventas
-                        </a></li>
-
-                    <li class="profile-dropdown">
-                        <a href="#" class="profile-toggle">
-                            <i class="fa-solid fa-user"></i> Perfil
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a th:href="@{/usuario/perfil}"><i class="fa-solid fa-user-circle"></i> Mi Perfil</a>
-                            </li>
-                            <li><a th:href="@{/usuario/logout}"><i class="fa-solid fa-sign-out-alt"></i> Cerrar
-                                    Sesión</a></li>
-                        </ul>
-                    </li>
-
-                </ul>
+            <!-- Navegación Principal -->
+            <nav class="header-nav">
+                <a th:href="@{/vendedor/inicio}" class="nav-link">
+                    <i class="fas fa-home"></i>
+                    <span>Inicio</span>
+                </a>
+                <a th:href="@{/vendedor/productos/nuevo}" class="nav-link">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Agregar Producto</span>
+                </a>
+                <a th:href="@{/vendedor/Miproductos}" class="nav-link">
+                    <i class="fas fa-box"></i>
+                    <span>Mis Productos</span>
+                </a>
+                <a th:href="@{/vendedor/ventas}" class="nav-link">
+                    <i class="fas fa-chart-line"></i>
+                    <span>Mis Ventas</span>
+                </a>
             </nav>
+
+            <!-- CTAs -->
+            <div class="header-actions">
+                <!-- Mi Perfil -->
+                <a th:href="@{/usuario/perfil}" class="btn-profile-link">
+                    <i class="fas fa-user-circle"></i>
+                </a>
+
+                <!-- Cerrar Sesión -->
+                <a th:href="@{/usuario/logout}" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i>
+                </a>
+            </div>
+
+            <!-- Mobile Menu Toggle -->
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </div>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <span>Menú Vendedor</span>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-nav">
+            <a th:href="@{/vendedor/inicio}"><i class="fas fa-home"></i> Inicio</a>
+            <a th:href="@{/vendedor/productos/nuevo}"><i class="fas fa-plus-circle"></i> Agregar Producto</a>
+            <a th:href="@{/vendedor/Miproductos}"><i class="fas fa-box"></i> Mis Productos</a>
+            <a th:href="@{/vendedor/ventas}"><i class="fas fa-chart-line"></i> Mis Ventas</a>
+            <div class="mobile-divider"></div>
+            <a th:href="@{/usuario/perfil}"><i class="fas fa-user"></i> Mi Perfil</a>
+            <a th:href="@{/usuario/logout}"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</a>
+        </nav>
+    </div>
+
+    <script>
+        // Mobile Menu
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+
+        if (mobileMenuToggle && mobileMenu) {
+            mobileMenuToggle.addEventListener('click', () => {
+                mobileMenu.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            });
+
+            mobileMenuClose.addEventListener('click', () => {
+                mobileMenu.classList.remove('active');
+                document.body.style.overflow = '';
+            });
+        }
+
+        // Sticky Header
+        const header = document.getElementById('mainHeader');
+        if (header) {
+            window.addEventListener('scroll', () => {
+                const currentScroll = window.pageYOffset;
+                if (currentScroll > 50) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+    </script>
 </header>

@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cultivus - Panel de Vendedor</title>
+    <meta name="description" content="Únete a Cultivus y vende tus productos agrícolas a miles de compradores en Colombia">
+    <title>Vende en Cultivus - Conecta con Miles de Compradores</title>
 
     <link rel="stylesheet" th:href="@{/vendedor.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -17,110 +18,201 @@
     <!-- Header Vendedor -->
     <header th:replace="fragments/header-vendedor :: siteHeader"></header>
 
-    <!-- Hero -->
+    <!-- Hero Section -->
     <section class="hero-vendedor">
-        <div>
-            <h1>Conecta tus productos con toda Colombia</h1>
-            <p>Cultivus es el puente entre tu trabajo en el campo y miles de hogares que valoran lo natural y lo local.</p>
-            <a th:href="@{/vendedor/productos/nuevo}" class="btn-hero">
-                <i class="fas fa-plus"></i> Publicar Producto
-            </a>
-        </div>
-    </section>
-
-    <!-- Por qué vender en Cultivus -->
-    <section class="section section-light">
-        <div class="section-title">
-            <h2>¿Por qué vender en Cultivus?</h2>
-            <p>Hacemos que vender sea simple y justo</p>
-        </div>
-
-        <div class="beneficios-grid">
-            <div class="beneficio-item">
-                <i class="fas fa-hand-holding-dollar"></i>
-                <h3>Sin comisiones ocultas</h3>
-                <p>Transparencia total. Sabes exactamente cuánto ganas por cada venta.</p>
-            </div>
-
-            <div class="beneficio-item">
-                <i class="fas fa-map-marked-alt"></i>
-                <h3>Alcance nacional</h3>
-                <p>Tus productos llegan a clientes en toda Colombia, desde la ciudad hasta el pueblo.</p>
-            </div>
-
-            <div class="beneficio-item">
-                <i class="fas fa-mobile-alt"></i>
-                <h3>Fácil de usar</h3>
-                <p>Publica, gestiona y vende desde cualquier dispositivo sin complicaciones.</p>
-            </div>
-
-            <div class="beneficio-item">
-                <i class="fas fa-seedling"></i>
-                <h3>Apoyo al campo</h3>
-                <p>Somos parte de una comunidad que valora y apoya el trabajo del productor local.</p>
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-badge">
+                    <i class="fas fa-seedling"></i>
+                    <span>Plataforma #1 para Productores Agrícolas</span>
+                </div>
+                <h1>Conecta tus Productos con Toda Colombia</h1>
+                <p>Cultivus es el puente entre tu trabajo en el campo y miles de hogares que valoran lo natural y lo local. Aumenta tus ventas, elimina intermediarios y haz crecer tu negocio.</p>
+                <div class="hero-ctas">
+                    <a th:href="@{/vendedor/productos/nuevo}" class="btn-hero">
+                        <i class="fas fa-rocket"></i>
+                        Comenzar a Vender
+                    </a>
+                    <a href="#beneficios" class="btn-hero btn-secondary">
+                        <i class="fas fa-info-circle"></i>
+                        Conocer Más
+                    </a>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Cómo funciona -->
-    <section class="section section-gray">
-        <div class="section-title">
-            <h2>Así de fácil es vender</h2>
-            <p>Tres pasos y ya estás vendiendo</p>
-        </div>
-
-        <div class="pasos-container">
-            <div class="paso">
-                <div class="paso-numero">1</div>
-                <h3>Publica tus productos</h3>
-                <p>Sube fotos, agrega descripción y define tu precio. En minutos tu producto está listo.</p>
+    <!-- Beneficios -->
+    <section id="beneficios" class="beneficios-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>¿Por Qué Vender en Cultivus?</h2>
+                <p>Más que una plataforma, somos tu aliado para hacer crecer tu negocio agrícola</p>
             </div>
 
-            <div class="paso">
-                <div class="paso-numero">2</div>
-                <h3>Recibe pedidos</h3>
-                <p>Los clientes encuentran tus productos y hacen sus pedidos. Te notificamos al instante.</p>
-            </div>
+            <div class="beneficios-grid">
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <h3>Miles de Compradores</h3>
+                    <p>Accede a una red creciente de clientes que buscan productos frescos y de calidad directamente del productor.</p>
+                </div>
 
-            <div class="paso">
-                <div class="paso-numero">3</div>
-                <h3>Envía y gana</h3>
-                <p>Prepara el pedido, coordina el envío y recibe tu pago. Así de simple.</p>
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-hand-holding-usd"></i>
+                    </div>
+                    <h3>Sin Intermediarios</h3>
+                    <p>Vende directamente al consumidor final y obtén mejores precios por tus productos. Tú decides cuánto valer.</p>
+                </div>
+
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Fácil de Usar</h3>
+                    <p>Plataforma intuitiva diseñada para productores. Publica tus productos en minutos desde cualquier dispositivo.</p>
+                </div>
+
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-shipping-fast"></i>
+                    </div>
+                    <h3>Logística Simplificada</h3>
+                    <p>Te ayudamos con el envío y la entrega. Enfócate en producir, nosotros nos encargamos del resto.</p>
+                </div>
+
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h3>Crece tu Negocio</h3>
+                    <p>Herramientas de análisis para entender a tus clientes y optimizar tus ventas mes a mes.</p>
+                </div>
+
+                <div class="beneficio-card">
+                    <div class="beneficio-icon">
+                        <i class="fas fa-headset"></i>
+                    </div>
+                    <h3>Soporte Dedicado</h3>
+                    <p>Equipo de apoyo disponible para ayudarte en cada paso. Tu éxito es nuestro éxito.</p>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Cifras -->
-    <section class="section section-light">
-        <div class="section-title">
-            <h2>Cultivus en números</h2>
+    <!-- Cómo Funciona -->
+    <section class="como-funciona">
+        <div class="container">
+            <div class="section-header">
+                <h2>Cómo Funciona</h2>
+                <p>Comienza a vender en 3 simples pasos</p>
+            </div>
+
+            <div class="pasos-container">
+                <div class="paso">
+                    <div class="paso-numero">1</div>
+                    <h3>Regístrate Gratis</h3>
+                    <p>Crea tu cuenta de vendedor en menos de 2 minutos. Sin costos ocultos ni comisiones iniciales.</p>
+                </div>
+
+                <div class="paso">
+                    <div class="paso-numero">2</div>
+                    <h3>Publica tus Productos</h3>
+                    <p>Sube fotos, describe tus productos y establece tus precios. Es tan fácil como publicar en redes sociales.</p>
+                </div>
+
+                <div class="paso">
+                    <div class="paso-numero">3</div>
+                    <h3>Recibe Pedidos</h3>
+                    <p>Los compradores encuentran tus productos, hacen pedidos y tú recibes el pago de forma segura.</p>
+                </div>
+            </div>
         </div>
+    </section>
 
-        <div class="cifras-container">
-            <div class="cifra">
-                <div class="cifra-numero">50+</div>
-                <p>Municipios con cobertura</p>
+    <!-- Estadísticas -->
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-number">500+</span>
+                    <span class="stat-label">Productores Activos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">10K+</span>
+                    <span class="stat-label">Productos Vendidos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">95%</span>
+                    <span class="stat-label">Satisfacción</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Soporte</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonios -->
+    <section class="testimonios-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>Lo Que Dicen Nuestros Vendedores</h2>
+                <p>Historias reales de productores que han transformado su negocio</p>
             </div>
 
-            <div class="cifra">
-                <div class="cifra-numero">100%</div>
-                <p>Productos colombianos</p>
-            </div>
+            <div class="testimonios-grid">
+                <div class="testimonio-card">
+                    <p class="testimonio-text">"Desde que empecé en Cultivus, mis ventas aumentaron un 300%. Ahora llego a clientes en todo el país sin intermediarios."</p>
+                    <div class="testimonio-autor">
+                        <div class="autor-avatar">JM</div>
+                        <div class="autor-info">
+                            <h4>Juan Martínez</h4>
+                            <p>Productor de Café - Antioquia</p>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="cifra">
-                <div class="cifra-numero">0</div>
-                <p>Comisiones ocultas</p>
+                <div class="testimonio-card">
+                    <p class="testimonio-text">"La plataforma es muy fácil de usar. En minutos publiqué mis productos y al día siguiente ya tenía mi primer pedido."</p>
+                    <div class="testimonio-autor">
+                        <div class="autor-avatar">MR</div>
+                        <div class="autor-info">
+                            <h4>María Rodríguez</h4>
+                            <p>Productora de Lácteos - Cundinamarca</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="testimonio-card">
+                    <p class="testimonio-text">"Cultivus me ayudó a eliminar intermediarios y obtener precios justos por mi trabajo. Recomendado al 100%."</p>
+                    <div class="testimonio-autor">
+                        <div class="autor-avatar">CG</div>
+                        <div class="autor-info">
+                            <h4>Carlos Gómez</h4>
+                            <p>Agricultor de Frutas - Valle del Cauca</p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- CTA Final -->
-    <section class="cta-section">
-        <h2>¿Listo para empezar?</h2>
-        <p>Tu próximo cliente está esperando tus productos</p>
-        <a th:href="@{/vendedor/productos/nuevo}" class="btn-cta">
-            <i class="fas fa-rocket"></i> Agregar mi primer producto
-        </a>
+    <section class="cta-final">
+        <div class="container">
+            <div class="cta-content">
+                <h2>¿Listo para Hacer Crecer tu Negocio?</h2>
+                <p>Únete a cientos de productores que ya están vendiendo en Cultivus. Es gratis y sin compromiso.</p>
+                <a th:href="@{/vendedor/productos/nuevo}" class="btn-cta">
+                    <i class="fas fa-rocket"></i>
+                    Comenzar Ahora
+                </a>
+            </div>
+        </div>
     </section>
 
     <!-- Footer -->

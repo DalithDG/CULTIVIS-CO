@@ -1,87 +1,87 @@
 /* Miproductos - Formulario de Productos */
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f6f8;
-    margin: 0;
-    padding: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f8;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
-    width: 90%;
-    max-width: 600px;
-    margin: 50px auto;
-    background-color: #fff;
-    padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 25px;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+  text-align: center;
+  margin-bottom: 20px;
+  color: #333;
 }
 
 .form-group {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: bold;
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
 }
 
 input,
 select,
 textarea {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    font-size: 14px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 14px;
 }
 
 .image-preview {
-    margin-top: 10px;
-    width: 100%;
-    max-height: 200px;
-    object-fit: cover;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    display: none;
+  margin-top: 10px;
+  width: 100%;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  display: none;
 }
 
 .d-flex {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 .btn {
-    flex: 1;
-    padding: 10px 15px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    color: white;
-    transition: 0.3s;
+  flex: 1;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  color: white;
+  transition: 0.3s;
 }
 
 .btn-primary {
-    background-color: #27ae60;
+  background-color: #6b7c2e;
 }
 
 .btn-primary:hover {
-    background-color: #1ef378;
+  background-color: #6b7c2e;
 }
 
 .btn-secondary {
-    background-color: #6c757d;
+  background-color: #6c757d;
 }
 
 .btn-secondary:hover {
-    background-color: #5a6268;
+  background-color: #5a6268;
 }

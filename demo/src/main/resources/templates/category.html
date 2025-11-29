@@ -2,295 +2,311 @@
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
 
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Categorías - Cultivus</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Explora todas las categorías de productos frescos y naturales en Cultivus">
+    <title>Categorías - Cultivus</title>
 
-  <!-- Font Awesome -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-
-  <!-- CSS de Categorías -->
-  <link rel="stylesheet" th:href="@{/category.css}">
-
-  <!-- CSS del Header DESPUÉS (sobrescribe) -->
-  <link rel="stylesheet" th:href="@{/header.css}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" th:href="@{/category.css}">
+    <link rel="stylesheet" th:href="@{/header.css}">
 </head>
 
 <body>
 
-  <!-- Header -->
-  <header th:replace="fragments/header :: siteHeader"></header>
+    <!-- Header -->
+    <header th:replace="fragments/header :: siteHeader"></header>
 
-  <!-- Banner de Categorías -->
-  <section class="banner-categorias">
-    <div class="banner-content">
-      <h1>Explora Nuestras Categorías</h1>
-      <p>Productos frescos y de calidad directo del campo</p>
-    </div>
-  </section>
-
-  <!-- Carrusel de Categorías -->
-  <section class="carousel-categorias">
-    <div class="container">
-      <h2 class="section-title">Categorías de Productos Campesinos</h2>
-      <div class="carrusel">
-
-        <a th:href="@{/frutas}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/frutas.jpg.webp}" alt="Frutas">
-          </div>
-          <div class="card-content">
-            <h3>Frutas</h3>
-            <p>Frescas y naturales</p>
-          </div>
-        </a>
-
-        <a th:href="@{/verduras}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/Verduras.jpg}" alt="Verduras">
-          </div>
-          <div class="card-content">
-            <h3>Verduras</h3>
-            <p>Directo del campo</p>
-          </div>
-        </a>
-
-        <a th:href="@{/lacteos}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/lacteos.jpg}" alt="Lácteos">
-          </div>
-          <div class="card-content">
-            <h3>Lácteos</h3>
-            <p>100% naturales</p>
-          </div>
-        </a>
-
-        <a th:href="@{/cafe}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/cafe.webp}" alt="Café">
-          </div>
-          <div class="card-content">
-            <h3>Café y Cacao</h3>
-            <p>Aroma colombiano</p>
-          </div>
-        </a>
-
-
-        <!-- Duplicados para efecto infinito -->
-        <a th:href="@{/frutas}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/frutas.jpg.webp}" alt="Frutas">
-          </div>
-          <div class="card-content">
-            <h3>Frutas</h3>
-            <p>Frescas y naturales</p>
-          </div>
-        </a>
-
-        <a th:href="@{/verduras}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/Verduras.jpg}" alt="Verduras">
-          </div>
-          <div class="card-content">
-            <h3>Verduras</h3>
-            <p>Directo del campo</p>
-          </div>
-        </a>
-
-        <a th:href="@{/lacteos}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/lacteos.jpg}" alt="Lácteos">
-          </div>
-          <div class="card-content">
-            <h3>Lácteos</h3>
-            <p>100% naturales</p>
-          </div>
-        </a>
-
-        <a th:href="@{/cafe}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/cafe.webp}" alt="Café">
-          </div>
-          <div class="card-content">
-            <h3>Café y Cacao</h3>
-            <p>Aroma colombiano</p>
-          </div>
-        </a>
-
-
-        <!-- Segunda copia -->
-        <a th:href="@{/frutas}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/frutas.jpg.webp}" alt="Frutas">
-          </div>
-          <div class="card-content">
-            <h3>Frutas</h3>
-            <p>Frescas y naturales</p>
-          </div>
-        </a>
-
-        <a th:href="@{/verduras}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/Verduras.jpg}" alt="Verduras">
-          </div>
-          <div class="card-content">
-            <h3>Verduras</h3>
-            <p>Directo del campo</p>
-          </div>
-        </a>
-
-        <a th:href="@{/lacteos}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/lacteos.jpg}" alt="Lácteos">
-          </div>
-          <div class="card-content">
-            <h3>Lácteos</h3>
-            <p>100% naturales</p>
-          </div>
-        </a>
-
-        <a th:href="@{/cafe}" class="categoria-card">
-          <div class="card-image">
-            <img th:src="@{/images/cafe.webp}" alt="Café">
-          </div>
-          <div class="card-content">
-            <h3>Café y Cacao</h3>
-            <p>Aroma colombiano</p>
-          </div>
-        </a>
-
-
-
-      </div>
-    </div>
-  </section>
-
-  <!-- Sección de Filtros y Productos -->
-  <section class="productos-section">
-    <div class="container-productos">
-
-      <!-- Sidebar de Filtros -->
-      <aside class="filtros-sidebar">
-        <div class="filtros-header">
-          <h3><i class="fas fa-filter"></i> Filtros</h3>
-          <button class="btn-limpiar" onclick="limpiarFiltros()">
-            <i class="fas fa-trash-alt"></i> Limpiar
-          </button>
+    <!-- Banner Compacto -->
+    <section class="banner-categorias">
+        <div class="banner-content">
+            <h1>Explora Nuestras Categorías</h1>
+            <p>Productos frescos y de calidad directo del campo</p>
         </div>
+    </section>
 
-        <form th:action="@{/category}" method="get" id="filtros-form">
-          <div class="filtro-grupo">
-            <h4>Categoría</h4>
-            <div class="filtro-opciones">
-              <label class="filtro-checkbox">
-                <input type="checkbox" name="categoria" value="frutas"
-                  th:checked="${param.categoria != null and #lists.contains(param.categoria, 'frutas')}">
-                <span class="checkmark"></span>
-                Frutas
-              </label>
-              <label class="filtro-checkbox">
-                <input type="checkbox" name="categoria" value="verduras"
-                  th:checked="${param.categoria != null and #lists.contains(param.categoria, 'verduras')}">
-                <span class="checkmark"></span>
-                Verduras
-              </label>
-              <label class="filtro-checkbox">
-                <input type="checkbox" name="categoria" value="lacteos"
-                  th:checked="${param.categoria != null and #lists.contains(param.categoria, 'lacteos')}">
-                <span class="checkmark"></span>
-                Lácteos
-              </label>
-              <label class="filtro-checkbox">
-                <input type="checkbox" name="categoria" value="cafe"
-                  th:checked="${param.categoria != null and #lists.contains(param.categoria, 'cafe')}">
-                <span class="checkmark"></span>
-                Café
-              </label>
-              <label class="filtro-checkbox">
-                <input type="checkbox" name="categoria" value="cacao"
-                  th:checked="${param.categoria != null and #lists.contains(param.categoria, 'cacao')}">
-                <span class="checkmark"></span>
-                Cacao
-              </label>
+    <!-- Breadcrumbs -->
+    <nav class="breadcrumbs">
+        <div class="breadcrumbs-container">
+            <ul class="breadcrumbs-list">
+                <li><a th:href="@{/}"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><i class="fas fa-chevron-right"></i></li>
+                <li class="active">Categorías</li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Carrusel de Categorías -->
+    <section class="carousel-categorias">
+        <div class="container">
+            <h2 class="section-title">Categorías de Productos</h2>
+            <div class="carrusel">
+
+                <a th:href="@{/frutas}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/frutas.jpg.webp}" alt="Frutas">
+                    </div>
+                    <div class="card-content">
+                        <h3>Frutas</h3>
+                        <p>Frescas y naturales</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/verduras}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/Verduras.jpg}" alt="Verduras">
+                    </div>
+                    <div class="card-content">
+                        <h3>Verduras</h3>
+                        <p>Directo del campo</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/lacteos}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/lacteos.jpg}" alt="Lácteos">
+                    </div>
+                    <div class="card-content">
+                        <h3>Lácteos</h3>
+                        <p>100% naturales</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/cafe}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/cafe.webp}" alt="Café">
+                    </div>
+                    <div class="card-content">
+                        <h3>Café y Cacao</h3>
+                        <p>Aroma colombiano</p>
+                    </div>
+                </a>
+
+                <!-- Duplicados para efecto infinito -->
+                <a th:href="@{/frutas}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/frutas.jpg.webp}" alt="Frutas">
+                    </div>
+                    <div class="card-content">
+                        <h3>Frutas</h3>
+                        <p>Frescas y naturales</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/verduras}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/Verduras.jpg}" alt="Verduras">
+                    </div>
+                    <div class="card-content">
+                        <h3>Verduras</h3>
+                        <p>Directo del campo</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/lacteos}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/lacteos.jpg}" alt="Lácteos">
+                    </div>
+                    <div class="card-content">
+                        <h3>Lácteos</h3>
+                        <p>100% naturales</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/cafe}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/cafe.webp}" alt="Café">
+                    </div>
+                    <div class="card-content">
+                        <h3>Café y Cacao</h3>
+                        <p>Aroma colombiano</p>
+                    </div>
+                </a>
+
+                <!-- Segunda copia -->
+                <a th:href="@{/frutas}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/frutas.jpg.webp}" alt="Frutas">
+                    </div>
+                    <div class="card-content">
+                        <h3>Frutas</h3>
+                        <p>Frescas y naturales</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/verduras}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/Verduras.jpg}" alt="Verduras">
+                    </div>
+                    <div class="card-content">
+                        <h3>Verduras</h3>
+                        <p>Directo del campo</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/lacteos}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/lacteos.jpg}" alt="Lácteos">
+                    </div>
+                    <div class="card-content">
+                        <h3>Lácteos</h3>
+                        <p>100% naturales</p>
+                    </div>
+                </a>
+
+                <a th:href="@{/cafe}" class="categoria-card">
+                    <div class="card-image">
+                        <img th:src="@{/images/cafe.webp}" alt="Café">
+                    </div>
+                    <div class="card-content">
+                        <h3>Café y Cacao</h3>
+                        <p>Aroma colombiano</p>
+                    </div>
+                </a>
+
             </div>
-          </div>
-
-          <button type="submit" class="btn-aplicar-filtros">
-            <i class="fas fa-check"></i> Aplicar filtros
-          </button>
-        </form>
-      </aside>
-
-      <!-- Área de Productos -->
-      <main class="productos-main">
-        <div class="productos-header">
-          <div class="resultados-info">
-            <p>
-              <strong th:text="${productos != null ? productos.size() : 0}">0</strong>
-              productos encontrados
-            </p>
-          </div>
-          <div class="productos-ordenar">
-            <label for="ordenar">Ordenar por:</label>
-            <select id="ordenar" class="select-ordenar" onchange="ordenarProductos(this.value)">
-              <option value="relevancia">Relevancia</option>
-              <option value="precio-menor">Precio: Menor a Mayor</option>
-              <option value="precio-mayor">Precio: Mayor a Menor</option>
-              <option value="nombre">Nombre A-Z</option>
-              <option value="recientes">Más Recientes</option>
-            </select>
-          </div>
         </div>
+    </section>
 
-        <!-- Grid de productos -->
-        <div class="productos-grid">
+    <!-- Sección de Filtros y Productos -->
+    <section class="productos-section">
+        <div class="container-productos">
 
-          <!-- Si HAY productos -->
-          <div th:if="${productos != null and !productos.isEmpty()}" class="grid-productos-real">
-            <div th:each="producto : ${productos}" class="producto-card">
-              <a th:href="@{/producto/{id}(id=${producto.id})}" class="producto-link">
-                <div class="producto-imagen">
-                  <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}"
-                    onerror="this.src='/images/placeholder.jpg'">
+            <!-- Sidebar de Filtros -->
+            <aside class="filtros-sidebar">
+                <div class="filtros-header">
+                    <h3><i class="fas fa-filter"></i> Filtros</h3>
+                    <button class="btn-limpiar" onclick="limpiarFiltros()">
+                        <i class="fas fa-times"></i> Limpiar
+                    </button>
                 </div>
-                <div class="producto-info">
-                  <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
-                  <p class="producto-categoria"
-                    th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">Categoría</p>
-                  <div class="producto-precio">
-                    <span class="precio-actual"
-                      th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">
-                      $0
-                    </span>
-                  </div>
-                </div>
-              </a>
-              <form th:action="@{/carrito/agregar}" method="post" style="display: inline;">
-                <input type="hidden" name="productoId" th:value="${producto.id}">
-                <button type="submit" class="btn-agregar">
-                  <i class="fas fa-cart-plus"></i> Agregar
-                </button>
-              </form>
-            </div>
-          </div>
 
-          <!-- Si NO hay productos -->
-          <div th:if="${productos == null or productos.isEmpty()}" class="mensaje-productos">
-            <i class="fas fa-box-open"></i>
-            <h3>No se encontraron productos</h3>
-            <p>Intenta con otros filtros o categorías</p>
-          </div>
+                <form th:action="@{/category}" method="get" id="filtros-form">
+                    <div class="filtro-grupo">
+                        <h4>Categoría</h4>
+                        <div class="filtro-opciones">
+                            <label class="filtro-checkbox">
+                                <input type="checkbox" name="categoria" value="frutas"
+                                    th:checked="${param.categoria != null and #lists.contains(param.categoria, 'frutas')}">
+                                <span class="checkmark"></span>
+                                Frutas
+                            </label>
+                            <label class="filtro-checkbox">
+                                <input type="checkbox" name="categoria" value="verduras"
+                                    th:checked="${param.categoria != null and #lists.contains(param.categoria, 'verduras')}">
+                                <span class="checkmark"></span>
+                                Verduras
+                            </label>
+                            <label class="filtro-checkbox">
+                                <input type="checkbox" name="categoria" value="lacteos"
+                                    th:checked="${param.categoria != null and #lists.contains(param.categoria, 'lacteos')}">
+                                <span class="checkmark"></span>
+                                Lácteos
+                            </label>
+                            <label class="filtro-checkbox">
+                                <input type="checkbox" name="categoria" value="cafe"
+                                    th:checked="${param.categoria != null and #lists.contains(param.categoria, 'cafe')}">
+                                <span class="checkmark"></span>
+                                Café
+                            </label>
+                            <label class="filtro-checkbox">
+                                <input type="checkbox" name="categoria" value="cacao"
+                                    th:checked="${param.categoria != null and #lists.contains(param.categoria, 'cacao')}">
+                                <span class="checkmark"></span>
+                                Cacao
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-aplicar-filtros">
+                        <i class="fas fa-check"></i> Aplicar filtros
+                    </button>
+                </form>
+            </aside>
+
+            <!-- Área de Productos -->
+            <main class="productos-main">
+                <div class="productos-header">
+                    <div class="resultados-info">
+                        <p>
+                            <strong th:text="${productos != null ? productos.size() : 0}">0</strong>
+                            productos encontrados
+                        </p>
+                    </div>
+                    <div class="productos-ordenar">
+                        <label for="ordenar">Ordenar por:</label>
+                        <select id="ordenar" class="select-ordenar" onchange="ordenarProductos(this.value)">
+                            <option value="relevancia">Relevancia</option>
+                            <option value="precio-menor">Precio: Menor a Mayor</option>
+                            <option value="precio-mayor">Precio: Mayor a Menor</option>
+                            <option value="nombre">Nombre A-Z</option>
+                            <option value="recientes">Más Recientes</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Grid de productos -->
+                <div class="productos-grid">
+
+                    <!-- Si HAY productos -->
+                    <div th:if="${productos != null and !productos.isEmpty()}" class="grid-productos-real">
+                        <div th:each="producto : ${productos}" class="producto-card">
+                            <a th:href="@{/producto/{id}(id=${producto.id})}" class="producto-link">
+                                <div class="producto-imagen">
+                                    <img th:src="${producto.imagenUrl}" th:alt="${producto.nombre}"
+                                        onerror="this.src='/images/placeholder.jpg'">
+                                </div>
+                                <div class="producto-info">
+                                    <h3 th:text="${producto.nombre}">Nombre del Producto</h3>
+                                    <p class="producto-categoria"
+                                        th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">
+                                        Categoría</p>
+                                    <div class="producto-precio">
+                                        <span class="precio-actual"
+                                            th:text="'$' + ${#numbers.formatDecimal(producto.precio, 0, 'COMMA', 0, 'POINT')}">
+                                            $0
+                                        </span>
+                                    </div>
+                                </div>
+                            </a>
+                            <form th:action="@{/carrito/agregar}" method="post" style="padding: 0 20px 20px;">
+                                <input type="hidden" name="productoId" th:value="${producto.id}">
+                                <button type="submit" class="btn-agregar">
+                                    <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Si NO hay productos -->
+                    <div th:if="${productos == null or productos.isEmpty()}" class="mensaje-productos">
+                        <i class="fas fa-box-open"></i>
+                        <h3>No se encontraron productos</h3>
+                        <p>Intenta con otros filtros o categorías</p>
+                    </div>
+
+                </div>
+
+            </main>
 
         </div>
+    </section>
 
-      </main>
+    <!-- Footer -->
+    <footer th:replace="fragments/footer :: siteFooter"></footer>
 
-    </div>
-  </section>
+    <script>
+        function limpiarFiltros() {
+            document.getElementById('filtros-form').reset();
+            window.location.href = '/category';
+        }
 
-
-  <!-- Footer -->
-  <footer th:replace="fragments/footer :: siteFooter"></footer>
+        function ordenarProductos(orden) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('orden', orden);
+            window.location.href = url.toString();
+        }
+    </script>
 
 </body>
 

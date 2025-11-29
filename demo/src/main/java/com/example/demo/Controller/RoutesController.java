@@ -37,11 +37,6 @@ public class RoutesController {
         return "product-detall";
     }
 
-    @GetMapping("/registro-vendedor")
-    public String RegistroVendedor() {
-        return "registro-vendedor";
-    }
-
     @GetMapping("/login")
     public String Login(Model model) {
         model.addAttribute("usuario", new Usuario()); // tu clase de usuario

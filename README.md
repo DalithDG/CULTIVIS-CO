@@ -577,7 +577,9 @@ Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detall
 
 ## 👥 Autores
 
-- **Tu Nombre** - _Desarrollo inicial_ - [@tu-usuario](https://github.com/tu-usuario)
+- **Alex Bryant** - _Desarrollo inicial_ - [@Alexbryant7](https://github.com/Alexbryant7)
+- **Dalith Garcia** - _Desarrollo inicial_ - [@DalithDG](https://github.com/DalithDG)
+- **Andres Cervantes** - _Desarrollo inicial_ - [@andrescervantes6](https://github.com/andrescervantes6)
 
 ---
 

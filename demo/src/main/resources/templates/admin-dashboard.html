@@ -64,7 +64,8 @@
                     <a th:href="@{/admin/ofertas}" class="submenu-link" data-page="ofertas">Ofertas Globales</a>
                     <a th:href="@{/admin/moderacion}" class="submenu-link" data-page="moderacion">
                         Moderación
-                        <span class="badge-menu" th:if="${catalogoPendienteCount != null and catalogoPendienteCount > 0}"
+                        <span class="badge-menu"
+                            th:if="${catalogoPendienteCount != null and catalogoPendienteCount > 0}"
                             th:text="${catalogoPendienteCount}"
                             style="background:#FF9800;color:white;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-left:5px;"></span>
                     </a>
@@ -99,7 +100,8 @@
                 <a th:href="@{/admin/verificacion-tiendas}" class="menu-link" data-page="verificacion-tiendas">
                     <i class="fas fa-store"></i>
                     <span class="menu-text">Verificar Tiendas</span>
-                    <span class="badge-menu" th:if="${vendedoresPendientesCount != null and vendedoresPendientesCount > 0}"
+                    <span class="badge-menu"
+                        th:if="${vendedoresPendientesCount != null and vendedoresPendientesCount > 0}"
                         th:text="${vendedoresPendientesCount}"
                         style="background:#FF5252;color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-left:auto;"></span>
                 </a>
@@ -156,11 +158,15 @@
                 <div class="topbar-icons">
                     <a th:href="@{/admin/notificaciones}" class="icon-btn">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge" th:if="${notificacionesCount != null and notificacionesCount > 0}" th:text="${notificacionesCount}">3</span>
+                        <span class="notification-badge"
+                            th:if="${notificacionesCount != null and notificacionesCount > 0}"
+                            th:text="${notificacionesCount}">3</span>
                     </a>
                     <a th:href="@{/admin/mensajes}" class="icon-btn">
                         <i class="fas fa-envelope"></i>
-                        <span class="notification-badge" th:if="${mensajesRecibidosCount != null and mensajesRecibidosCount > 0}" th:text="${mensajesRecibidosCount}">2</span>
+                        <span class="notification-badge"
+                            th:if="${mensajesRecibidosCount != null and mensajesRecibidosCount > 0}"
+                            th:text="${mensajesRecibidosCount}">2</span>
                     </a>
                 </div>
             </div>
@@ -226,20 +232,18 @@
                     <div
                         style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
                         <h2 style="margin: 0;"><i class="fas fa-chart-pie"></i> Inteligencia de Negocios (Power BI)</h2>
-                        <a href="#" style="color: #4facfe; text-decoration: none; font-weight: 600;"><i
-                                class="fas fa-external-link-alt"></i> Abrir en Power BI</a>
+                        <a href="https://app.powerbi.com/view?r=eyJrIjoiZTQ5ZWNlNGUtMWVjMi00MmQ3LTkyNTMtN2Q4NzUyNDI4ZDIzIiwidCI6IjlkMTJiZjNmLWU0ZjYtNDdhYi05MTJmLTFhMmYwZmM0OGFhNCIsImMiOjR9"
+                           target="_blank"
+                           style="color: #4facfe; text-decoration: none; font-weight: 600;">
+                           <i class="fas fa-external-link-alt"></i> Abrir en Power BI
+                        </a>
                     </div>
                     <div
-                        style="flex: 1; background: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 500px;">
-                        <!-- Aquí pones el iframe generado por Power BI -->
-                        <!-- Ejemplo: <iframe title="Reporte Ventas" width="100%" height="100%" src="https://app.powerbi.com/view?r=..." frameborder="0" allowFullScreen="true"></iframe> -->
-
-                        <div style="text-align: center; color: #999;">
-                            <i class="fas fa-chart-bar fa-4x" style="margin-bottom: 15px; color: #ddd;"></i>
-                            <h3>Reporte de Power BI No Configurado</h3>
-                            <p>Reemplaza este recuadro con el código <code>&lt;iframe&gt;</code> que te proporciona
-                                Power BI Desktop o Power BI Service.</p>
-                        </div>
+                        style="flex: 1; background: #f9f9f9; display: flex; flex-direction: column; min-height: 500px;">
+                        <iframe title="Cultivus"
+                            src="https://app.powerbi.com/view?r=eyJrIjoiZTQ5ZWNlNGUtMWVjMi00MmQ3LTkyNTMtN2Q4NzUyNDI4ZDIzIiwidCI6IjlkMTJiZjNmLWU0ZjYtNDdhYi05MTJmLTFhMmYwZmM0OGFhNCIsImMiOjR9"
+                            style="width: 100%; height: 100%; border: none; flex: 1;"
+                            allowFullScreen="true"></iframe>
                     </div>
                 </div>
             </div>
@@ -254,15 +258,18 @@
                             <input type="text" name="search" th:value="${searchQuery}"
                                 placeholder="Buscar por nombre o email..."
                                 style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; min-width: 200px;">
-                            <select name="rol" style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; background: white;">
+                            <select name="rol"
+                                style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; background: white;">
                                 <option value="">Todos los roles</option>
-                                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}" th:selected="${r == rolFilter}"></option>
+                                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"
+                                    th:selected="${r == rolFilter}"></option>
                             </select>
                             <button type="submit"
                                 style="background: #4facfe; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">
                                 <i class="fas fa-search"></i> Filtrar
                             </button>
-                            <a th:if="${(searchQuery != null and !searchQuery.isEmpty()) or (rolFilter != null and !rolFilter.isEmpty())}" th:href="@{/admin/usuarios}"
+                            <a th:if="${(searchQuery != null and !searchQuery.isEmpty()) or (rolFilter != null and !rolFilter.isEmpty())}"
+                                th:href="@{/admin/usuarios}"
                                 style="background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; text-decoration: none;">
                                 <i class="fas fa-times"></i> Limpiar
                             </a>
@@ -326,7 +333,8 @@
                             <div style="display:flex; gap:5px;">
                                 <span th:each="i : ${#numbers.sequence(0, usuarios.totalPages - 1)}"
                                     th:if="${i >= usuarios.number - 2 and i <= usuarios.number + 2}">
-                                    <a th:href="@{/admin/usuarios(page=${i}, search=${searchQuery}, rol=${rolFilter})}" th:text="${i + 1}"
+                                    <a th:href="@{/admin/usuarios(page=${i}, search=${searchQuery}, rol=${rolFilter})}"
+                                        th:text="${i + 1}"
                                         th:style="${i == usuarios.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
                                         style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
                                     </a>
@@ -394,7 +402,8 @@
                                 <div class="activity-content">
                                     <h4 th:text="${resena.usuarioId}">Nueva reseña</h4>
                                     <p th:text="${resena.comentario}">Comentario</p>
-                                    <span class="time" th:text="${#temporals.format(resena.fecha, 'dd/MM/yyyy')}">Hace poco</span>
+                                    <span class="time" th:text="${#temporals.format(resena.fecha, 'dd/MM/yyyy')}">Hace
+                                        poco</span>
                                     <form th:action="@{/admin/resenas/{id}/eliminar(id=${resena.id})}" method="post"
                                         style="display:inline;">
                                         <button type="submit"
@@ -408,8 +417,7 @@
                         <!-- Paginación Reseñas -->
                         <div th:if="${resenas.totalPages > 1}" class="paginacion-container"
                             style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
-                            <a th:href="@{/admin/resenas(page=${resenas.number - 1})}"
-                                th:if="${resenas.hasPrevious()}"
+                            <a th:href="@{/admin/resenas(page=${resenas.number - 1})}" th:if="${resenas.hasPrevious()}"
                                 style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
                                 <i class="fas fa-chevron-left"></i> Anterior
                             </a>
@@ -426,8 +434,7 @@
                                     </a>
                                 </span>
                             </div>
-                            <a th:href="@{/admin/resenas(page=${resenas.number + 1})}"
-                                th:if="${resenas.hasNext()}"
+                            <a th:href="@{/admin/resenas(page=${resenas.number + 1})}" th:if="${resenas.hasNext()}"
                                 style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
                                 Siguiente <i class="fas fa-chevron-right"></i>
                             </a>
@@ -438,8 +445,10 @@
                         </div>
                     </div>
 
-                    <div th:if="${resenas == null or resenas.empty}" style="text-align:center; padding:40px; color:#999;">
-                        <i class="fas fa-history" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                    <div th:if="${resenas == null or resenas.empty}"
+                        style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-history"
+                            style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
                         <p style="font-size:18px;">No hay reseñas registradas.</p>
                     </div>
                 </div>
@@ -455,15 +464,18 @@
                             <input type="text" name="search" th:value="${searchQuery}"
                                 placeholder="Buscar por nombre o descripción..."
                                 style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; min-width: 200px;">
-                            <select name="categoriaId" style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; background: white; max-width: 200px;">
+                            <select name="categoriaId"
+                                style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; background: white; max-width: 200px;">
                                 <option value="">Todas las categorías</option>
-                                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}" th:selected="${cat.id == categoriaFilter}"></option>
+                                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"
+                                    th:selected="${cat.id == categoriaFilter}"></option>
                             </select>
                             <button type="submit"
                                 style="background: #4facfe; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">
                                 <i class="fas fa-search"></i> Filtrar
                             </button>
-                            <a th:if="${(searchQuery != null and !searchQuery.isEmpty()) or (categoriaFilter != null and !categoriaFilter.isEmpty())}" th:href="@{/admin/productos}"
+                            <a th:if="${(searchQuery != null and !searchQuery.isEmpty()) or (categoriaFilter != null and !categoriaFilter.isEmpty())}"
+                                th:href="@{/admin/productos}"
                                 style="background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; text-decoration: none;">
                                 <i class="fas fa-times"></i> Limpiar
                             </a>
@@ -879,7 +891,8 @@
                             <tbody>
                                 <tr th:each="pedido : ${pedidos.content}">
                                     <td th:text="${pedido.id}">#ORD-001</td>
-                                    <td th:text="${pedido.comprador != null ? pedido.comprador.nombre : 'Anónimo'}">Pedro Sánchez</td>
+                                    <td th:text="${pedido.comprador != null ? pedido.comprador.nombre : 'Anónimo'}">
+                                        Pedro Sánchez</td>
                                     <td th:text="${'$' + (pedido.total ?: 0)}">$156.99</td>
                                     <td
                                         th:text="${pedido.fechaPedido != null ? #temporals.format(pedido.fechaPedido, 'dd/MM/yyyy') : '-'}">
@@ -897,8 +910,7 @@
                         <!-- Paginación Pedidos -->
                         <div th:if="${pedidos.totalPages > 1}" class="paginacion-container"
                             style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
-                            <a th:href="@{/admin/pedidos(page=${pedidos.number - 1})}"
-                                th:if="${pedidos.hasPrevious()}"
+                            <a th:href="@{/admin/pedidos(page=${pedidos.number - 1})}" th:if="${pedidos.hasPrevious()}"
                                 style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
                                 <i class="fas fa-chevron-left"></i> Anterior
                             </a>
@@ -915,8 +927,7 @@
                                     </a>
                                 </span>
                             </div>
-                            <a th:href="@{/admin/pedidos(page=${pedidos.number + 1})}"
-                                th:if="${pedidos.hasNext()}"
+                            <a th:href="@{/admin/pedidos(page=${pedidos.number + 1})}" th:if="${pedidos.hasNext()}"
                                 style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
                                 Siguiente <i class="fas fa-chevron-right"></i>
                             </a>
@@ -927,8 +938,10 @@
                         </div>
                     </div>
 
-                    <div th:if="${pedidos == null or pedidos.empty}" style="text-align:center; padding:40px; color:#999;">
-                        <i class="fas fa-shopping-bag" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                    <div th:if="${pedidos == null or pedidos.empty}"
+                        style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-shopping-bag"
+                            style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
                         <p style="font-size:18px;">No hay pedidos registrados.</p>
                     </div>
                 </div>
@@ -1147,25 +1160,37 @@
             <!-- VERIFICACIÓN DE TIENDAS PAGE -->
             <div class="page" id="verificacion-tiendas-page" style="display:none;">
                 <div class="page-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:15px;">
+                    <div
+                        style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:15px;">
                         <h2>
-                            <i class="fas fa-store" th:style="${estadoFilter == 'VERIFICADO' ? 'color:#4CAF50;' : 'color:#FF9800;'}"></i>
-                            <span th:text="${estadoFilter == 'VERIFICADO' ? 'Tiendas Verificadas' : 'Solicitudes de Tiendas Pendientes'}">Solicitudes de Tiendas</span>
+                            <i class="fas fa-store"
+                                th:style="${estadoFilter == 'VERIFICADO' ? 'color:#4CAF50;' : 'color:#FF9800;'}"></i>
+                            <span
+                                th:text="${estadoFilter == 'VERIFICADO' ? 'Tiendas Verificadas' : 'Solicitudes de Tiendas Pendientes'}">Solicitudes
+                                de Tiendas</span>
                         </h2>
-                        
-                        <form th:action="@{/admin/verificacion-tiendas}" method="get" style="display:flex; gap:10px; align-items:center;">
+
+                        <form th:action="@{/admin/verificacion-tiendas}" method="get"
+                            style="display:flex; gap:10px; align-items:center;">
                             <label style="font-weight:600; color:#555;">Mostrar:</label>
-                            <select name="estado" onchange="this.form.submit()" style="padding:8px 15px; border:1px solid #ddd; border-radius:20px; outline:none; background:white; cursor:pointer;">
-                                <option value="PENDIENTE" th:selected="${estadoFilter == 'PENDIENTE' or estadoFilter == null}">Pendientes de Aprobación</option>
-                                <option value="VERIFICADO" th:selected="${estadoFilter == 'VERIFICADO'}">Verificadas</option>
+                            <select name="estado" onchange="this.form.submit()"
+                                style="padding:8px 15px; border:1px solid #ddd; border-radius:20px; outline:none; background:white; cursor:pointer;">
+                                <option value="PENDIENTE"
+                                    th:selected="${estadoFilter == 'PENDIENTE' or estadoFilter == null}">Pendientes de
+                                    Aprobación</option>
+                                <option value="VERIFICADO" th:selected="${estadoFilter == 'VERIFICADO'}">Verificadas
+                                </option>
                             </select>
                         </form>
                     </div>
 
-                    <div th:if="${vendedores == null or vendedores.empty}" style="text-align:center; padding:40px; color:#999;">
+                    <div th:if="${vendedores == null or vendedores.empty}"
+                        style="text-align:center; padding:40px; color:#999;">
                         <i th:class="${estadoFilter == 'VERIFICADO' ? 'fas fa-store-slash' : 'fas fa-check-circle'}"
-                           th:style="${estadoFilter == 'VERIFICADO' ? 'font-size:48px; color:#ccc; margin-bottom:15px; display:block;' : 'font-size:48px; color:#4CAF50; margin-bottom:15px; display:block;'}"></i>
-                        <p style="font-size:18px;" th:text="${estadoFilter == 'VERIFICADO' ? 'Aún no hay tiendas verificadas.' : 'No hay solicitudes pendientes. ¡Todo al día!'}">Sin datos</p>
+                            th:style="${estadoFilter == 'VERIFICADO' ? 'font-size:48px; color:#ccc; margin-bottom:15px; display:block;' : 'font-size:48px; color:#4CAF50; margin-bottom:15px; display:block;'}"></i>
+                        <p style="font-size:18px;"
+                            th:text="${estadoFilter == 'VERIFICADO' ? 'Aún no hay tiendas verificadas.' : 'No hay solicitudes pendientes. ¡Todo al día!'}">
+                            Sin datos</p>
                     </div>
 
                     <div th:if="${vendedores != null and !vendedores.empty}">
@@ -1184,23 +1209,30 @@
                                 <tr th:each="v : ${vendedores.content}">
                                     <td th:text="${v.nombre}">Nombre</td>
                                     <td th:text="${v.email}">email@ejemplo.com</td>
-                                    <td th:text="${v.perfilVendedor != null ? v.perfilVendedor.razonSocial : '-'}">Razón Social</td>
-                                    <td th:text="${v.perfilVendedor != null ? v.perfilVendedor.telefonoContacto : '-'}">Teléfono</td>
+                                    <td th:text="${v.perfilVendedor != null ? v.perfilVendedor.razonSocial : '-'}">Razón
+                                        Social</td>
+                                    <td th:text="${v.perfilVendedor != null ? v.perfilVendedor.telefonoContacto : '-'}">
+                                        Teléfono</td>
                                     <td>
-                                        <span class="badge" th:classappend="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'badge-success' : 'badge-warning'}">
-                                            <i th:class="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'fas fa-check-circle' : 'fas fa-hourglass-half'}"></i>
-                                            <span th:text="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'Verificado' : 'Pendiente'}">Estado</span>
+                                        <span class="badge"
+                                            th:classappend="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'badge-success' : 'badge-warning'}">
+                                            <i
+                                                th:class="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'fas fa-check-circle' : 'fas fa-hourglass-half'}"></i>
+                                            <span
+                                                th:text="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'Verificado' : 'Pendiente'}">Estado</span>
                                         </span>
                                     </td>
                                     <td style="white-space:nowrap;">
                                         <!-- Acciones para Pendientes -->
                                         <div th:if="${v.perfilVendedor == null or !v.perfilVendedor.verificado}">
-                                            <form th:action="@{/admin/tiendas/{id}/aprobar(id=${v.id})}" method="post" style="display:inline;">
+                                            <form th:action="@{/admin/tiendas/{id}/aprobar(id=${v.id})}" method="post"
+                                                style="display:inline;">
                                                 <button type="submit" class="btn-action" style="background:#4CAF50;">
                                                     <i class="fas fa-check"></i> Aprobar
                                                 </button>
                                             </form>
-                                            <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post" style="display:inline; margin-left:6px;">
+                                            <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post"
+                                                style="display:inline; margin-left:6px;">
                                                 <button type="submit" class="btn-action" style="background:#f44336;">
                                                     <i class="fas fa-times"></i> Rechazar
                                                 </button>
@@ -1208,7 +1240,8 @@
                                         </div>
                                         <!-- Acciones para Verificados -->
                                         <div th:if="${v.perfilVendedor != null and v.perfilVendedor.verificado}">
-                                            <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post" onsubmit="return confirm('¿Revocar verificación a esta tienda?')">
+                                            <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post"
+                                                onsubmit="return confirm('¿Revocar verificación a esta tienda?')">
                                                 <button type="submit" class="btn-action" style="background:#FF9800;">
                                                     <i class="fas fa-ban"></i> Revocar
                                                 </button>
@@ -1234,7 +1267,8 @@
                             <div style="display:flex; gap:5px;">
                                 <span th:each="i : ${#numbers.sequence(0, vendedores.totalPages - 1)}"
                                     th:if="${i >= vendedores.number - 2 and i <= vendedores.number + 2}">
-                                    <a th:href="@{/admin/verificacion-tiendas(page=${i}, estado=${estadoFilter})}" th:text="${i + 1}"
+                                    <a th:href="@{/admin/verificacion-tiendas(page=${i}, estado=${estadoFilter})}"
+                                        th:text="${i + 1}"
                                         th:style="${i == vendedores.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
                                         style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
                                     </a>
@@ -1281,7 +1315,9 @@
                                             th:classappend="${user.rol != null ? (user.rol.name() == 'ADMIN' ? 'badge-admin' : (user.rol.name() == 'VENDEDOR' ? 'badge-mod' : 'badge-user')) : 'badge-user'}"
                                             th:text="${user.rol != null ? user.rol : 'SIN ROL'}">Rol</span>
                                     </td>
-                                    <td th:text="${user.ultimaConexion != null ? #temporals.format(user.ultimaConexion, 'dd/MM/yyyy HH:mm') : '-'}">Fecha</td>
+                                    <td
+                                        th:text="${user.ultimaConexion != null ? #temporals.format(user.ultimaConexion, 'dd/MM/yyyy HH:mm') : '-'}">
+                                        Fecha</td>
                                     <td><span class="badge badge-active">Conectado</span></td>
                                 </tr>
                             </tbody>
@@ -1320,8 +1356,10 @@
                         </div>
                     </div>
 
-                    <div th:if="${usuariosActivos == null or usuariosActivos.empty}" style="text-align:center; padding:40px; color:#999;">
-                        <i class="fas fa-user-clock" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                    <div th:if="${usuariosActivos == null or usuariosActivos.empty}"
+                        style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-user-clock"
+                            style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
                         <p style="font-size:18px;">No hay usuarios activos recientemente.</p>
                     </div>
                 </div>
@@ -1375,11 +1413,13 @@
                             </thead>
                             <tbody>
                                 <tr th:each="n : ${notificacionesPaginadas.content}">
-                                    <td th:text="${n.fecha != null ? #temporals.format(n.fecha, 'dd/MM HH:mm') : '-'}">Fecha</td>
+                                    <td th:text="${n.fecha != null ? #temporals.format(n.fecha, 'dd/MM HH:mm') : '-'}">
+                                        Fecha</td>
                                     <td th:text="${n.titulo}">Título</td>
                                     <td><span class="badge" th:text="${n.tipo}">Tipo</span></td>
                                     <td>
-                                        <form th:action="@{/admin/notificaciones/{id}/eliminar(id=${n.id})}" method="post">
+                                        <form th:action="@{/admin/notificaciones/{id}/eliminar(id=${n.id})}"
+                                            method="post">
                                             <button type="submit" class="btn-action" style="background:#f44336;"><i
                                                     class="fas fa-trash"></i></button>
                                         </form>
@@ -1421,8 +1461,10 @@
                         </div>
                     </div>
 
-                    <div th:if="${notificacionesPaginadas == null or notificacionesPaginadas.empty}" style="text-align:center; padding:40px; color:#999;">
-                        <i class="fas fa-history" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                    <div th:if="${notificacionesPaginadas == null or notificacionesPaginadas.empty}"
+                        style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-history"
+                            style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
                         <p style="font-size:18px;">No hay notificaciones enviadas.</p>
                     </div>
                 </div>

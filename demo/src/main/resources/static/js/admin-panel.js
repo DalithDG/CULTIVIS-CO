@@ -16,7 +16,8 @@ window.navigateToPage = function(pageName) {
         'mensajes': 'Centro de Mensajes',
         'catalogo': 'Catálogo de Productos',
         'configuracion': 'Configuración del Sistema',
-        'moderacion': 'Moderar Ofertas y Catálogo'
+        'moderacion': 'Moderar Ofertas y Catálogo',
+        'ordenes': 'Gestión de Pedidos'
     };
 
     const targetPage = document.getElementById(pageName + '-page');

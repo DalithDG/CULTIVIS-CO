@@ -171,6 +171,15 @@ public class CatalogoService {
         return catalogoRepository.findByAprobadoFalseAndActivoTrue();
     }
 
+    public org.springframework.data.domain.Page<ProductoCatalogo> listarPendientesPaginados(int page, int size) {
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by(org.springframework.data.domain.Sort.Direction.DESC, "createdAt"));
+        return catalogoRepository.findByAprobadoFalseAndActivoTrue(pageable);
+    }
+
+    public long obtenerCantidadCatalogoPendiente() {
+        return catalogoRepository.findByAprobadoFalseAndActivoTrue(org.springframework.data.domain.PageRequest.of(0, 1)).getTotalElements();
+    }
+
     // ══════════════════════════════════════════════════════════
     // Recálculo de estadísticas
     // ══════════════════════════════════════════════════════════

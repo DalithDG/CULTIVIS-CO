@@ -19,6 +19,16 @@ public interface ProductoRepository extends MongoRepository<Producto, String> {
     // Buscar productos por nombre (búsqueda parcial)
     List<Producto> findByNombreContainingIgnoreCase(String nombre);
 
+    // Búsqueda paginada por nombre o descripción
+    org.springframework.data.domain.Page<Producto> findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(String nombre, String descripcion, org.springframework.data.domain.Pageable pageable);
+
+    // Búsqueda paginada por categoría
+    org.springframework.data.domain.Page<Producto> findByCategoriaId(String categoriaId, org.springframework.data.domain.Pageable pageable);
+
+    // Búsqueda paginada por nombre/descripción Y categoría
+    @org.springframework.data.mongodb.repository.Query("{ '$and': [ { '$or': [ { 'nombre': { $regex: ?0, $options: 'i' } }, { 'descripcion': { $regex: ?0, $options: 'i' } } ] }, { 'categoria._id': ?1 } ] }")
+    org.springframework.data.domain.Page<Producto> findBySearchAndCategoria(String search, String categoriaId, org.springframework.data.domain.Pageable pageable);
+
     // Buscar productos con stock disponible
     List<Producto> findByStockGreaterThan(int stock);
 

@@ -153,6 +153,13 @@ public class OfertaService {
     }
 
     /**
+     * Obtiene ofertas paginadas (para el panel de administración).
+     */
+    public org.springframework.data.domain.Page<OfertaVendedor> obtenerOfertasPaginadas(int page, int size) {
+        return ofertaRepository.findAll(org.springframework.data.domain.PageRequest.of(page, size));
+    }
+
+    /**
      * Busca una oferta por ID.
      */
     public OfertaVendedor buscarPorId(String ofertaId) {

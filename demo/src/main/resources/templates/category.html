@@ -44,77 +44,35 @@
 
                 <!-- Dinámico desde la base de datos -->
                 <th:block th:each="cat : ${categorias}">
-                    <a th:href="@{/category(categoria=${cat.id})}" class="categoria-card">
+                    <a th:href="@{/category(categoria=${cat.id})}" class="categoria-card" th:with="imgUrl=${
+                           cat.nombre == 'Frutas' ? 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=600' :
+                           (cat.nombre == 'Verduras' ? 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?q=80&w=600' :
+                           (cat.nombre == 'Tubérculos' ? 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?q=80&w=600' :
+                           (cat.nombre == 'Granos y Cereales' ? 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=600' :
+                           (cat.nombre == 'Procesados Artesanales' ? 'https://images.unsplash.com/photo-1589134732688-69335a420ee9?q=80&w=600' :
+                           'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=600'))))}">
                         <div class="card-image">
-                            <!-- Lógica robusta de imágenes: intenta .jpg, .webp, .png y luego versión sin acentos -->
-                            <img th:src="${'/images/' + #strings.toLowerCase(cat.nombre) + '.jpg'}" 
-                                 th:alt="${cat.nombre}"
-                                 th:data-name="${#strings.toLowerCase(cat.nombre)}"
-                                 onerror="
-                                    let n = this.getAttribute('data-name');
-                                    if(!this.dataset.step){
-                                        this.dataset.step = '1';
-                                        this.src = '/images/' + n + '.webp';
-                                    } else if(this.dataset.step == '1'){
-                                        this.dataset.step = '2';
-                                        this.src = '/images/' + n + '.png';
-                                    } else if(this.dataset.step == '2'){
-                                        this.dataset.step = '3';
-                                        let clean = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                                        this.src = '/images/' + clean + '.jpg';
-                                    } else if(this.dataset.step == '3'){
-                                        this.dataset.step = '4';
-                                        let clean = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                                        this.src = '/images/' + clean + '.webp';
-                                    } else if(this.dataset.step == '4'){
-                                        this.dataset.step = '5';
-                                        let clean = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                                        this.src = '/images/' + clean + '.png';
-                                    } else {
-                                        this.src = '/images/LogoCultivus.png';
-                                        this.onerror = null;
-                                    }
-                                 ">
+                            <img th:src="${imgUrl}" th:alt="${cat.nombre}"
+                                onerror="this.src='https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=600'">
                         </div>
                         <div class="card-content">
                             <h3 th:text="${cat.nombre}">Nombre</h3>
-                            <p th:text="${cat.descripcion}">Descripción</p>
                         </div>
                     </a>
                 </th:block>
 
                 <!-- Duplicados para efecto infinito (si hay pocos items) -->
                 <th:block th:if="${categorias.size() < 6}" th:each="cat : ${categorias}">
-                    <a th:href="@{/category(categoria=${cat.id})}" class="categoria-card">
+                    <a th:href="@{/category(categoria=${cat.id})}" class="categoria-card" th:with="imgUrl=${
+                           cat.nombre == 'Frutas' ? 'https://images.unsplash.com/photo-1610832958506-aa56368176cf?q=80&w=600' :
+                           (cat.nombre == 'Verduras' ? 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?q=80&w=600' :
+                           (cat.nombre == 'Tubérculos' ? 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?q=80&w=600' :
+                           (cat.nombre == 'Granos y Cereales' ? 'https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?q=80&w=600' :
+                           (cat.nombre == 'Procesados Artesanales' ? 'https://images.unsplash.com/photo-1589134732688-69335a420ee9?q=80&w=600' :
+                           'https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=600'))))}">
                         <div class="card-image">
-                            <img th:src="${'/images/' + #strings.toLowerCase(cat.nombre) + '.jpg'}" 
-                                 th:alt="${cat.nombre}"
-                                 th:data-name="${#strings.toLowerCase(cat.nombre)}"
-                                 onerror="
-                                    let n = this.getAttribute('data-name');
-                                    if(!this.dataset.step){
-                                        this.dataset.step = '1';
-                                        this.src = '/images/' + n + '.webp';
-                                    } else if(this.dataset.step == '1'){
-                                        this.dataset.step = '2';
-                                        this.src = '/images/' + n + '.png';
-                                    } else if(this.dataset.step == '2'){
-                                        this.dataset.step = '3';
-                                        let clean = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                                        this.src = '/images/' + clean + '.jpg';
-                                    } else if(this.dataset.step == '3'){
-                                        this.dataset.step = '4';
-                                        let clean = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                                        this.src = '/images/' + clean + '.webp';
-                                    } else if(this.dataset.step == '4'){
-                                        this.dataset.step = '5';
-                                        let clean = n.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-                                        this.src = '/images/' + clean + '.png';
-                                    } else {
-                                        this.src = '/images/LogoCultivus.png';
-                                        this.onerror = null;
-                                    }
-                                 ">
+                            <img th:src="${imgUrl}" th:alt="${cat.nombre}"
+                                onerror="this.src='https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=600'">
                         </div>
                         <div class="card-content">
                             <h3 th:text="${cat.nombre}">Nombre</h3>
@@ -164,17 +122,23 @@
                     <div class="resultados-info">
                         <p>
                             <strong th:text="${catalogo != null ? catalogo.size() : 0}">0</strong>
-                            <span th:text="${catalogo != null and catalogo.size() == 1 ? 'producto encontrado' : 'productos encontrados'}">productos encontrados</span>
+                            <span
+                                th:text="${catalogo != null and catalogo.size() == 1 ? 'producto encontrado' : 'productos encontrados'}">productos
+                                encontrados</span>
                         </p>
                     </div>
                     <div class="productos-ordenar">
                         <label for="ordenar">Ordenar por:</label>
                         <select id="ordenar" class="select-ordenar" onchange="ordenarProductos(this.value)">
-                            <option value="relevancia" th:selected="${ordenSeleccionado == 'relevancia'}">Relevancia</option>
-                            <option value="precio-menor" th:selected="${ordenSeleccionado == 'precio-menor'}">Precio: Menor a Mayor</option>
-                            <option value="precio-mayor" th:selected="${ordenSeleccionado == 'precio-mayor'}">Precio: Mayor a Menor</option>
+                            <option value="relevancia" th:selected="${ordenSeleccionado == 'relevancia'}">Relevancia
+                            </option>
+                            <option value="precio-menor" th:selected="${ordenSeleccionado == 'precio-menor'}">Precio:
+                                Menor a Mayor</option>
+                            <option value="precio-mayor" th:selected="${ordenSeleccionado == 'precio-mayor'}">Precio:
+                                Mayor a Menor</option>
                             <option value="nombre" th:selected="${ordenSeleccionado == 'nombre'}">Nombre A-Z</option>
-                            <option value="recientes" th:selected="${ordenSeleccionado == 'recientes'}">Más Recientes</option>
+                            <option value="recientes" th:selected="${ordenSeleccionado == 'recientes'}">Más Recientes
+                            </option>
                         </select>
                     </div>
                 </div>
@@ -191,7 +155,7 @@
                                         onerror="this.src='/images/placeholder.jpg'">
                                     <!-- Badge de vendedores -->
                                     <span th:if="${producto.totalVendedores != null and producto.totalVendedores > 0}"
-                                          style="position:absolute;top:10px;right:10px;background:#27ae60;color:#fff;font-size:0.72rem;padding:4px 10px;border-radius:20px;font-weight:600;">
+                                        style="position:absolute;top:10px;right:10px;background:#27ae60;color:#fff;font-size:0.72rem;padding:4px 10px;border-radius:20px;font-weight:600;">
                                         <i class="fas fa-store"></i>
                                         <span th:text="${producto.totalVendedores}">0</span> vendedor(es)
                                     </span>
@@ -202,13 +166,11 @@
                                         th:text="${producto.categoria != null ? producto.categoria.nombre : 'Sin categoría'}">
                                         Categoría</p>
                                     <div class="producto-precio">
-                                        <span class="precio-actual"
-                                            th:if="${producto.precioMinimo != null}"
+                                        <span class="precio-actual" th:if="${producto.precioMinimo != null}"
                                             th:text="'Desde $' + ${#numbers.formatDecimal(producto.precioMinimo, 0, 'COMMA', 0, 'POINT')} + ' / ' + ${producto.unidadMedida != null ? producto.unidadMedida : 'unid'}">
                                             Desde $0 / unid
                                         </span>
-                                        <span class="precio-actual"
-                                            th:if="${producto.precioMinimo == null}"
+                                        <span class="precio-actual" th:if="${producto.precioMinimo == null}"
                                             style="color:#999;">
                                             Sin ofertas
                                         </span>
@@ -218,7 +180,7 @@
                             <!-- Botón para ver vendedores -->
                             <div style="padding: 0 20px 20px;">
                                 <a th:href="@{/producto/{id}(id=${producto.id})}" class="btn-agregar"
-                                   style="text-decoration:none; text-align:center; display:block;">
+                                    style="text-decoration:none; text-align:center; display:block;">
                                     <i class="fas fa-eye"></i> Ver vendedores
                                 </a>
                             </div>
@@ -232,6 +194,25 @@
                         <p>Intenta con otros filtros o categorías</p>
                     </div>
 
+                </div>
+
+                <!-- Controles de Paginación -->
+                <div th:if="${totalPages > 1}" class="paginacion-container"
+                    style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                    <button class="btn-paginacion" th:onclick="'cambiarPagina(' + (${currentPage} - 1) + ')'"
+                        th:disabled="${currentPage == 0}"
+                        style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer;">
+                        <i class="fas fa-chevron-left"></i> Anterior
+                    </button>
+
+                    <span style="font-weight:600; color:#555;"
+                        th:text="'Página ' + (${currentPage} + 1) + ' de ' + ${totalPages}">Página 1 de 5</span>
+
+                    <button class="btn-paginacion" th:onclick="'cambiarPagina(' + (${currentPage} + 1) + ')'"
+                        th:disabled="${currentPage + 1 >= totalPages}"
+                        style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer;">
+                        Siguiente <i class="fas fa-chevron-right"></i>
+                    </button>
                 </div>
 
             </main>
@@ -251,6 +232,13 @@
         function ordenarProductos(orden) {
             const url = new URL(window.location.href);
             url.searchParams.set('orden', orden);
+            url.searchParams.set('page', '0'); // Reset page when ordering
+            window.location.href = url.toString();
+        }
+
+        function cambiarPagina(page) {
+            const url = new URL(window.location.href);
+            url.searchParams.set('page', page);
             window.location.href = url.toString();
         }
     </script>

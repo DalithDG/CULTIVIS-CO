@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +8,7 @@
     <link rel="stylesheet" th:href="@{/Administrador_panel.css}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
+
 <body>
     <!-- SIDEBAR -->
     <div class="sidebar" id="sidebar">
@@ -29,6 +31,14 @@
                 </a>
             </div>
 
+            <!-- Analíticas Power BI -->
+            <div class="menu-item">
+                <a th:href="@{/admin/powerbi}" class="menu-link" data-page="powerbi">
+                    <i class="fas fa-chart-pie"></i>
+                    <span class="menu-text">Power BI</span>
+                </a>
+            </div>
+
             <!-- Usuarios - Desplegable -->
             <div class="menu-item has-submenu">
                 <a href="#" class="menu-link" data-submenu="usuarios">
@@ -38,8 +48,7 @@
                 </a>
                 <div class="submenu" id="usuarios-submenu">
                     <a th:href="@{/admin/usuarios}" class="submenu-link" data-page="usuarios">Gestionar Usuarios</a>
-                    <a href="#" class="submenu-link" data-page="roles">Roles y Permisos</a>
-                    <a th:href="@{/admin/resenas}" class="submenu-link" data-page="actividad">Actividad</a>
+                    <a th:href="@{/admin/resenas}" class="submenu-link" data-page="actividad">Actividad y Reseñas</a>
                 </div>
             </div>
 
@@ -51,33 +60,23 @@
                     <i class="fas fa-chevron-down submenu-icon"></i>
                 </a>
                 <div class="submenu" id="productos-submenu">
-                    <a th:href="@{/admin/productos}" class="submenu-link" data-page="catalogo">Catálogo</a>
-                    <a href="#" class="submenu-link" data-page="inventario">Inventario</a>
-                    <a href="#" class="submenu-link" data-page="categorias">Categorías</a>
+                    <a th:href="@{/admin/productos}" class="submenu-link" data-page="catalogo">Catálogo Completo</a>
+                    <a th:href="@{/admin/ofertas}" class="submenu-link" data-page="ofertas">Ofertas Globales</a>
                     <a th:href="@{/admin/moderacion}" class="submenu-link" data-page="moderacion">
-                        Moderación 
-                        <span class="badge-menu" th:if="${#lists.size(catalogoPendiente) > 0}"
-                              th:text="${#lists.size(catalogoPendiente)}"
-                              style="background:#FF9800;color:white;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-left:5px;"></span>
-                    </a>
-                    <a href="#" class="submenu-link" data-page="agregar-producto" style="color: #4facfe; font-weight: 600;">
-                        <i class="fas fa-plus-circle" style="margin-right: 5px;"></i> Nuevo Producto
+                        Moderación
+                        <span class="badge-menu" th:if="${catalogoPendienteCount != null and catalogoPendienteCount > 0}"
+                            th:text="${catalogoPendienteCount}"
+                            style="background:#FF9800;color:white;border-radius:50%;width:18px;height:18px;display:inline-flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;margin-left:5px;"></span>
                     </a>
                 </div>
             </div>
 
-            
-            <div class="menu-item has-submenu">
-                <a href="#" class="menu-link" data-submenu="ventas">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="menu-text">Ventas</span>
-                    <i class="fas fa-chevron-down submenu-icon"></i>
+            <!-- Pedidos -->
+            <div class="menu-item">
+                <a th:href="@{/admin/pedidos}" class="menu-link" data-page="ordenes">
+                    <i class="fas fa-shopping-bag"></i>
+                    <span class="menu-text">Pedidos</span>
                 </a>
-                <div class="submenu" id="ventas-submenu">
-                    <a href="#" class="submenu-link" data-page="ordenes">Órdenes</a>
-                    <a href="#" class="submenu-link" data-page="reportes">Reportes</a>
-                    <a href="#" class="submenu-link" data-page="clientes">Clientes</a>
-                </div>
             </div>
 
             <!-- Configuración - Desplegable -->
@@ -88,30 +87,21 @@
                     <i class="fas fa-chevron-down submenu-icon"></i>
                 </a>
                 <div class="submenu" id="configuracion-submenu">
-                    <a th:href="@{/admin/configuracion}" class="submenu-link" data-page="configuracion">Límites y Parámetros</a>
-                    <a href="#" class="submenu-link" data-page="general">General</a>
-                    <a href="#" class="submenu-link" data-page="seguridad">Seguridad</a>
-                    <a href="#" class="submenu-link" data-page="respaldos">Respaldos</a>
-                    <a href="#" class="submenu-link" data-page="integraciones">Integraciones</a>
+                    <a th:href="@{/admin/configuracion}" class="submenu-link" data-page="configuracion">Límites y
+                        Parámetros</a>
                 </div>
             </div>
 
-            <!-- Ayuda -->
-            <div class="menu-item">
-                <a href="#" class="menu-link" data-page="ayuda">
-                    <i class="fas fa-question-circle"></i>
-                    <span class="menu-text">Ayuda</span>
-                </a>
-            </div>
+
 
             <!-- Verificación de Tiendas -->
             <div class="menu-item">
                 <a th:href="@{/admin/verificacion-tiendas}" class="menu-link" data-page="verificacion-tiendas">
                     <i class="fas fa-store"></i>
                     <span class="menu-text">Verificar Tiendas</span>
-                    <span class="badge-menu" th:if="${#lists.size(vendedoresPendientes) > 0}"
-                          th:text="${#lists.size(vendedoresPendientes)}"
-                          style="background:#FF5252;color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-left:auto;"></span>
+                    <span class="badge-menu" th:if="${vendedoresPendientesCount != null and vendedoresPendientesCount > 0}"
+                        th:text="${vendedoresPendientesCount}"
+                        style="background:#FF5252;color:white;border-radius:50%;width:20px;height:20px;display:inline-flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;margin-left:auto;"></span>
                 </a>
             </div>
 
@@ -163,18 +153,14 @@
                 <h2 id="page-title">Bienvenido al Panel Administrador</h2>
             </div>
             <div class="topbar-right">
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" placeholder="Buscar...">
-                </div>
                 <div class="topbar-icons">
-                    <a href="#" class="icon-btn">
+                    <a th:href="@{/admin/notificaciones}" class="icon-btn">
                         <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
+                        <span class="notification-badge" th:if="${notificacionesCount != null and notificacionesCount > 0}" th:text="${notificacionesCount}">3</span>
                     </a>
-                    <a href="#" class="icon-btn">
+                    <a th:href="@{/admin/mensajes}" class="icon-btn">
                         <i class="fas fa-envelope"></i>
-                        <span class="notification-badge">2</span>
+                        <span class="notification-badge" th:if="${mensajesRecibidosCount != null and mensajesRecibidosCount > 0}" th:text="${mensajesRecibidosCount}">2</span>
                     </a>
                 </div>
             </div>
@@ -186,7 +172,8 @@
             <div class="page" id="dashboard-page">
                 <div class="welcome-card">
                     <h1>Hola, Administrador</h1>
-                    <p>Bienvenido a tu panel de control. Aquí puedes gestionar todos los aspectos de tu aplicación Cultivus.</p>
+                    <p>Bienvenido a tu panel de control. Aquí puedes gestionar todos los aspectos de tu aplicación
+                        Cultivus.</p>
                 </div>
 
                 <div class="stats-grid">
@@ -232,46 +219,138 @@
                 </div>
             </div>
 
+            <!-- POWER BI PAGE -->
+            <div class="page" id="powerbi-page" style="display: none;">
+                <div class="page-card"
+                    style="padding: 0; overflow: hidden; display: flex; flex-direction: column; height: calc(100vh - 120px);">
+                    <div
+                        style="padding: 20px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center;">
+                        <h2 style="margin: 0;"><i class="fas fa-chart-pie"></i> Inteligencia de Negocios (Power BI)</h2>
+                        <a href="#" style="color: #4facfe; text-decoration: none; font-weight: 600;"><i
+                                class="fas fa-external-link-alt"></i> Abrir en Power BI</a>
+                    </div>
+                    <div
+                        style="flex: 1; background: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 500px;">
+                        <!-- Aquí pones el iframe generado por Power BI -->
+                        <!-- Ejemplo: <iframe title="Reporte Ventas" width="100%" height="100%" src="https://app.powerbi.com/view?r=..." frameborder="0" allowFullScreen="true"></iframe> -->
+
+                        <div style="text-align: center; color: #999;">
+                            <i class="fas fa-chart-bar fa-4x" style="margin-bottom: 15px; color: #ddd;"></i>
+                            <h3>Reporte de Power BI No Configurado</h3>
+                            <p>Reemplaza este recuadro con el código <code>&lt;iframe&gt;</code> que te proporciona
+                                Power BI Desktop o Power BI Service.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <!-- USUARIOS PAGE -->
             <div class="page" id="usuarios-page" style="display: none;">
                 <div class="page-card">
-                    <h2><i class="fas fa-users"></i> Gestionar Usuarios</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Email</th>
-                                <th>Rol</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="user : ${usuarios}">
-                                <td th:text="${user.id}">#001</td>
-                                <td th:text="${user.nombre}">Juan García</td>
-                                <td th:text="${user.email}">juan@cultivus.com</td>
-                                <td>
-                                    <span class="badge" 
-                                          th:classappend="${user.rol != null ? (user.rol.name() == 'ADMIN' ? 'badge-admin' : (user.rol.name() == 'VENDEDOR' ? 'badge-mod' : 'badge-user')) : 'badge-user'}" 
-                                          th:text="${user.rol != null ? user.rol : 'SIN ROL'}">Rol</span>
-                                </td>
-                                <td><span class="badge badge-active">Activo</span></td>
-                                <td>
-                                    <form th:action="@{/admin/usuarios/{id}/cambiar-rol(id=${user.id})}" method="post" style="display:inline;">
-                                        <select name="nuevoRol" onchange="this.form.submit()">
-                                            <option th:each="r : ${roles}" th:value="${r}" th:text="${r}" 
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2><i class="fas fa-users"></i> Gestionar Usuarios</h2>
+                        <form th:action="@{/admin/usuarios}" method="get" style="display: flex; gap: 10px;">
+                            <input type="text" name="search" th:value="${searchQuery}"
+                                placeholder="Buscar por nombre o email..."
+                                style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; min-width: 200px;">
+                            <select name="rol" style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; background: white;">
+                                <option value="">Todos los roles</option>
+                                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}" th:selected="${r == rolFilter}"></option>
+                            </select>
+                            <button type="submit"
+                                style="background: #4facfe; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <a th:if="${(searchQuery != null and !searchQuery.isEmpty()) or (rolFilter != null and !rolFilter.isEmpty())}" th:href="@{/admin/usuarios}"
+                                style="background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; text-decoration: none;">
+                                <i class="fas fa-times"></i> Limpiar
+                            </a>
+                        </form>
+                    </div>
+
+                    <div th:if="${usuarios != null and !usuarios.empty}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user : ${usuarios.content}">
+                                    <td th:text="${user.id}">#001</td>
+                                    <td th:text="${user.nombre}">Juan García</td>
+                                    <td th:text="${user.email}">juan@cultivus.com</td>
+                                    <td>
+                                        <span class="badge"
+                                            th:classappend="${user.rol != null ? (user.rol.name() == 'ADMIN' ? 'badge-admin' : (user.rol.name() == 'VENDEDOR' ? 'badge-mod' : 'badge-user')) : 'badge-user'}"
+                                            th:text="${user.rol != null ? user.rol : 'SIN ROL'}">Rol</span>
+                                    </td>
+                                    <td><span class="badge badge-active">Activo</span></td>
+                                    <td>
+                                        <form th:action="@{/admin/usuarios/{id}/cambiar-rol(id=${user.id})}"
+                                            method="post" style="display:inline;">
+                                            <select name="nuevoRol" onchange="this.form.submit()">
+                                                <option th:each="r : ${roles}" th:value="${r}" th:text="${r}"
                                                     th:selected="${user.rol != null && user.rol.name() == r}"></option>
-                                        </select>
-                                    </form>
-                                    <form th:action="@{/admin/usuarios/{id}/eliminar(id=${user.id})}" method="post" style="display:inline;" onsubmit="return confirm('¿Eliminar usuario?')">
-                                        <button type="submit" class="btn-action" style="background: #f44336; border:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                            </select>
+                                        </form>
+                                        <form th:action="@{/admin/usuarios/{id}/eliminar(id=${user.id})}" method="post"
+                                            style="display:inline;" onsubmit="return confirm('¿Eliminar usuario?')">
+                                            <button type="submit" class="btn-action"
+                                                style="background: #f44336; border:none; cursor:pointer;"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Paginación Usuarios -->
+                        <div th:if="${usuarios.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/usuarios(page=${usuarios.number - 1}, search=${searchQuery}, rol=${rolFilter})}"
+                                th:if="${usuarios.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${usuarios.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, usuarios.totalPages - 1)}"
+                                    th:if="${i >= usuarios.number - 2 and i <= usuarios.number + 2}">
+                                    <a th:href="@{/admin/usuarios(page=${i}, search=${searchQuery}, rol=${rolFilter})}" th:text="${i + 1}"
+                                        th:style="${i == usuarios.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/usuarios(page=${usuarios.number + 1}, search=${searchQuery}, rol=${rolFilter})}"
+                                th:if="${usuarios.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${usuarios.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div th:if="${usuarios == null or usuarios.empty}"
+                        style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-users"
+                            style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                        <p style="font-size:18px;">No se encontraron usuarios.</p>
+                    </div>
+
                 </div>
             </div>
 
@@ -283,17 +362,20 @@
                         <div class="role-card">
                             <h3>Administrador</h3>
                             <p class="role-desc">Acceso completo al sistema</p>
-                            <p><strong th:text="${estadisticas.usuariosPorRol.ADMIN}">0</strong> usuarios con este rol</p>
+                            <p><strong th:text="${estadisticas.usuariosPorRol.ADMIN}">0</strong> usuarios con este rol
+                            </p>
                         </div>
                         <div class="role-card">
                             <h3>Vendedor</h3>
                             <p class="role-desc">Acceso a gestión de productos y pedidos</p>
-                            <p><strong th:text="${estadisticas.usuariosPorRol.VENDEDOR}">0</strong> usuarios con este rol</p>
+                            <p><strong th:text="${estadisticas.usuariosPorRol.VENDEDOR}">0</strong> usuarios con este
+                                rol</p>
                         </div>
                         <div class="role-card">
                             <h3>Comprador</h3>
                             <p class="role-desc">Acceso básico de cliente</p>
-                            <p><strong th:text="${estadisticas.usuariosPorRol.COMPRADOR}">0</strong> usuarios con este rol</p>
+                            <p><strong th:text="${estadisticas.usuariosPorRol.COMPRADOR}">0</strong> usuarios con este
+                                rol</p>
                         </div>
                     </div>
                 </div>
@@ -303,20 +385,62 @@
             <div class="page" id="actividad-page" style="display: none;">
                 <div class="page-card">
                     <h2><i class="fas fa-history"></i> Registro de Actividad</h2>
-                    <div class="activity-log">
-                        <div class="activity-item" th:each="resena : ${resenas}">
-                            <div class="activity-icon" style="background: #2196F3;">
-                                <i class="fas fa-comment"></i>
-                            </div>
-                            <div class="activity-content">
-                                <h4 th:text="${resena.usuarioId}">Nueva reseña</h4>
-                                <p th:text="${resena.comentario}">Comentario</p>
-                                <span class="time" th:text="${#temporals.format(resena.fecha, 'dd/MM/yyyy')}">Hace poco</span>
-                                <form th:action="@{/admin/resenas/{id}/eliminar(id=${resena.id})}" method="post" style="display:inline;">
-                                    <button type="submit" style="color:red; background:none; border:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                                </form>
+                    <div th:if="${resenas != null and !resenas.empty}">
+                        <div class="activity-log">
+                            <div class="activity-item" th:each="resena : ${resenas.content}">
+                                <div class="activity-icon" style="background: #2196F3;">
+                                    <i class="fas fa-comment"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4 th:text="${resena.usuarioId}">Nueva reseña</h4>
+                                    <p th:text="${resena.comentario}">Comentario</p>
+                                    <span class="time" th:text="${#temporals.format(resena.fecha, 'dd/MM/yyyy')}">Hace poco</span>
+                                    <form th:action="@{/admin/resenas/{id}/eliminar(id=${resena.id})}" method="post"
+                                        style="display:inline;">
+                                        <button type="submit"
+                                            style="color:red; background:none; border:none; cursor:pointer;"><i
+                                                class="fas fa-trash"></i></button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Paginación Reseñas -->
+                        <div th:if="${resenas.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/resenas(page=${resenas.number - 1})}"
+                                th:if="${resenas.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${resenas.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, resenas.totalPages - 1)}"
+                                    th:if="${i >= resenas.number - 2 and i <= resenas.number + 2}">
+                                    <a th:href="@{/admin/resenas(page=${i})}" th:text="${i + 1}"
+                                        th:style="${i == resenas.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/resenas(page=${resenas.number + 1})}"
+                                th:if="${resenas.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${resenas.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div th:if="${resenas == null or resenas.empty}" style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-history" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                        <p style="font-size:18px;">No hay reseñas registradas.</p>
                     </div>
                 </div>
             </div>
@@ -324,21 +448,90 @@
             <!-- CATALOGO PAGE -->
             <div class="page" id="catalogo-page" style="display: none;">
                 <div class="page-card">
-                    <h2><i class="fas fa-list"></i> Catálogo de Productos</h2>
-                    <div class="products-grid">
-                        <div class="product-item" th:each="p : ${productos}">
-                            <div class="product-img" style="background: #E8F5E9;">
-                                <img th:if="${p.imagenUrl}" th:src="${p.imagenUrl}" style="width:100%; height:100%; object-fit:cover;">
-                                <i th:unless="${p.imagenUrl}" class="fas fa-leaf fa-3x" style="color: #4CAF50;"></i>
+                    <div
+                        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <h2><i class="fas fa-list"></i> Catálogo de Productos</h2>
+                        <form th:action="@{/admin/productos}" method="get" style="display: flex; gap: 10px;">
+                            <input type="text" name="search" th:value="${searchQuery}"
+                                placeholder="Buscar por nombre o descripción..."
+                                style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; min-width: 200px;">
+                            <select name="categoriaId" style="padding: 8px 15px; border: 1px solid #ddd; border-radius: 20px; outline: none; background: white; max-width: 200px;">
+                                <option value="">Todas las categorías</option>
+                                <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}" th:selected="${cat.id == categoriaFilter}"></option>
+                            </select>
+                            <button type="submit"
+                                style="background: #4facfe; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer;">
+                                <i class="fas fa-search"></i> Filtrar
+                            </button>
+                            <a th:if="${(searchQuery != null and !searchQuery.isEmpty()) or (categoriaFilter != null and !categoriaFilter.isEmpty())}" th:href="@{/admin/productos}"
+                                style="background: #f44336; color: white; border: none; padding: 8px 15px; border-radius: 20px; cursor: pointer; text-decoration: none;">
+                                <i class="fas fa-times"></i> Limpiar
+                            </a>
+                        </form>
+                    </div>
+
+                    <div th:if="${productos != null and !productos.empty}">
+                        <div class="products-grid">
+                            <div class="product-item" th:each="p : ${productos.content}">
+                                <div class="product-img" style="background: #E8F5E9;">
+                                    <img th:if="${p.imagenUrl}" th:src="${p.imagenUrl}"
+                                        style="width:100%; height:100%; object-fit:cover;">
+                                    <i th:unless="${p.imagenUrl}" class="fas fa-leaf fa-3x" style="color: #4CAF50;"></i>
+                                </div>
+                                <h4 th:text="${p.nombre}">Producto</h4>
+                                <p class="price" th:text="${'$' + p.precio}">$12.99</p>
+                                <p class="stock"
+                                    th:text="${'Stock: ' + (p.stock % 1 == 0 ? #numbers.formatDecimal(p.stock, 0, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(p.stock, 1, 'POINT', 2, 'COMMA'))}">
+                                    Stock: 150</p>
+                                <form th:action="@{/admin/productos/{id}/eliminar(id=${p.id})}" method="post">
+                                    <button type="submit" class="btn-action"
+                                        style="background:#f44336; border:none; color:white; width:100%;"><i
+                                            class="fas fa-trash"></i> Eliminar</button>
+                                </form>
                             </div>
-                            <h4 th:text="${p.nombre}">Producto</h4>
-                            <p class="price" th:text="${'$' + p.precio}">$12.99</p>
-                            <p class="stock" th:text="${'Stock: ' + (p.stock % 1 == 0 ? #numbers.formatDecimal(p.stock, 0, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(p.stock, 1, 'POINT', 2, 'COMMA'))}">Stock: 150</p>
-                            <form th:action="@{/admin/productos/{id}/eliminar(id=${p.id})}" method="post">
-                                <button type="submit" class="btn-action" style="background:#f44336; border:none; color:white; width:100%;"><i class="fas fa-trash"></i> Eliminar</button>
-                            </form>
+                        </div>
+
+                        <!-- Paginación Productos -->
+                        <div th:if="${productos.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/productos(page=${productos.number - 1}, search=${searchQuery}, categoriaId=${categoriaFilter})}"
+                                th:if="${productos.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${productos.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, productos.totalPages - 1)}"
+                                    th:if="${i >= productos.number - 2 and i <= productos.number + 2}">
+                                    <a th:href="@{/admin/productos(page=${i}, search=${searchQuery}, categoriaId=${categoriaFilter})}"
+                                        th:text="${i + 1}"
+                                        th:style="${i == productos.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/productos(page=${productos.number + 1}, search=${searchQuery}, categoriaId=${categoriaFilter})}"
+                                th:if="${productos.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${productos.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
                         </div>
                     </div>
+
+                    <div th:if="${productos == null or productos.empty}"
+                        style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-box-open"
+                            style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                        <p style="font-size:18px;">No se encontraron productos.</p>
+                    </div>
+
                 </div>
             </div>
 
@@ -361,11 +554,17 @@
                             <tr th:each="p : ${productos}">
                                 <td th:text="${p.nombre}">Producto</td>
                                 <td th:text="${p.id}">SKU</td>
-                                <td th:text="${(p.stock % 1 == 0 ? #numbers.formatDecimal(p.stock, 0, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(p.stock, 1, 'POINT', 2, 'COMMA'))}">150</td>
-                                <td th:text="${(p.compraMinima % 1 == 0 ? #numbers.formatDecimal(p.compraMinima, 0, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(p.compraMinima, 1, 'POINT', 2, 'COMMA'))}">1</td>
+                                <td
+                                    th:text="${(p.stock % 1 == 0 ? #numbers.formatDecimal(p.stock, 0, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(p.stock, 1, 'POINT', 2, 'COMMA'))}">
+                                    150</td>
+                                <td
+                                    th:text="${(p.compraMinima % 1 == 0 ? #numbers.formatDecimal(p.compraMinima, 0, 'POINT', 0, 'COMMA') : #numbers.formatDecimal(p.compraMinima, 1, 'POINT', 2, 'COMMA'))}">
+                                    1</td>
                                 <td>Almacén General</td>
                                 <td>
-                                    <span class="badge" th:classappend="${(p.stock ?: 0) > 10 ? 'badge-active' : 'badge-warning'}" th:text="${(p.stock ?: 0) > 10 ? 'Ok' : 'Bajo'}">Estado</span>
+                                    <span class="badge"
+                                        th:classappend="${(p.stock ?: 0) > 10 ? 'badge-active' : 'badge-warning'}"
+                                        th:text="${(p.stock ?: 0) > 10 ? 'Ok' : 'Bajo'}">Estado</span>
                                 </td>
                             </tr>
                         </tbody>
@@ -402,7 +601,8 @@
                         </div>
                     </div>
 
-                    <form class="minimalist-form" th:action="@{/vendedor/productos/guardar}" method="post" enctype="multipart/form-data">
+                    <form class="minimalist-form" th:action="@{/vendedor/productos/guardar}" method="post"
+                        enctype="multipart/form-data">
                         <div class="form-section">
                             <h3>Información General</h3>
                             <div class="input-grid">
@@ -414,13 +614,15 @@
                                     <label>Categoría</label>
                                     <select name="categoriaId" required>
                                         <option value="">Selecciona una categoría</option>
-                                        <option th:each="cat : ${categorias}" th:value="${cat.id}" th:text="${cat.nombre}"></option>
+                                        <option th:each="cat : ${categorias}" th:value="${cat.id}"
+                                            th:text="${cat.nombre}"></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="input-group full">
                                 <label>Descripción Detallada</label>
-                                <textarea name="descripcion" placeholder="Describe las características principales..." rows="3" required></textarea>
+                                <textarea name="descripcion" placeholder="Describe las características principales..."
+                                    rows="3" required></textarea>
                             </div>
                         </div>
 
@@ -451,15 +653,17 @@
                                 <div class="input-group full">
                                     <label>URL de la Imagen</label>
                                     <div class="input-with-icon">
-                                        <i class="fas fa-link" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888;"></i>
-                                        <input type="text" name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg" style="padding-left: 45px;" required>
+                                        <i class="fas fa-link"
+                                            style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #888;"></i>
+                                        <input type="text" name="imagenUrl" placeholder="https://ejemplo.com/imagen.jpg"
+                                            style="padding-left: 45px;" required>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <input type="hidden" name="unidadMedidaId" value="un">
-                        
+
                         <div class="form-footer">
                             <button type="reset" class="btn-cancel">Descartar</button>
                             <button type="submit" class="btn-submit">
@@ -475,15 +679,22 @@
                         margin: 2rem auto;
                         background: white;
                         border-radius: 20px;
-                        box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+                        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
                         overflow: hidden;
                         border: 1px solid #f0f0f0;
                         animation: slideUp 0.5s ease-out;
                     }
 
                     @keyframes slideUp {
-                        from { opacity: 0; transform: translateY(20px); }
-                        to { opacity: 1; transform: translateY(0); }
+                        from {
+                            opacity: 0;
+                            transform: translateY(20px);
+                        }
+
+                        to {
+                            opacity: 1;
+                            transform: translateY(0);
+                        }
                     }
 
                     .minimalist-header {
@@ -566,8 +777,8 @@
                         color: #444;
                     }
 
-                    .minimalist-form input, 
-                    .minimalist-form select, 
+                    .minimalist-form input,
+                    .minimalist-form select,
                     .minimalist-form textarea {
                         padding: 12px 16px;
                         border: 1px solid #e0e0e0;
@@ -577,8 +788,8 @@
                         background: #fafafa;
                     }
 
-                    .minimalist-form input:focus, 
-                    .minimalist-form select:focus, 
+                    .minimalist-form input:focus,
+                    .minimalist-form select:focus,
                     .minimalist-form textarea:focus {
                         border-color: #2e7d32;
                         background: white;
@@ -653,29 +864,73 @@
             <div class="page" id="ordenes-page" style="display: none;">
                 <div class="page-card">
                     <h2><i class="fas fa-shopping-bag"></i> Órdenes</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Orden ID</th>
-                                <th>Cliente</th>
-                                <th>Total</th>
-                                <th>Fecha</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
-                            </tr>
-                        <tbody>
-                            <tr th:each="pedido : ${pedidos}">
-                                <td th:text="${pedido.id}">#ORD-001</td>
-                                <td th:text="${pedido.comprador != null ? pedido.comprador.nombre : 'Anónimo'}">Pedro Sánchez</td>
-                                <td th:text="${'$' + (pedido.total ?: 0)}">$156.99</td>
-                                <td th:text="${pedido.fechaPedido != null ? #temporals.format(pedido.fechaPedido, 'dd/MM/yyyy') : '-'}">22/04/2026</td>
-                                <td>
-                                    <span class="badge" th:classappend="${pedido.estado == 'ENTREGADO' ? 'badge-success' : 'badge-warning'}" th:text="${pedido.estado}">Estado</span>
-                                </td>
-                                <td><button class="btn-action">Ver</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div th:if="${pedidos != null and !pedidos.empty}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Orden ID</th>
+                                    <th>Cliente</th>
+                                    <th>Total</th>
+                                    <th>Fecha</th>
+                                    <th>Estado</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="pedido : ${pedidos.content}">
+                                    <td th:text="${pedido.id}">#ORD-001</td>
+                                    <td th:text="${pedido.comprador != null ? pedido.comprador.nombre : 'Anónimo'}">Pedro Sánchez</td>
+                                    <td th:text="${'$' + (pedido.total ?: 0)}">$156.99</td>
+                                    <td
+                                        th:text="${pedido.fechaPedido != null ? #temporals.format(pedido.fechaPedido, 'dd/MM/yyyy') : '-'}">
+                                        22/04/2026</td>
+                                    <td>
+                                        <span class="badge"
+                                            th:classappend="${pedido.estado == 'ENTREGADO' ? 'badge-success' : 'badge-warning'}"
+                                            th:text="${pedido.estado}">Estado</span>
+                                    </td>
+                                    <td><button class="btn-action">Ver</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Paginación Pedidos -->
+                        <div th:if="${pedidos.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/pedidos(page=${pedidos.number - 1})}"
+                                th:if="${pedidos.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${pedidos.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, pedidos.totalPages - 1)}"
+                                    th:if="${i >= pedidos.number - 2 and i <= pedidos.number + 2}">
+                                    <a th:href="@{/admin/pedidos(page=${i})}" th:text="${i + 1}"
+                                        th:style="${i == pedidos.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/pedidos(page=${pedidos.number + 1})}"
+                                th:if="${pedidos.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${pedidos.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div th:if="${pedidos == null or pedidos.empty}" style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-shopping-bag" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                        <p style="font-size:18px;">No hay pedidos registrados.</p>
+                    </div>
                 </div>
             </div>
 
@@ -723,7 +978,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                             <tr th:each="user : ${usuarios}" th:if="${user.rol != null && user.rol.name() == 'COMPRADOR'}">
+                            <tr th:each="user : ${usuarios}"
+                                th:if="${user.rol != null && user.rol.name() == 'COMPRADOR'}">
                                 <td th:text="${user.nombre}">Nombre</td>
                                 <td th:text="${user.email}">Email</td>
                                 <td>-</td>
@@ -862,15 +1118,18 @@
                     <div class="faq-container">
                         <div class="faq-item">
                             <h4><i class="fas fa-question"></i> ¿Cómo agregó un nuevo producto?</h4>
-                            <p>Ve a la sección de Productos > Añadir Producto e ingresa los detalles del producto. Luego haz clic en "Guardar Producto".</p>
+                            <p>Ve a la sección de Productos > Añadir Producto e ingresa los detalles del producto. Luego
+                                haz clic en "Guardar Producto".</p>
                         </div>
                         <div class="faq-item">
                             <h4><i class="fas fa-question"></i> ¿Cómo gestiono usuarios?</h4>
-                            <p>Accede a Usuarios > Gestionar Usuarios para ver la lista de usuarios y editar sus permisos.</p>
+                            <p>Accede a Usuarios > Gestionar Usuarios para ver la lista de usuarios y editar sus
+                                permisos.</p>
                         </div>
                         <div class="faq-item">
                             <h4><i class="fas fa-question"></i> ¿Cómo veo los reportes de ventas?</h4>
-                            <p>Dirígete a Ventas > Reportes para ver gráficos y estadísticas detalladas de tus ventas.</p>
+                            <p>Dirígete a Ventas > Reportes para ver gráficos y estadísticas detalladas de tus ventas.
+                            </p>
                         </div>
                         <div class="faq-item">
                             <h4><i class="fas fa-question"></i> ¿Cómo creo un respaldo?</h4>
@@ -878,7 +1137,8 @@
                         </div>
                         <div class="contact-support">
                             <h3>¿Necesitas más ayuda?</h3>
-                            <p>Contáctanos en <strong>soporte@cultivus.com</strong> o llama al <strong>+34 123 456 789</strong></p>
+                            <p>Contáctanos en <strong>soporte@cultivus.com</strong> o llama al <strong>+34 123 456
+                                    789</strong></p>
                         </div>
                     </div>
                 </div>
@@ -886,89 +1146,111 @@
 
             <!-- VERIFICACIÓN DE TIENDAS PAGE -->
             <div class="page" id="verificacion-tiendas-page" style="display:none;">
-
-                <!-- Pendientes -->
-                <div class="page-card" style="margin-bottom:24px;">
-                    <h2><i class="fas fa-hourglass-half" style="color:#FF9800;"></i> Solicitudes Pendientes</h2>
-                    <p style="color:#999;margin-bottom:16px;">Vendedores que esperan aprobación para operar su tienda.</p>
-
-                    <div th:if="${#lists.isEmpty(vendedoresPendientes)}" style="text-align:center;padding:40px;color:#999;">
-                        <i class="fas fa-check-circle" style="font-size:40px;color:#4CAF50;margin-bottom:12px;display:block;"></i>
-                        <p>No hay solicitudes pendientes. ¡Todo al día!</p>
-                    </div>
-
-                    <table class="table" th:unless="${#lists.isEmpty(vendedoresPendientes)}">
-                        <thead>
-                            <tr>
-                                <th>Vendedor</th>
-                                <th>Email</th>
-                                <th>Razón Social</th>
-                                <th>Teléfono</th>
-                                <th>Descripción</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="v : ${vendedoresPendientes}">
-                                <td th:text="${v.nombre}">Nombre</td>
-                                <td th:text="${v.email}">email@ejemplo.com</td>
-                                <td th:text="${v.perfilVendedor.razonSocial}">Razón Social</td>
-                                <td th:text="${v.perfilVendedor.telefonoContacto}">Teléfono</td>
-                                <td th:text="${v.perfilVendedor.descripcionNegocio != null ? v.perfilVendedor.descripcionNegocio : '-'}">Descripción</td>
-                                <td style="white-space:nowrap;">
-                                    <form th:action="@{/admin/tiendas/{id}/aprobar(id=${v.id})}" method="post" style="display:inline;">
-                                        <button type="submit" class="btn-action" style="background:#4CAF50;">
-                                            <i class="fas fa-check"></i> Aprobar
-                                        </button>
-                                    </form>
-                                    <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post" style="display:inline;margin-left:6px;">
-                                        <button type="submit" class="btn-action" style="background:#f44336;">
-                                            <i class="fas fa-times"></i> Rechazar
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Verificados -->
                 <div class="page-card">
-                    <h2><i class="fas fa-store" style="color:#4CAF50;"></i> Tiendas Verificadas</h2>
-                    <p style="color:#999;margin-bottom:16px;">Vendedores con tienda activa y aprobada.</p>
-
-                    <div th:if="${#lists.isEmpty(vendedoresVerificados)}" style="text-align:center;padding:40px;color:#999;">
-                        <i class="fas fa-store-slash" style="font-size:40px;color:#ccc;margin-bottom:12px;display:block;"></i>
-                        <p>Aún no hay tiendas verificadas.</p>
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px; flex-wrap:wrap; gap:15px;">
+                        <h2>
+                            <i class="fas fa-store" th:style="${estadoFilter == 'VERIFICADO' ? 'color:#4CAF50;' : 'color:#FF9800;'}"></i>
+                            <span th:text="${estadoFilter == 'VERIFICADO' ? 'Tiendas Verificadas' : 'Solicitudes de Tiendas Pendientes'}">Solicitudes de Tiendas</span>
+                        </h2>
+                        
+                        <form th:action="@{/admin/verificacion-tiendas}" method="get" style="display:flex; gap:10px; align-items:center;">
+                            <label style="font-weight:600; color:#555;">Mostrar:</label>
+                            <select name="estado" onchange="this.form.submit()" style="padding:8px 15px; border:1px solid #ddd; border-radius:20px; outline:none; background:white; cursor:pointer;">
+                                <option value="PENDIENTE" th:selected="${estadoFilter == 'PENDIENTE' or estadoFilter == null}">Pendientes de Aprobación</option>
+                                <option value="VERIFICADO" th:selected="${estadoFilter == 'VERIFICADO'}">Verificadas</option>
+                            </select>
+                        </form>
                     </div>
 
-                    <table class="table" th:unless="${#lists.isEmpty(vendedoresVerificados)}">
-                        <thead>
-                            <tr>
-                                <th>Vendedor</th>
-                                <th>Email</th>
-                                <th>Razón Social</th>
-                                <th>Estado</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="v : ${vendedoresVerificados}">
-                                <td th:text="${v.nombre}">Nombre</td>
-                                <td th:text="${v.email}">email@ejemplo.com</td>
-                                <td th:text="${v.perfilVendedor.razonSocial}">Razón Social</td>
-                                <td><span class="badge badge-active"><i class="fas fa-check-circle"></i> Verificado</span></td>
-                                <td>
-                                    <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post"
-                                          onsubmit="return confirm('¿Revocar verificación a esta tienda?')">
-                                        <button type="submit" class="btn-action" style="background:#FF9800;">
-                                            <i class="fas fa-ban"></i> Revocar
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div th:if="${vendedores == null or vendedores.empty}" style="text-align:center; padding:40px; color:#999;">
+                        <i th:class="${estadoFilter == 'VERIFICADO' ? 'fas fa-store-slash' : 'fas fa-check-circle'}"
+                           th:style="${estadoFilter == 'VERIFICADO' ? 'font-size:48px; color:#ccc; margin-bottom:15px; display:block;' : 'font-size:48px; color:#4CAF50; margin-bottom:15px; display:block;'}"></i>
+                        <p style="font-size:18px;" th:text="${estadoFilter == 'VERIFICADO' ? 'Aún no hay tiendas verificadas.' : 'No hay solicitudes pendientes. ¡Todo al día!'}">Sin datos</p>
+                    </div>
+
+                    <div th:if="${vendedores != null and !vendedores.empty}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Vendedor</th>
+                                    <th>Email</th>
+                                    <th>Razón Social</th>
+                                    <th>Teléfono</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="v : ${vendedores.content}">
+                                    <td th:text="${v.nombre}">Nombre</td>
+                                    <td th:text="${v.email}">email@ejemplo.com</td>
+                                    <td th:text="${v.perfilVendedor != null ? v.perfilVendedor.razonSocial : '-'}">Razón Social</td>
+                                    <td th:text="${v.perfilVendedor != null ? v.perfilVendedor.telefonoContacto : '-'}">Teléfono</td>
+                                    <td>
+                                        <span class="badge" th:classappend="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'badge-success' : 'badge-warning'}">
+                                            <i th:class="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'fas fa-check-circle' : 'fas fa-hourglass-half'}"></i>
+                                            <span th:text="${v.perfilVendedor != null and v.perfilVendedor.verificado ? 'Verificado' : 'Pendiente'}">Estado</span>
+                                        </span>
+                                    </td>
+                                    <td style="white-space:nowrap;">
+                                        <!-- Acciones para Pendientes -->
+                                        <div th:if="${v.perfilVendedor == null or !v.perfilVendedor.verificado}">
+                                            <form th:action="@{/admin/tiendas/{id}/aprobar(id=${v.id})}" method="post" style="display:inline;">
+                                                <button type="submit" class="btn-action" style="background:#4CAF50;">
+                                                    <i class="fas fa-check"></i> Aprobar
+                                                </button>
+                                            </form>
+                                            <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post" style="display:inline; margin-left:6px;">
+                                                <button type="submit" class="btn-action" style="background:#f44336;">
+                                                    <i class="fas fa-times"></i> Rechazar
+                                                </button>
+                                            </form>
+                                        </div>
+                                        <!-- Acciones para Verificados -->
+                                        <div th:if="${v.perfilVendedor != null and v.perfilVendedor.verificado}">
+                                            <form th:action="@{/admin/tiendas/{id}/rechazar(id=${v.id})}" method="post" onsubmit="return confirm('¿Revocar verificación a esta tienda?')">
+                                                <button type="submit" class="btn-action" style="background:#FF9800;">
+                                                    <i class="fas fa-ban"></i> Revocar
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Paginación Vendedores -->
+                        <div th:if="${vendedores.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/verificacion-tiendas(page=${vendedores.number - 1}, estado=${estadoFilter})}"
+                                th:if="${vendedores.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${vendedores.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, vendedores.totalPages - 1)}"
+                                    th:if="${i >= vendedores.number - 2 and i <= vendedores.number + 2}">
+                                    <a th:href="@{/admin/verificacion-tiendas(page=${i}, estado=${estadoFilter})}" th:text="${i + 1}"
+                                        th:style="${i == vendedores.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/verificacion-tiendas(page=${vendedores.number + 1}, estado=${estadoFilter})}"
+                                th:if="${vendedores.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${vendedores.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -976,30 +1258,72 @@
             <div class="page" id="sesiones-page" style="display:none;">
                 <div class="page-card">
                     <h2><i class="fas fa-user-clock"></i> Sesiones Activas (Últimas 24h)</h2>
-                    <p style="color:#999;margin-bottom:16px;">Usuarios que han interactuado con la plataforma recientemente.</p>
-                    
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Usuario</th>
-                                <th>Email</th>
-                                <th>Rol</th>
-                                <th>Última Conexión</th>
-                                <th>Estado</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="user : ${usuariosActivos}">
-                                <td th:text="${user.nombre}">Nombre</td>
-                                <td th:text="${user.email}">email@ejemplo.com</td>
-                                <td>
-                                    <span class="badge" th:classappend="${user.rol != null ? (user.rol.name() == 'ADMIN' ? 'badge-admin' : (user.rol.name() == 'VENDEDOR' ? 'badge-mod' : 'badge-user')) : 'badge-user'}" th:text="${user.rol != null ? user.rol : 'SIN ROL'}">Rol</span>
-                                </td>
-                                <td th:text="${#temporals.format(user.ultimaConexion, 'dd/MM/yyyy HH:mm')}">Fecha</td>
-                                <td><span class="badge badge-active">Conectado</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <p style="color:#999;margin-bottom:16px;">Usuarios que han interactuado con la plataforma
+                        recientemente.</p>
+
+                    <div th:if="${usuariosActivos != null and !usuariosActivos.empty}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Usuario</th>
+                                    <th>Email</th>
+                                    <th>Rol</th>
+                                    <th>Última Conexión</th>
+                                    <th>Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="user : ${usuariosActivos.content}">
+                                    <td th:text="${user.nombre}">Nombre</td>
+                                    <td th:text="${user.email}">email@ejemplo.com</td>
+                                    <td>
+                                        <span class="badge"
+                                            th:classappend="${user.rol != null ? (user.rol.name() == 'ADMIN' ? 'badge-admin' : (user.rol.name() == 'VENDEDOR' ? 'badge-mod' : 'badge-user')) : 'badge-user'}"
+                                            th:text="${user.rol != null ? user.rol : 'SIN ROL'}">Rol</span>
+                                    </td>
+                                    <td th:text="${user.ultimaConexion != null ? #temporals.format(user.ultimaConexion, 'dd/MM/yyyy HH:mm') : '-'}">Fecha</td>
+                                    <td><span class="badge badge-active">Conectado</span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Paginación Sesiones Activas -->
+                        <div th:if="${usuariosActivos.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/sesiones(page=${usuariosActivos.number - 1})}"
+                                th:if="${usuariosActivos.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${usuariosActivos.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, usuariosActivos.totalPages - 1)}"
+                                    th:if="${i >= usuariosActivos.number - 2 and i <= usuariosActivos.number + 2}">
+                                    <a th:href="@{/admin/sesiones(page=${i})}" th:text="${i + 1}"
+                                        th:style="${i == usuariosActivos.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/sesiones(page=${usuariosActivos.number + 1})}"
+                                th:if="${usuariosActivos.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${usuariosActivos.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div th:if="${usuariosActivos == null or usuariosActivos.empty}" style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-user-clock" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                        <p style="font-size:18px;">No hay usuarios activos recientemente.</p>
+                    </div>
                 </div>
             </div>
 
@@ -1014,7 +1338,8 @@
                         </div>
                         <div class="form-group">
                             <label>Mensaje</label>
-                            <textarea name="mensaje" rows="3" placeholder="Escriba el anuncio aquí..." required></textarea>
+                            <textarea name="mensaje" rows="3" placeholder="Escriba el anuncio aquí..."
+                                required></textarea>
                         </div>
                         <div class="form-row">
                             <div class="form-group">
@@ -1028,37 +1353,78 @@
                             </div>
                             <div class="form-group">
                                 <label>Usuario ID (Opcional)</label>
-                                <input type="text" name="usuarioId" placeholder="ID de usuario específico o vacío para todos">
+                                <input type="text" name="usuarioId"
+                                    placeholder="ID de usuario específico o vacío para todos">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary"><i class="fas fa-send"></i> Enviar a todos</button>
+                        <button type="submit" class="btn btn-primary"><i class="fas fa-send"></i> Enviar a
+                            todos</button>
                     </form>
                 </div>
 
                 <div class="page-card">
-                    <h2><i class="fas fa-history"></i> Historial de Notificaciones</h2>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Fecha</th>
-                                <th>Título</th>
-                                <th>Tipo</th>
-                                <th>Acción</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="n : ${notificaciones}">
-                                <td th:text="${#temporals.format(n.fecha, 'dd/MM HH:mm')}">Fecha</td>
-                                <td th:text="${n.titulo}">Título</td>
-                                <td><span class="badge" th:text="${n.tipo}">Tipo</span></td>
-                                <td>
-                                    <form th:action="@{/admin/notificaciones/{id}/eliminar(id=${n.id})}" method="post">
-                                        <button type="submit" class="btn-action" style="background:#f44336;"><i class="fas fa-trash"></i></button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div th:if="${notificacionesPaginadas != null and !notificacionesPaginadas.empty}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Fecha</th>
+                                    <th>Título</th>
+                                    <th>Tipo</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="n : ${notificacionesPaginadas.content}">
+                                    <td th:text="${n.fecha != null ? #temporals.format(n.fecha, 'dd/MM HH:mm') : '-'}">Fecha</td>
+                                    <td th:text="${n.titulo}">Título</td>
+                                    <td><span class="badge" th:text="${n.tipo}">Tipo</span></td>
+                                    <td>
+                                        <form th:action="@{/admin/notificaciones/{id}/eliminar(id=${n.id})}" method="post">
+                                            <button type="submit" class="btn-action" style="background:#f44336;"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Paginación Notificaciones -->
+                        <div th:if="${notificacionesPaginadas.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/notificaciones(page=${notificacionesPaginadas.number - 1})}"
+                                th:if="${notificacionesPaginadas.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${notificacionesPaginadas.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, notificacionesPaginadas.totalPages - 1)}"
+                                    th:if="${i >= notificacionesPaginadas.number - 2 and i <= notificacionesPaginadas.number + 2}">
+                                    <a th:href="@{/admin/notificaciones(page=${i})}" th:text="${i + 1}"
+                                        th:style="${i == notificacionesPaginadas.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/notificaciones(page=${notificacionesPaginadas.number + 1})}"
+                                th:if="${notificacionesPaginadas.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${notificacionesPaginadas.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div th:if="${notificacionesPaginadas == null or notificacionesPaginadas.empty}" style="text-align:center; padding:40px; color:#999;">
+                        <i class="fas fa-history" style="font-size:48px; color:#ccc; margin-bottom:15px; display:block;"></i>
+                        <p style="font-size:18px;">No hay notificaciones enviadas.</p>
+                    </div>
                 </div>
             </div>
 
@@ -1066,24 +1432,64 @@
             <div class="page" id="mensajes-page" style="display:none;">
                 <div class="page-card">
                     <h2><i class="fas fa-envelope-open-text"></i> Centro de Mensajes</h2>
-                    <div th:if="${#lists.isEmpty(mensajesRecibidos)}" style="text-align:center;padding:40px;color:#999;">
-                        <i class="fas fa-inbox" style="font-size:40px;margin-bottom:12px;display:block;"></i>
-                        <p>No hay mensajes nuevos.</p>
-                    </div>
-                    <div class="activity-log" th:unless="${#lists.isEmpty(mensajesRecibidos)}">
-                        <div class="activity-item" th:each="m : ${mensajesRecibidos}">
-                            <div class="activity-icon" style="background: #9C27B0;">
-                                <i class="fas fa-user"></i>
-                            </div>
-                            <div class="activity-content">
-                                <h4 th:text="${m.emisorNombre + ' - ' + m.asunto}">Remitente</h4>
-                                <p th:text="${m.contenido}">Contenido del mensaje...</p>
-                                <span class="time" th:text="${#temporals.format(m.fecha, 'dd/MM/yyyy HH:mm')}">Fecha</span>
-                                <form th:action="@{/admin/mensajes/{id}/eliminar(id=${m.id})}" method="post" style="display:inline;">
-                                    <button type="submit" style="color:red; background:none; border:none; cursor:pointer;"><i class="fas fa-trash"></i></button>
-                                </form>
+                    <div th:if="${mensajesRecibidosPaginados != null and !mensajesRecibidosPaginados.empty}">
+                        <div class="activity-log">
+                            <div class="activity-item" th:each="m : ${mensajesRecibidosPaginados.content}">
+                                <div class="activity-icon" style="background: #9C27B0;">
+                                    <i class="fas fa-user"></i>
+                                </div>
+                                <div class="activity-content">
+                                    <h4 th:text="${m.emisorNombre + ' - ' + m.asunto}">Remitente</h4>
+                                    <p th:text="${m.contenido}">Contenido del mensaje...</p>
+                                    <span class="time"
+                                        th:text="${m.fecha != null ? #temporals.format(m.fecha, 'dd/MM/yyyy HH:mm') : '-'}">Fecha</span>
+                                    <form th:action="@{/admin/mensajes/{id}/eliminar(id=${m.id})}" method="post"
+                                        style="display:inline;">
+                                        <button type="submit"
+                                            style="color:red; background:none; border:none; cursor:pointer;"><i
+                                                class="fas fa-trash"></i></button>
+                                    </form>
+                                </div>
                             </div>
                         </div>
+
+                        <!-- Paginación Mensajes -->
+                        <div th:if="${mensajesRecibidosPaginados.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/mensajes(page=${mensajesRecibidosPaginados.number - 1})}"
+                                th:if="${mensajesRecibidosPaginados.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${mensajesRecibidosPaginados.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, mensajesRecibidosPaginados.totalPages - 1)}"
+                                    th:if="${i >= mensajesRecibidosPaginados.number - 2 and i <= mensajesRecibidosPaginados.number + 2}">
+                                    <a th:href="@{/admin/mensajes(page=${i})}" th:text="${i + 1}"
+                                        th:style="${i == mensajesRecibidosPaginados.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/mensajes(page=${mensajesRecibidosPaginados.number + 1})}"
+                                th:if="${mensajesRecibidosPaginados.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${mensajesRecibidosPaginados.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div th:if="${mensajesRecibidosPaginados == null or mensajesRecibidosPaginados.empty}"
+                        style="text-align:center;padding:40px;color:#999;">
+                        <i class="fas fa-inbox" style="font-size:40px;margin-bottom:12px;display:block;"></i>
+                        <p>No hay mensajes nuevos.</p>
                     </div>
                 </div>
             </div>
@@ -1092,19 +1498,24 @@
             <div class="page" id="configuracion-page" style="display:none;">
                 <div class="page-card">
                     <h2><i class="fas fa-tools"></i> Límites y Parámetros del Sistema</h2>
-                    <p style="color:#999;margin-bottom:20px;">Ajusta los parámetros operativos de la plataforma. Los cambios se aplican de inmediato.</p>
-                    
-                    <div class="config-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
-                        <div class="report-card" th:each="config : ${configuraciones}" style="text-align: left; padding: 20px;">
+                    <p style="color:#999;margin-bottom:20px;">Ajusta los parámetros operativos de la plataforma. Los
+                        cambios se aplican de inmediato.</p>
+
+                    <div class="config-grid"
+                        style="display: grid; grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 20px;">
+                        <div class="report-card" th:each="config : ${configuraciones}"
+                            style="text-align: left; padding: 20px;">
                             <h4 th:text="${config.clave}" style="color: #4CAF50; margin-bottom: 8px;">CLAVE</h4>
-                            <p th:text="${config.descripcion}" style="font-size: 0.9em; color: #666; margin-bottom: 15px; height: 40px; overflow: hidden;">Descripción</p>
-                            
-                            <form th:action="@{/admin/configuracion/actualizar}" method="post" style="display: flex; gap: 10px;">
+                            <p th:text="${config.descripcion}"
+                                style="font-size: 0.9em; color: #666; margin-bottom: 15px; height: 40px; overflow: hidden;">
+                                Descripción</p>
+
+                            <form th:action="@{/admin/configuracion/actualizar}" method="post"
+                                style="display: flex; gap: 10px;">
                                 <input type="hidden" name="id" th:value="${config.id}">
-                                <input th:type="${config.tipo == 'NUMBER' ? 'number' : 'text'}" 
-                                       name="valor" th:value="${config.valor}" 
-                                       class="form-control" 
-                                       style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
+                                <input th:type="${config.tipo == 'NUMBER' ? 'number' : 'text'}" name="valor"
+                                    th:value="${config.valor}" class="form-control"
+                                    style="flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px;">
                                 <button type="submit" class="btn-action" style="background: #4CAF50;">
                                     <i class="fas fa-save"></i>
                                 </button>
@@ -1118,53 +1529,97 @@
             <div class="page" id="moderacion-page" style="display: none;">
                 <div class="page-card">
                     <h2><i class="fas fa-gavel"></i> Moderación de Catálogo</h2>
-                    <p style="color:#999;margin-bottom:16px;">Sugerencias de productos enviadas por vendedores para el catálogo global.</p>
+                    <p style="color:#999;margin-bottom:16px;">Sugerencias de productos enviadas por vendedores para el
+                        catálogo global.</p>
 
-                    <div th:if="${#lists.isEmpty(catalogoPendiente)}" style="text-align:center;padding:40px;color:#999;">
-                        <i class="fas fa-check-circle" style="font-size:40px;color:#4CAF50;margin-bottom:12px;display:block;"></i>
+                    <div th:if="${catalogoPendiente == null or catalogoPendiente.empty}"
+                        style="text-align:center;padding:40px;color:#999;">
+                        <i class="fas fa-check-circle"
+                            style="font-size:40px;color:#4CAF50;margin-bottom:12px;display:block;"></i>
                         <p>No hay sugerencias pendientes de moderación. ¡Buen trabajo!</p>
                     </div>
 
-                    <table class="table" th:unless="${#lists.isEmpty(catalogoPendiente)}">
-                        <thead>
-                            <tr>
-                                <th>Imagen</th>
-                                <th>Producto</th>
-                                <th>Categoría</th>
-                                <th>Unidad</th>
-                                <th>Descripción</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr th:each="p : ${catalogoPendiente}">
-                                <td>
-                                    <img th:if="${p.imagenUrl}" th:src="${p.imagenUrl}" style="width:50px; height:50px; object-fit:cover; border-radius:8px;">
-                                    <i th:unless="${p.imagenUrl}" class="fas fa-leaf" style="color:#4CAF50;"></i>
-                                </td>
-                                <td th:text="${p.nombre}">Nombre</td>
-                                <td>
-                                    <span class="badge" style="background:#E8F5E9; color:#2E7D32;" 
-                                          th:text="${p.categoria != null ? p.categoria.nombre : 'Sin categoría'}">Categoría</span>
-                                </td>
-                                <td th:text="${p.unidadMedida}">kg</td>
-                                <td th:text="${p.descripcion}" style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">Descripción</td>
-                                <td style="white-space:nowrap;">
-                                    <form th:action="@{/admin/catalogo/{id}/aprobar(id=${p.id})}" method="post" style="display:inline;">
-                                        <button type="submit" class="btn-action" style="background:#4CAF50; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">
-                                            <i class="fas fa-check"></i> Aprobar
-                                        </button>
-                                    </form>
-                                    <form th:action="@{/admin/catalogo/{id}/rechazar(id=${p.id})}" method="post" style="display:inline; margin-left:6px;">
-                                        <button type="submit" class="btn-action" style="background:#f44336; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;"
+                    <div th:if="${catalogoPendiente != null and !catalogoPendiente.empty}">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Producto</th>
+                                    <th>Categoría</th>
+                                    <th>Unidad</th>
+                                    <th>Descripción</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="p : ${catalogoPendiente.content}">
+                                    <td>
+                                        <img th:if="${p.imagenUrl}" th:src="${p.imagenUrl}"
+                                            style="width:50px; height:50px; object-fit:cover; border-radius:8px;">
+                                        <i th:unless="${p.imagenUrl}" class="fas fa-leaf" style="color:#4CAF50;"></i>
+                                    </td>
+                                    <td th:text="${p.nombre}">Nombre</td>
+                                    <td>
+                                        <span class="badge" style="background:#E8F5E9; color:#2E7D32;"
+                                            th:text="${p.categoria != null ? p.categoria.nombre : 'Sin categoría'}">Categoría</span>
+                                    </td>
+                                    <td th:text="${p.unidadMedida}">kg</td>
+                                    <td th:text="${p.descripcion}"
+                                        style="max-width:200px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
+                                        Descripción</td>
+                                    <td style="white-space:nowrap;">
+                                        <form th:action="@{/admin/catalogo/{id}/aprobar(id=${p.id})}" method="post"
+                                            style="display:inline;">
+                                            <button type="submit" class="btn-action"
+                                                style="background:#4CAF50; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;">
+                                                <i class="fas fa-check"></i> Aprobar
+                                            </button>
+                                        </form>
+                                        <form th:action="@{/admin/catalogo/{id}/rechazar(id=${p.id})}" method="post"
+                                            style="display:inline; margin-left:6px;">
+                                            <button type="submit" class="btn-action"
+                                                style="background:#f44336; color:white; border:none; padding:6px 12px; border-radius:6px; cursor:pointer;"
                                                 onclick="return confirm('¿Rechazar esta sugerencia?')">
-                                            <i class="fas fa-times"></i> Rechazar
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                                                <i class="fas fa-times"></i> Rechazar
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Paginación Moderación de Catálogo -->
+                        <div th:if="${catalogoPendiente.totalPages > 1}" class="paginacion-container"
+                            style="display:flex; justify-content:center; align-items:center; gap:15px; margin-top:30px; padding:20px 0;">
+                            <a th:href="@{/admin/moderacion(page=${catalogoPendiente.number - 1})}"
+                                th:if="${catalogoPendiente.hasPrevious()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </a>
+                            <button th:unless="${catalogoPendiente.hasPrevious()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                <i class="fas fa-chevron-left"></i> Anterior
+                            </button>
+                            <div style="display:flex; gap:5px;">
+                                <span th:each="i : ${#numbers.sequence(0, catalogoPendiente.totalPages - 1)}"
+                                    th:if="${i >= catalogoPendiente.number - 2 and i <= catalogoPendiente.number + 2}">
+                                    <a th:href="@{/admin/moderacion(page=${i})}" th:text="${i + 1}"
+                                        th:style="${i == catalogoPendiente.number ? 'background:#4facfe; color:white; border:1px solid #4facfe;' : 'background:white; color:#333; border:1px solid #ccc;'}"
+                                        style="padding:8px 14px; border-radius:5px; text-decoration:none; font-weight:600; cursor:pointer; transition: 0.3s;">
+                                    </a>
+                                </span>
+                            </div>
+                            <a th:href="@{/admin/moderacion(page=${catalogoPendiente.number + 1})}"
+                                th:if="${catalogoPendiente.hasNext()}"
+                                style="padding:8px 16px; border:1px solid #ccc; border-radius:5px; background:white; cursor:pointer; text-decoration:none; color:#333;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </a>
+                            <button th:unless="${catalogoPendiente.hasNext()}" disabled
+                                style="padding:8px 16px; border:1px solid #eee; border-radius:5px; background:#f9f9f9; color:#aaa; cursor:not-allowed;">
+                                Siguiente <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1173,7 +1628,7 @@
     <script th:src="@{/js/admin-panel.js}"></script>
     <script th:inline="javascript">
         /*<![CDATA[*/
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const activePage = /*[[${activePage}]]*/ 'dashboard';
             if (typeof navigateToPage === 'function') {
                 navigateToPage(activePage);
@@ -1182,4 +1637,5 @@
         /*]]>*/
     </script>
 </body>
+
 </html>

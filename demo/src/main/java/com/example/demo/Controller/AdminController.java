@@ -56,24 +56,57 @@ public class AdminController {
         return true;
     }
 
-    private void cargarDatosDashboard(Model model, Usuario admin) {
+    /**
+     * Carga todos los datos necesarios para el dashboard
+     */
+    private void cargarDatosDashboard(Model model, Usuario admin, String activePage, int page, String search, String filterParam) {
         model.addAttribute("admin", admin);
-        model.addAttribute("estadisticas", adminService.obtenerEstadisticas());
-        model.addAttribute("usuarios", adminService.obtenerTodosLosUsuarios());
         model.addAttribute("roles", ROLES);
-        model.addAttribute("productos", adminService.obtenerTodosLosProductos());
-        model.addAttribute("resenas", adminService.obtenerTodasLasResenas());
+        model.addAttribute("estadisticas", adminService.obtenerEstadisticas());
         model.addAttribute("categorias", adminService.obtenerTodasLasCategorias());
-        model.addAttribute("pedidos", adminService.obtenerTodosLosPedidos());
-        model.addAttribute("vendedoresPendientes", adminService.obtenerVendedoresPendientes());
-        model.addAttribute("vendedoresVerificados", adminService.obtenerVendedoresVerificados());
-        model.addAttribute("usuariosActivos", adminService.obtenerUsuariosActivos());
-        model.addAttribute("notificaciones", adminService.obtenerTodasLasNotificaciones());
-        model.addAttribute("mensajesRecibidos", adminService.obtenerTodosLosMensajes());
         model.addAttribute("configuraciones", configService.obtenerTodas());
+        
+        // Counts for dashboard badges
+        model.addAttribute("notificacionesCount", adminService.obtenerTotalNotificaciones());
+        model.addAttribute("mensajesRecibidosCount", adminService.obtenerTotalMensajes());
+        model.addAttribute("vendedoresPendientesCount", adminService.obtenerCantidadVendedoresPendientes());
+        model.addAttribute("catalogoPendienteCount", catalogoService.obtenerCantidadCatalogoPendiente());
 
-        // ── Datos de moderación del catálogo ──
-        model.addAttribute("catalogoPendiente", catalogoService.listarPendientes());
+        // Default empty pages to avoid NPE in Thymeleaf
+        model.addAttribute("usuarios", org.springframework.data.domain.Page.empty());
+        model.addAttribute("productos", org.springframework.data.domain.Page.empty());
+        model.addAttribute("resenas", org.springframework.data.domain.Page.empty());
+        model.addAttribute("pedidos", org.springframework.data.domain.Page.empty());
+        model.addAttribute("vendedores", org.springframework.data.domain.Page.empty());
+        model.addAttribute("usuariosActivos", org.springframework.data.domain.Page.empty());
+        model.addAttribute("notificacionesPaginadas", org.springframework.data.domain.Page.empty());
+        model.addAttribute("mensajesPaginados", org.springframework.data.domain.Page.empty());
+        model.addAttribute("catalogoPendiente", org.springframework.data.domain.Page.empty());
+
+        // Paginación dinámica según la pestaña activa
+        if ("usuarios".equals(activePage)) {
+            model.addAttribute("usuarios", adminService.obtenerUsuariosPaginados(page, 50, search, filterParam));
+        } else if ("catalogo".equals(activePage)) {
+            model.addAttribute("productos", adminService.obtenerProductosPaginados(page, 50, search, filterParam));
+        } else if ("resenas".equals(activePage)) {
+            model.addAttribute("resenas", adminService.obtenerResenasPaginadas(page, 50));
+        } else if ("pedidos".equals(activePage)) {
+            model.addAttribute("pedidos", adminService.obtenerPedidosPaginados(page, 50));
+        } else if ("verificacion-tiendas".equals(activePage)) {
+            boolean verificado = "VERIFICADO".equals(filterParam);
+            model.addAttribute("vendedores", adminService.obtenerVendedoresPorEstadoVerificacionPaginado(verificado, page, 50));
+        } else if ("sesiones".equals(activePage)) {
+            model.addAttribute("usuariosActivos", adminService.obtenerUsuariosActivosPaginado(page, 50));
+        } else if ("notificaciones".equals(activePage)) {
+            model.addAttribute("notificacionesPaginadas", adminService.obtenerNotificacionesPaginadas(page, 50));
+        } else if ("mensajes".equals(activePage)) {
+            model.addAttribute("mensajesPaginados", adminService.obtenerMensajesPaginados(page, 50));
+        } else if ("moderacion".equals(activePage)) {
+            model.addAttribute("catalogoPendiente", catalogoService.listarPendientesPaginados(page, 50));
+        }
+        
+        model.addAttribute("searchQuery", search);
+        model.addAttribute("filterParam", filterParam);
     }
 
     // ==================== DASHBOARD ====================
@@ -87,16 +120,16 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "dashboard", 0, null, null);
         model.addAttribute("activePage", "dashboard");
 
         return "admin-dashboard";
     }
 
-    // ==================== GESTIÓN DE USUARIOS ====================
+    // ==================== ANALÍTICAS POWER BI ====================
 
-    @GetMapping("/usuarios")
-    public String mostrarUsuarios(HttpSession session, Model model,
+    @GetMapping("/powerbi")
+    public String mostrarPowerBi(HttpSession session, Model model,
             RedirectAttributes redirectAttributes) {
 
         if (!verificarAdmin(session, redirectAttributes)) {
@@ -104,8 +137,30 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "powerbi", 0, null, null);
+        model.addAttribute("activePage", "powerbi");
+
+        return "admin-dashboard";
+    }
+
+    // ==================== GESTIÓN DE USUARIOS ====================
+
+    @GetMapping("/usuarios")
+    public String mostrarUsuarios(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String rol,
+            HttpSession session, Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (!verificarAdmin(session, redirectAttributes)) {
+            return "redirect:/usuario/login";
+        }
+
+        Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
+        cargarDatosDashboard(model, admin, "usuarios", page, search, rol);
         model.addAttribute("activePage", "usuarios");
+        model.addAttribute("rolFilter", rol);
 
         return "admin-dashboard";
     }
@@ -154,7 +209,11 @@ public class AdminController {
     // ==================== GESTIÓN DE PRODUCTOS ====================
 
     @GetMapping("/productos")
-    public String mostrarProductos(HttpSession session, Model model,
+    public String mostrarProductos(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String search,
+            @RequestParam(required = false) String categoriaId,
+            HttpSession session, Model model,
             RedirectAttributes redirectAttributes) {
 
         if (!verificarAdmin(session, redirectAttributes)) {
@@ -162,8 +221,9 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "catalogo", page, search, categoriaId);
         model.addAttribute("activePage", "catalogo");
+        model.addAttribute("categoriaFilter", categoriaId);
 
         return "admin-dashboard";
     }
@@ -191,7 +251,9 @@ public class AdminController {
     // ==================== GESTIÓN DE RESEÑAS ====================
 
     @GetMapping("/resenas")
-    public String mostrarResenas(HttpSession session, Model model,
+    public String mostrarResenas(
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session, Model model,
             RedirectAttributes redirectAttributes) {
 
         if (!verificarAdmin(session, redirectAttributes)) {
@@ -199,8 +261,25 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "resenas", page, null, null);
         model.addAttribute("activePage", "actividad");
+
+        return "admin-dashboard";
+    }
+
+    // ==================== GESTIÓN DE OFERTAS ====================
+
+    @GetMapping("/ofertas")
+    public String mostrarOfertas(
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (!verificarAdmin(session, redirectAttributes)) return "redirect:/usuario/login";
+
+        Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
+        cargarDatosDashboard(model, admin, "ofertas", page, null, null);
+        org.springframework.data.domain.Page<OfertaVendedor> ofertas = ofertaService.obtenerOfertasPaginadas(page, 50);
+        model.addAttribute("ofertas", ofertas);
+        model.addAttribute("activePage", "ofertas");
 
         return "admin-dashboard";
     }
@@ -225,10 +304,12 @@ public class AdminController {
         return "redirect:/admin/resenas";
     }
 
-    // ==================== VERIFICACIÓN DE TIENDAS ====================
+    // ==================== GESTIÓN DE PEDIDOS ====================
 
-    @GetMapping("/verificacion-tiendas")
-    public String mostrarVerificacionTiendas(HttpSession session, Model model,
+    @GetMapping("/pedidos")
+    public String mostrarPedidos(
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session, Model model,
             RedirectAttributes redirectAttributes) {
 
         if (!verificarAdmin(session, redirectAttributes)) {
@@ -236,8 +317,29 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "pedidos", page, null, null);
+        model.addAttribute("activePage", "ordenes");
+
+        return "admin-dashboard";
+    }
+
+    // ==================== VERIFICACIÓN DE TIENDAS ====================
+
+    @GetMapping("/verificacion-tiendas")
+    public String mostrarVerificacionTiendas(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false, defaultValue = "PENDIENTE") String estado,
+            HttpSession session, Model model,
+            RedirectAttributes redirectAttributes) {
+
+        if (!verificarAdmin(session, redirectAttributes)) {
+            return "redirect:/usuario/login";
+        }
+
+        Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
+        cargarDatosDashboard(model, admin, "verificacion-tiendas", page, null, estado);
         model.addAttribute("activePage", "verificacion-tiendas");
+        model.addAttribute("estadoFilter", estado);
 
         return "admin-dashboard";
     }
@@ -283,7 +385,9 @@ public class AdminController {
     // ==================== SESIONES ====================
 
     @GetMapping("/sesiones")
-    public String mostrarSesiones(HttpSession session, Model model,
+    public String mostrarSesiones(
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session, Model model,
             RedirectAttributes redirectAttributes) {
 
         if (!verificarAdmin(session, redirectAttributes)) {
@@ -291,7 +395,7 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "sesiones", page, null, null);
         model.addAttribute("activePage", "sesiones");
 
         return "admin-dashboard";
@@ -300,7 +404,9 @@ public class AdminController {
     // ==================== NOTIFICACIONES ====================
 
     @GetMapping("/notificaciones")
-    public String mostrarNotificaciones(HttpSession session, Model model,
+    public String mostrarNotificaciones(
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session, Model model,
             RedirectAttributes redirectAttributes) {
 
         if (!verificarAdmin(session, redirectAttributes)) {
@@ -308,7 +414,7 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "notificaciones", page, null, null);
         model.addAttribute("activePage", "notificaciones");
 
         return "admin-dashboard";
@@ -355,7 +461,9 @@ public class AdminController {
     // ==================== MENSAJES ====================
 
     @GetMapping("/mensajes")
-    public String mostrarMensajes(HttpSession session, Model model,
+    public String mostrarMensajes(
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session, Model model,
             RedirectAttributes redirectAttributes) {
 
         if (!verificarAdmin(session, redirectAttributes)) {
@@ -363,7 +471,7 @@ public class AdminController {
         }
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "mensajes", page, null, null);
         model.addAttribute("activePage", "mensajes");
 
         return "admin-dashboard";
@@ -386,15 +494,11 @@ public class AdminController {
     // ==================== CONFIGURACIÓN ====================
 
     @GetMapping("/configuracion")
-    public String mostrarConfiguracion(HttpSession session, Model model,
-            RedirectAttributes redirectAttributes) {
-
-        if (!verificarAdmin(session, redirectAttributes)) {
-            return "redirect:/usuario/login";
-        }
+    public String mostrarConfiguracion(HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (!verificarAdmin(session, redirectAttributes)) return "redirect:/usuario/login";
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "configuracion", 0, null, null);
         model.addAttribute("activePage", "configuracion");
 
         return "admin-dashboard";
@@ -423,20 +527,17 @@ public class AdminController {
     // ==================== MODERACIÓN DE OFERTAS Y CATÁLOGO ====================
 
     @GetMapping("/moderacion")
-    public String mostrarModeracion(HttpSession session, Model model,
-            RedirectAttributes redirectAttributes) {
-
-        if (!verificarAdmin(session, redirectAttributes)) {
-            return "redirect:/usuario/login";
-        }
+    public String mostrarModeracion(
+            @RequestParam(defaultValue = "0") int page,
+            HttpSession session, Model model, RedirectAttributes redirectAttributes) {
+        if (!verificarAdmin(session, redirectAttributes)) return "redirect:/usuario/login";
 
         Usuario admin = (Usuario) session.getAttribute("usuarioLogueado");
-        cargarDatosDashboard(model, admin);
+        cargarDatosDashboard(model, admin, "moderacion", page, null, null);
         model.addAttribute("activePage", "moderacion");
 
         return "admin-dashboard";
     }
-
 
 
     @PostMapping("/catalogo/{id}/aprobar")

@@ -45,6 +45,8 @@ public class CatalogoController {
     public String listarCatalogo(
             @RequestParam(value = "categoria", required = false) List<String> categoriaIds,
             @RequestParam(value = "orden", required = false, defaultValue = "relevancia") String orden,
+            @RequestParam(value = "page", defaultValue = "0") int page,
+            @RequestParam(value = "size", defaultValue = "12") int size,
             Model model, HttpSession session) {
 
         // Obtener productos del catálogo (aprobados y activos)
@@ -87,9 +89,24 @@ public class CatalogoController {
             }
         }
 
+        // Lógica de paginación manual
+        int totalItems = catalogo != null ? catalogo.size() : 0;
+        int totalPages = (int) Math.ceil((double) totalItems / size);
+        
+        List<ProductoCatalogo> paginaCatalogo = new ArrayList<>();
+        if (catalogo != null && !catalogo.isEmpty()) {
+            int start = Math.min(page * size, totalItems);
+            int end = Math.min(start + size, totalItems);
+            paginaCatalogo = catalogo.subList(start, end);
+        }
+
         Usuario usuario = (Usuario) session.getAttribute("usuarioLogueado");
 
-        model.addAttribute("catalogo", catalogo != null ? catalogo : new ArrayList<>());
+        model.addAttribute("catalogo", paginaCatalogo);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", totalPages > 0 ? totalPages : 1);
+        model.addAttribute("totalItems", totalItems);
+        
         model.addAttribute("usuario", usuario);
         model.addAttribute("categorias", categoriaRepository.findAll());
         model.addAttribute("categoriaSeleccionada", categoriaIds);

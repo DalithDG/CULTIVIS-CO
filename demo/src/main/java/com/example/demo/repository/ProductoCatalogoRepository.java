@@ -31,6 +31,9 @@ public interface ProductoCatalogoRepository extends MongoRepository<ProductoCata
     /** Admin: productos pendientes de aprobación */
     List<ProductoCatalogo> findByAprobadoFalseAndActivoTrue();
 
+    // Paginación para Admin de catálogo pendiente
+    org.springframework.data.domain.Page<ProductoCatalogo> findByAprobadoFalseAndActivoTrue(org.springframework.data.domain.Pageable pageable);
+
     /** Productos sugeridos por un vendedor específico */
     List<ProductoCatalogo> findBySugeridoPor(String vendedorId);
 }

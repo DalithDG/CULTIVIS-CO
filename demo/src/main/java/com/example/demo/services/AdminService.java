@@ -11,6 +11,8 @@ import com.example.demo.Model.Mensaje;
 import com.example.demo.Model.embebidos.PerfilAdmin;
 import com.example.demo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -153,10 +155,23 @@ public class AdminService {
     // ==================== GESTIÓN DE USUARIOS ====================
 
     /**
-     * Obtener todos los usuarios
+     * Obtener usuarios paginados y con filtro de búsqueda
      */
-    public List<Usuario> obtenerTodosLosUsuarios() {
-        return usuarioRepository.findAll();
+    public org.springframework.data.domain.Page<Usuario> obtenerUsuariosPaginados(int page, int size, String search, String role) {
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        
+        boolean hasSearch = (search != null && !search.trim().isEmpty());
+        boolean hasRole = (role != null && !role.trim().isEmpty());
+        
+        if (hasSearch && hasRole) {
+            return usuarioRepository.findBySearchAndRole(search, Role.valueOf(role), pageable);
+        } else if (hasSearch) {
+            return usuarioRepository.findByNombreContainingIgnoreCaseOrEmailContainingIgnoreCase(search, search, pageable);
+        } else if (hasRole) {
+            return usuarioRepository.findByRolesContaining(Role.valueOf(role), pageable);
+        }
+        
+        return usuarioRepository.findAll(pageable);
     }
 
     /**
@@ -248,10 +263,23 @@ public class AdminService {
     // ==================== GESTIÓN DE PRODUCTOS ====================
 
     /**
-     * Obtener todos los productos
+     * Obtener productos paginados y con filtro de búsqueda
      */
-    public List<Producto> obtenerTodosLosProductos() {
-        return productoRepository.findAll();
+    public org.springframework.data.domain.Page<Producto> obtenerProductosPaginados(int page, int size, String search, String categoriaId) {
+        org.springframework.data.domain.Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
+        
+        boolean hasSearch = (search != null && !search.trim().isEmpty());
+        boolean hasCategoria = (categoriaId != null && !categoriaId.trim().isEmpty());
+        
+        if (hasSearch && hasCategoria) {
+            return productoRepository.findBySearchAndCategoria(search, categoriaId, pageable);
+        } else if (hasSearch) {
+            return productoRepository.findByNombreContainingIgnoreCaseOrDescripcionContainingIgnoreCase(search, search, pageable);
+        } else if (hasCategoria) {
+            return productoRepository.findByCategoriaId(categoriaId, pageable);
+        }
+        
+        return productoRepository.findAll(pageable);
     }
 
     /**
@@ -274,7 +302,11 @@ public class AdminService {
      * Obtener todas las reseñas
      */
     public List<Resena> obtenerTodasLasResenas() {
-        return resenaRepository.findAll();
+        return resenaRepository.findAll(PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "fecha"))).getContent();
+    }
+
+    public org.springframework.data.domain.Page<Resena> obtenerResenasPaginadas(int page, int size) {
+        return resenaRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "fecha")));
     }
 
     /**
@@ -298,7 +330,11 @@ public class AdminService {
 
     // ==================== GESTIÓN DE PEDIDOS ====================
     public List<Pedido> obtenerTodosLosPedidos() {
-        return pedidoRepository.findAll();
+        return pedidoRepository.findAll(PageRequest.of(0, 50, Sort.by(Sort.Direction.DESC, "createdAt"))).getContent();
+    }
+
+    public org.springframework.data.domain.Page<Pedido> obtenerPedidosPaginados(int page, int size) {
+        return pedidoRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
     }
 
     // ==================== ESTADÍSTICAS ====================
@@ -334,6 +370,11 @@ public class AdminService {
         return notificacionRepository.findAll();
     }
 
+    public org.springframework.data.domain.Page<Notificacion> obtenerNotificacionesPaginadas(int page, int size) {
+        // Asumiendo que no tiene campo createdAt, ordenamos de forma genérica o podemos no ordenar
+        return notificacionRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
+    }
+
     public Notificacion enviarNotificacion(String titulo, String mensaje, String tipo, String usuarioId) {
         Notificacion notificacion = new Notificacion(titulo, mensaje, tipo);
         notificacion.setUsuarioId(usuarioId);
@@ -350,6 +391,11 @@ public class AdminService {
         return mensajeRepository.findAll();
     }
 
+    public org.springframework.data.domain.Page<Mensaje> obtenerMensajesPaginados(int page, int size) {
+        // Mensaje suele tener un id secuencial o fecha, ordenamos por id desc
+        return mensajeRepository.findAll(PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id")));
+    }
+
     public void eliminarMensaje(String id) {
         mensajeRepository.deleteById(id);
     }
@@ -363,5 +409,26 @@ public class AdminService {
                 .filter(u -> u.getUltimaConexion() != null && u.getUltimaConexion().isAfter(hace24Horas))
                 .sorted(Comparator.comparing(Usuario::getUltimaConexion).reversed())
                 .collect(Collectors.toList());
+    }
+
+    public org.springframework.data.domain.Page<Usuario> obtenerVendedoresPorEstadoVerificacionPaginado(boolean verificado, int page, int size) {
+        return usuarioRepository.findVendedoresPorEstadoVerificacion(verificado, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt")));
+    }
+
+    public org.springframework.data.domain.Page<Usuario> obtenerUsuariosActivosPaginado(int page, int size) {
+        LocalDateTime hace24Horas = LocalDateTime.now().minusHours(24);
+        return usuarioRepository.findUsuariosActivosPaginados(hace24Horas, PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "ultimaConexion")));
+    }
+
+    public long obtenerTotalNotificaciones() {
+        return notificacionRepository.count();
+    }
+
+    public long obtenerTotalMensajes() {
+        return mensajeRepository.count();
+    }
+
+    public long obtenerCantidadVendedoresPendientes() {
+        return usuarioRepository.findVendedoresPorEstadoVerificacion(false, PageRequest.of(0, 1)).getTotalElements();
     }
 }

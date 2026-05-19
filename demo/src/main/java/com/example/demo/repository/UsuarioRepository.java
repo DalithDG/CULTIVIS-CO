@@ -24,9 +24,27 @@ public interface UsuarioRepository extends MongoRepository<Usuario, String> {
     // Buscar usuarios por nombre (búsqueda parcial)
     List<Usuario> findByNombreContainingIgnoreCase(String nombre);
 
+    // Búsqueda paginada por nombre o email
+    org.springframework.data.domain.Page<Usuario> findByNombreContainingIgnoreCaseOrEmailContainingIgnoreCase(String nombre, String email, org.springframework.data.domain.Pageable pageable);
+
+    // Búsqueda paginada por rol
+    org.springframework.data.domain.Page<Usuario> findByRolesContaining(Role rol, org.springframework.data.domain.Pageable pageable);
+
+    // Búsqueda paginada por nombre/email Y rol (usando @Query)
+    @org.springframework.data.mongodb.repository.Query("{ '$and': [ { '$or': [ { 'nombre': { $regex: ?0, $options: 'i' } }, { 'email': { $regex: ?0, $options: 'i' } } ] }, { 'roles': ?1 } ] }")
+    org.springframework.data.domain.Page<Usuario> findBySearchAndRole(String search, Role rol, org.springframework.data.domain.Pageable pageable);
+
     // Buscar usuarios por ciudad
     List<Usuario> findByUbicacionCiudad(String ciudad);
 
     // Buscar usuarios por departamento
     List<Usuario> findByUbicacionDepartamento(String departamento);
+
+    // Buscar vendedores (pendientes o verificados) de forma paginada
+    @org.springframework.data.mongodb.repository.Query("{ 'roles': 'VENDEDOR', 'perfilVendedor.verificado': ?0 }")
+    org.springframework.data.domain.Page<Usuario> findVendedoresPorEstadoVerificacion(boolean verificado, org.springframework.data.domain.Pageable pageable);
+
+    // Buscar usuarios activos paginados
+    @org.springframework.data.mongodb.repository.Query("{ 'ultimaConexion': { '$gt': ?0 } }")
+    org.springframework.data.domain.Page<Usuario> findUsuariosActivosPaginados(java.time.LocalDateTime desde, org.springframework.data.domain.Pageable pageable);
 }

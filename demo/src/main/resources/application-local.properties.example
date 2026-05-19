@@ -1,4 +1,0 @@
-# Renombra o copia este archivo como application-local.properties (está en .gitignore)
-
-spring.security.oauth2.client.registration.google.client-id=TU_CLIENT_ID_AQUI
-spring.security.oauth2.client.registration.google.client-secret=TU_CLIENT_SECRET_AQUI
